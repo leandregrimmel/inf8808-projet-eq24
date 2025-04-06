@@ -3,12 +3,12 @@ import * as d3 from "d3";
 
 export default function useData() {
   const [data, setData] = useState(null);
-  d3.csv("/Most_Streamed_Spotify_Songs_2024.csv").then((data) => {
+  d3.csv("/inf8808-projet-eq24/Most_Streamed_Spotify_Songs_2024.csv").then((data) => {
     console.log(data);
   });
 
   useEffect(() => {
-    d3.csv("/Most_Streamed_Spotify_Songs_2024.csv", function (d) {
+    d3.csv("/inf8808-projet-eq24/Most_Streamed_Spotify_Songs_2024.csv", function (d) {
       const toNumber = (str) => (str ? +str.replace(/,/g, "") : 0);
 
       const releaseDate = new Date(d["Release Date"]);
