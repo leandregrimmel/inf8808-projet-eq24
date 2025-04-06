@@ -3,6 +3,9 @@ import * as d3 from "d3";
 
 export default function useData() {
   const [data, setData] = useState(null);
+  d3.csv("/Most_Streamed_Spotify_Songs_2024.csv").then((data) => {
+    console.log(data);
+  });
 
   useEffect(() => {
     d3.csv("/Most_Streamed_Spotify_Songs_2024.csv", function (d) {

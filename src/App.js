@@ -6,7 +6,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/inf8808-projet-eq24" element={<Dashboard />} />
       </Routes>
     </Router>
   );
