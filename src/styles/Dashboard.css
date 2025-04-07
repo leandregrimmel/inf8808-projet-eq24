@@ -160,6 +160,31 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+/* BoxPlot specific styles */
+.boxplot-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background-color: var(--card-bg);
+  padding: 0;
+  box-shadow: var(--shadow);
+  margin-top: 1rem;
+}
+
+.boxplot-wrapper svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.boxplot-tooltip {
+  min-width: 120px;
+  font-size: 13px;
+  line-height: 1.4;
+  z-index: 100;
+}
+
 /* Overview page */
 .overview-container {
   text-align: center;
