@@ -3,9 +3,6 @@ import * as d3 from "d3";
 
 export default function useData() {
   const [data, setData] = useState(null);
-  d3.csv("/inf8808-projet-eq24/Most_Streamed_Spotify_Songs_2024.csv").then((data) => {
-    console.log(data);
-  });
 
   useEffect(() => {
     d3.csv("/inf8808-projet-eq24/Most_Streamed_Spotify_Songs_2024.csv", function (d) {
@@ -50,8 +47,11 @@ export default function useData() {
         explicitTrack: d["Explicit Track"] === "1", // Convert "0"/"1" to a boolean
       };
     }).then((data) => {
-      console.log(data);
+      console.log("Data loaded:", data.length, "tracks");
       setData(data);
+    })
+    .catch(error => {
+      console.error("Error loading data:", error);
     });
   }, []);
 
