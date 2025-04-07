@@ -249,15 +249,6 @@ const BoxPlot = ({ data }) => {
     const boxWidth = x.bandwidth();
     const boxContainer = svg.append("g");
 
-    // Create text positions for each stat to avoid overlaps
-    const textPositions = {
-      max: { offsetY: -25, side: "top" },
-      q3: { offsetY: -5, side: "right" },
-      median: { offsetY: 0, side: "inside" },
-      q1: { offsetY: 5, side: "right" },
-      min: { offsetY: 25, side: "bottom" }
-    };
-
     stats.forEach((s, i) => {
       const center = x(s.group) + boxWidth / 2;
       // Calculate horizontal offset based on which box (left/right)
