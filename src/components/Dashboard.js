@@ -5,17 +5,21 @@ import CorrelationMatrix from "./CorrelationMatrix";
 import BarChart from "./BarChart";
 import ScatterPlot from "./ScatterPlot";
 import SunburstChart from "./SunburstChart";
-import { flatToHierarchy } from "../hooks/prepareHierarchyTop10"; // ou le chemin correct
-
+import { useDataHierarchy } from "../hooks/useDataHierarchy";
 
 
 const Dashboard = () => {
   const data = useData();
 
+  const hierarchicalData = useDataHierarchy(data);
+
   if (!data) return <div>Loading...</div>;
 
-  // Convertir les données plates en structure hiérarchique.
-  const hierarchicalData = flatToHierarchy(data);
+  if (!hierarchicalData) {
+    return <div>Building hierarchy…</div>;
+  }
+  
+  
 
   return (
     <div>

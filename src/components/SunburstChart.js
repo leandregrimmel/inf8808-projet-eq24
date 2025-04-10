@@ -57,7 +57,7 @@ const SunburstChart = ({ data }) => {
 
     // --- Création du conteneur SVG ---
     const svg = d3.select(ref.current)
-      .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`) // Modification ici : utilisation d'espaces
+      .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
       .attr("preserveAspectRatio", "xMidYMid meet")
       .style("font", "10px sans-serif");
 
@@ -83,11 +83,14 @@ const SunburstChart = ({ data }) => {
       .style("cursor", "pointer")
       .on("click", clicked);
 
-    // Ajout d'un titre (tooltip natif)
+    // >>> Modification ici : Ajout du mot "vues" après la valeur dans le tooltip
     path.append("title")
-      .text(d =>
-        `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d3.format(",d")(d.value)}`
-      );
+      .text(d => {
+        // Chaîne des noms (Artistes / Plateformes)
+        const labelPath = d.ancestors().map(p => p.data.name).reverse().join("/");
+        // Format de la valeur + ajout de "vues"
+        return `${labelPath}\n${d3.format(",d")(d.value)} vues`;
+      });
 
     // --- Ajout des labels ---
     const label = svg.append("g")
@@ -147,7 +150,7 @@ const SunburstChart = ({ data }) => {
       return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
     }
     function labelTransform(d) {
-      const x = ((d.x0 + d.x1) / 2 * 180) / Math.PI;
+      const x = ((d.x0 + d.x1) / 2) * 180 / Math.PI;
       const y = ((d.y0 + d.y1) / 2) * radius;
       return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
     }
