@@ -6,6 +6,8 @@ import BarChart from "./BarChart";
 import ScatterPlot from "./ScatterPlot";
 import SunburstChart from "./SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
+import ParallelCoordinates from "./ParallelCoordinates";
+
 
 
 const Dashboard = () => {
@@ -19,12 +21,31 @@ const Dashboard = () => {
     return <div>Building hierarchy…</div>;
   }
   
+   // Construire le tableau pcData à partir des données brutes
+   const pcData = data.map(d => ({
+    // Q9: spotifyPlaylistReach & spotifyStreams
+    playlistReach: d.spotifyPlaylistReach,
+    streams: d.spotifyStreams,
+
+    // Q10: spotifyPlaylistCount & spotifyPopularity
+    playlistCount: d.spotifyPlaylistCount,
+    popularity: d.spotifyPopularity,
+
+    // Q11: airPlaySpins & siriusXMSpins
+    airPlaySpins: d.airplaySpins,
+    siriusXMSpins: d.siriusXMSpins
+  }));
+
+  console.log("pcData:", pcData);
+
   
 
   return (
     <div>
       <SunburstChart data={hierarchicalData} />
+      <ParallelCoordinates data={pcData} />
     </div>
+
   );
 };
 
