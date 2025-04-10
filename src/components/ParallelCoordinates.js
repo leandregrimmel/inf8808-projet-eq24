@@ -10,8 +10,6 @@ import * as d3 from "d3";
  *   - airPlaySpins (nombre)
  *   - siriusXMSpins (nombre)
  * 
- * Optionnellement, vous pouvez inclure .track (nom de la chanson) pour l'afficher
- * dans le tooltip.
  */
 const ParallelCoordinates = ({ data }) => {
   const ref = useRef(null);
