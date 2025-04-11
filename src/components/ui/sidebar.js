@@ -3,7 +3,6 @@ import { cn } from "./utils";
 import { Menu } from "lucide-react";
 import { Button } from "./button";
 
-// Create context for sidebar state
 const SidebarContext = createContext({
   isOpen: true,
   setIsOpen: () => {},
@@ -76,23 +75,6 @@ export function SidebarContent({ className, children, ...props }) {
   );
 }
 
-export function SidebarFooter({ className, children, ...props }) {
-  const { isOpen } = useSidebar();
-  
-  return (
-    <div
-      className={cn(
-        "p-4 border-t",
-        isOpen ? "flex items-center" : "hidden",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}
-
 export function SidebarMenu({ className, children, ...props }) {
   const { isOpen } = useSidebar();
   
@@ -129,7 +111,6 @@ export function SidebarMenuItem({ className, children, ...props }) {
 export function SidebarMenuButton({ className, children, isActive, ...props }) {
   const { isOpen } = useSidebar();
   
-  // Extract icon and text from children
   const childrenArray = React.Children.toArray(children);
   const icon = childrenArray[0];
   const text = childrenArray[1];
