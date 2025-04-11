@@ -32,9 +32,7 @@ const sectionHeaderStyle = {
 
 // Standardized container for visualizations.
 const visualizationContainerStyle = {
-  border: "1px solid #ddd",
   marginBottom: "20px",
-  borderRadius: "4px",
   backgroundColor: "#fff",
 };
 
