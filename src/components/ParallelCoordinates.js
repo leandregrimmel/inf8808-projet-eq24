@@ -1,69 +1,62 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-/**
- * @param {Array} data - Tableau d'objets, chaque objet représentant une chanson.
- * Chaque objet doit contenir les propriétés numériques suivantes :
- *   - playlistReach (nombre)
- *   - streams (nombre)
- *   - popularity (nombre)
- *   - airPlaySpins (nombre)
- *   - siriusXMSpins (nombre)
- * 
- */
-const ParallelCoordinates = ({ data }) => {
+const ParallelCoordinates = ({ data, config }) => {
   const ref = useRef(null);
+  // Use a default configuration if none is provided.
+  const dimensions = React.useMemo(() => config?.dimensions || [
+    "playlistReach",
+    "streams",
+    "popularity",
+    "airPlaySpins",
+    "siriusXMSpins",
+  ], [config]);
 
   useEffect(() => {
     if (!data || data.length === 0) return;
 
-    // 1) Liste des dimensions affichées, dans l'ordre X
-    const dimensions = [
-      "playlistReach",
-      "streams",
-      "popularity",
-      "airPlaySpins",
-      "siriusXMSpins"
-    ];
-
-    // 2) Dimensions du SVG
+    // Dimensions of the SVG container
     const margin = { top: 40, right: 50, bottom: 30, left: 50 };
-    const width = 900 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+    const containerWidth = ref.current.parentNode.clientWidth;
+    const containerHeight = ref.current.parentNode.clientHeight;
+    const width = containerWidth - margin.left - margin.right;
+    const height = containerHeight - margin.top - margin.bottom;
 
-    // 3) Création/Nettoyage du conteneur SVG
-    const svgEl = d3.select(ref.current);
-    svgEl.selectAll("*").remove();
-    const svg = svgEl
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+    // Clear previous drawing
+    d3.select(ref.current).selectAll("*").remove();
+    const svg = d3
+      .select(ref.current)
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // 4) Échelles Y, une par dimension (linéaires)
+    // Create a y-scale for each dimension based on extents from the data.
     const yScales = {};
-    dimensions.forEach(dim => {
-      const domain = d3.extent(data, d => +d[dim]);
-      yScales[dim] = d3.scaleLinear()
-        .domain(domain)       // [min, max] pour la dimension
-        .range([height, 0]);  // haut = max
+    dimensions.forEach((dim) => {
+      const domain = d3.extent(data, (d) => +d[dim]);
+      yScales[dim] = d3.scaleLinear().domain(domain).range([height, 0]).nice();
     });
 
-    // 5) Échelle X pour positionner les axes verticaux
-    const xScale = d3.scalePoint()
+    // X scale for positioning the axes
+    const xScale = d3
+      .scalePoint()
       .domain(dimensions)
       .range([0, width])
       .padding(1);
 
-    // 6) Générateur de chemins
-    function pathGenerator(d) {
-      return d3.line()(dimensions.map(dim => {
-        return [ xScale(dim), yScales[dim](d[dim]) ];
-      }));
-    }
+    // Define a line generator that maps a datum to a path using the current dimensions.
+    const pathGenerator = (d) => {
+      return d3.line()(
+        dimensions.map((dim) => [xScale(dim), yScales[dim](d[dim])])
+      );
+    };
 
-    // 7) Dessin des lignes (une par chanson)
-    const lines = svg.selectAll("path.data-line")
+    // Draw all the lines for each data point.
+    const lines = svg
+      .selectAll("path.data-line")
       .data(data)
       .join("path")
       .attr("class", "data-line")
@@ -74,7 +67,7 @@ const ParallelCoordinates = ({ data }) => {
 
     // === (A) Interaction : Survol (mouseover/mouseout) ===
     lines
-      .on("mouseover", function(event, d) {
+      .on("mouseover", function (event, d) {
         // Passe la ligne survolée en avant, augmente l'opacité et la largeur
         d3.select(this)
           .raise()
@@ -83,8 +76,7 @@ const ParallelCoordinates = ({ data }) => {
           .style("stroke-width", 2);
 
         // Diminue l'opacité des autres lignes
-        lines.filter(x => x !== d)
-          .style("opacity", 0.1);
+        lines.filter((x) => x !== d).style("opacity", 0.1);
 
         // Petit tooltip natif (title) affichant quelques infos
         d3.select(this)
@@ -95,7 +87,7 @@ const ParallelCoordinates = ({ data }) => {
               : `Popularity: ${d.popularity}`;
           });
       })
-      .on("mouseout", function(event, d) {
+      .on("mouseout", function (event, d) {
         lines
           .style("stroke", "#69b3a2")
           .style("opacity", 0.4)
@@ -109,12 +101,12 @@ const ParallelCoordinates = ({ data }) => {
 
     // On garde dans brushedRanges la plage [minVal, maxVal] autorisée pour chaque dimension
     const brushedRanges = {};
-    dimensions.forEach(dim => {
+    dimensions.forEach((dim) => {
       brushedRanges[dim] = [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY];
     });
 
     function isVisible(song) {
-      return dimensions.every(dim => {
+      return dimensions.every((dim) => {
         const [minVal, maxVal] = brushedRanges[dim];
         const val = song[dim];
         return val >= minVal && val <= maxVal;
@@ -125,28 +117,29 @@ const ParallelCoordinates = ({ data }) => {
       const selection = event.selection;
       if (!selection) {
         // Brush effacé → on remet la plage infinie
-        brushedRanges[dim] = [Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY];
+        brushedRanges[dim] = [
+          Number.NEGATIVE_INFINITY,
+          Number.POSITIVE_INFINITY,
+        ];
       } else {
         // Inversion du Y (plus haut = plus grand)
         const [y0, y1] = selection;
-        brushedRanges[dim] = [
-          yScales[dim].invert(y1),
-          yScales[dim].invert(y0)
-        ];
+        brushedRanges[dim] = [yScales[dim].invert(y1), yScales[dim].invert(y0)];
       }
       // Met à jour l'affichage des lignes
-      lines.style("display", d => isVisible(d) ? null : "none");
+      lines.style("display", (d) => (isVisible(d) ? null : "none"));
     }
 
-    // Pour chaque dimension, on dessine l’axe + on ajoute le brush
-    dimensions.forEach(dim => {
-      // Axe Y
-      const axisGroup = svg.append("g")
-        .attr("transform", `translate(${xScale(dim)}, 0)`)
-        .call(d3.axisLeft(yScales[dim]).ticks(6));  // 6 ticks, par ex.
+    dimensions.forEach((dim) => {
+      // Add Y axis
+      const axisGroup = svg
+        .append("g")
+        .attr("transform", `translate(${xScale(dim)},0)`)
+        .call(d3.axisLeft(yScales[dim]).ticks(6));
 
-      // Label d'axe
-      axisGroup.append("text")
+      // Label the axis
+      axisGroup
+        .append("text")
         .attr("y", -9)
         .attr("text-anchor", "middle")
         .attr("fill", "black")
@@ -154,15 +147,17 @@ const ParallelCoordinates = ({ data }) => {
 
       // Ajout du brush sur l'axe
       axisGroup.append("g")
-        .attr("class", `brush-${dim}`)
-        .call(d3.brushY()
-          // On limite la zone du brush à environ 20px de large [-10..10]
-          .extent([[-10, 0], [10, height]])
-          .on("brush end", (event) => brushHandler(event, dim))
-        );
+      .attr("class", `brush-${dim}`)
+      .call(d3.brushY()
+        // On limite la zone du brush à environ 20px de large [-10..10]
+        .extent([[-10, 0], [10, height]])
+        .on("brush end", (event) => brushHandler(event, dim))
+      );
     });
 
-  }, [data]);
+    // Animate transition for updated lines (optional, simple fade-in)
+    lines.transition().duration(1000).style("opacity", 0.8);
+  }, [data, config, dimensions]);
 
   return <svg ref={ref}></svg>;
 };
