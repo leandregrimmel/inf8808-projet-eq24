@@ -14,9 +14,9 @@ const SunburstChart = ({ data }) => {
 
 
     // --- Définition des dimensions et du rayon ---
-    const width = 900;
+    const width = 600;
     const height = width;
-    const radius = width / 10;
+    const radius = width / 7;
 
     // --- Création de la palette de couleurs ---
     const color = d3.scaleOrdinal(
@@ -153,7 +153,7 @@ const SunburstChart = ({ data }) => {
   }, [data]);
 
   return (
-    <div style={{ margin: "0 auto", maxWidth: "928px" }}>
+    <div style={{ margin: "0 auto", maxWidth: "600px" }}>
       <svg ref={ref}></svg>
     </div>
   );

@@ -170,51 +170,6 @@ const ScrollytellingDashboard = () => {
             <h1>Aspect Genre Musical</h1>
           </div>
           <div style={visualizationContainerStyle}>
-            {/* <RadialLineChart data={data} /> */}
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Ce graphique radial permet d'identifier les tendances saisonnières
-            en fonction du mois ou de la saison, en cliquant sur une section
-            pour zoomer sur les détails.
-          </p>
-        </section>
-
-        {/* Aspect Multi-plateformes Section */}
-        <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
-          <div style={sectionHeaderStyle}>
-            <h1>Aspect Multi-plateformes</h1>
-          </div>
-          <div className="p-6 space-y-8">
-            <h2 className="text-2xl font-bold mb-4">Matrice de Corrélation</h2>
-            <p className="mb-4 text-muted-foreground">
-              Explorez les relations entre différents indicateurs issus de
-              plateformes variées.
-            </p>
-            <div style={visualizationContainerStyle}>
-              <CorrelationMatrix data={data} />
-            </div>
-            <h2 className="text-2xl font-bold mb-4">
-              Sunburst Chart : Répartition des Consommations par Artiste et
-              Plateforme
-            </h2>
-            <p className="mb-4 text-muted-foreground">
-              Ce graphique vous permet de visualiser comment les différents
-              canaux se répartissent pour les artistes les plus populaires. Le
-              niveau 1 présente le top des artistes (ex. top 10 basé sur la
-              somme des streams) et les niveaux suivants détaillent la
-              contribution de chaque plateforme.
-            </p>
-            <div style={visualizationContainerStyle}>
-              <SunburstChart data={hierarchicalData} />
-            </div>
-          </div>
-        </section>
-        {/* Aspect Genre Musical Section */}
-        <section ref={genreRef} id="genre" style={sectionStyle}>
-          <div style={sectionHeaderStyle}>
-            <h1>Aspect Genre Musical</h1>
-          </div>
-          <div style={visualizationContainerStyle}>
             <BoxPlot data={data} />
           </div>
           <div style={visualizationContainerStyle}>
