@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import ParallelCoordinates from "./ParallelCoordinates";
 import useData from "../hooks/useData";
 import BoxPlot from "./BoxPlot";
@@ -9,17 +9,10 @@ import Sidebar from "./Sidebar";
 import CorrelationMatrix from "./CorrelationMatrix";
 import SunburstChart from "./SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
-
-const containerStyle = {
-  marginLeft: "220px",
-  height: "100vh",
-  width: "calc(100vw - 220px)",
-  overflowY: "auto",
-  scrollSnapType: "y mandatory",
-};
+import { useSidebar } from "../context/SidebarContext";
 
 const sectionStyle = {
-  height: "100vh", // fully fill viewport
+  height: "100vh",
   width: "100%",
   scrollSnapAlign: "start",
   display: "flex",
@@ -39,7 +32,8 @@ const stickyTitleStyle = {
 
 const ScrollytellingDashboard = () => {
   const data = useData();
-  const [activeSection, setActiveSection] = React.useState("dashboard");
+  const { isOpen } = useSidebar();
+  const [activeSection, setActiveSection] = useState("overview");
   const overviewRef = useRef(null);
   const temporalRef = useRef(null);
   const multiplatformRef = useRef(null);
@@ -50,6 +44,15 @@ const ScrollytellingDashboard = () => {
 
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const containerStyle = {
+    marginLeft: isOpen ? "16rem" : "5rem",
+    height: "100vh",
+    width: `calc(100vw - ${isOpen ? "16rem" : "5rem"})`,
+    overflowY: "auto",
+    scrollSnapType: "y mandatory",
+    transition: "margin-left 0.3s ease, width 0.3s ease",
   };
 
   return (

@@ -1,13 +1,4 @@
-import React from "react";
-import {
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger,
-} from "./ui/sidebar";
+import React, { useState } from "react";
 import {
   LayoutDashboard,
   Calendar,
@@ -15,7 +6,10 @@ import {
   Music,
   Radio,
   Users,
+  Menu,
 } from "lucide-react";
+import { Button } from "./ui/button";
+import { useSidebar } from "../context/SidebarContext";
 
 const SideBar = ({
   scrollToSection,
@@ -23,6 +17,8 @@ const SideBar = ({
   activeSection,
   setActiveSection,
 }) => {
+  const { isOpen, toggleSidebar } = useSidebar();
+
   const navItems = [
     {
       id: "overview",
@@ -63,28 +59,81 @@ const SideBar = ({
   ];
 
   return (
-    <Sidebar>
-      <h1 className="mb-4 text-2xl font-bold p-4 pb-0">Spotify Analytics</h1>
-      <SidebarContent>
-        <SidebarMenu>
-          {navItems.map((item) => (
-            <SidebarMenuItem key={item.id}>
-              <SidebarMenuButton
-                onClick={() => {
-                  scrollToSection(sectionRefs[item.ref]);
-                  setActiveSection(item.id);
-                }}
-                isActive={activeSection === item.id}
-                className="flex justify-start"
+    <aside
+      className={`fixed top-0 left-0 h-screen bg-background border-r transition-all duration-300 ease-in-out overflow-hidden z-40 ${
+        isOpen ? "w-64" : "w-20"
+      }`}
+    >
+      <div className="flex flex-col h-full">
+        {/* Sidebar Header */}
+        <div
+          className={`flex h-16 items-center border-b px-4 ${
+            isOpen ? "justify-between" : "justify-center"
+          }`}
+        >
+          {isOpen ? (
+            <>
+              <h1 className="text-xl font-bold">Spotify Analytics</h1>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleSidebar}
+                className="hover:bg-accent/50"
               >
-                <item.icon className="h-5 w-5" />
-                {item.label}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarContent>
-    </Sidebar>
+                <Menu className="h-5 w-5" />
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="hover:bg-accent/50"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
+        </div>
+
+        {/* Sidebar Content */}
+        <div className="flex flex-col flex-1 overflow-y-auto py-2">
+          <nav
+            className={`flex flex-col gap-1 py-3 ${isOpen ? "px-2" : "px-0"}`}
+          >
+            {navItems.map((item) => (
+              <div key={item.id} className={`${isOpen ? "mb-1" : "mb-2"}`}>
+                <button
+                  className={`flex items-center rounded-md py-2.5 text-sm font-medium transition-colors ${
+                    isOpen
+                      ? "w-full px-3 justify-start"
+                      : "w-full px-0 justify-center"
+                  } ${
+                    activeSection === item.id
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
+                  }`}
+                  onClick={() => {
+                    scrollToSection(sectionRefs[item.ref]);
+                    setActiveSection(item.id);
+                  }}
+                >
+                  <div
+                    className={`flex items-center justify-center min-w-[28px] ${
+                      isOpen ? "" : "mx-auto"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                  </div>
+                  {isOpen && (
+                    <span className="ml-2.5 truncate">{item.label}</span>
+                  )}
+                </button>
+              </div>
+            ))}
+          </nav>
+        </div>
+      </div>
+    </aside>
   );
 };
 
