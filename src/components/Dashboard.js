@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import useData from "../hooks/useData";
 import BoxPlot from "./BoxPlot";
 import CorrelationMatrix from "./CorrelationMatrix";
 import ScatterPlot from "./ScatterPlot";
+import RadialLineChart from "./RadialLineChart";
+import Overview from "./Overview";
+import MultiPlatformOverview from "./MultiPlatformOverview";
 import SunburstChart from "./SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import ParallelCoordinates from "./ParallelCoordinates";
@@ -43,6 +46,40 @@ import {
   useSidebar,
 } from "./ui/sidebar";
 import { cn } from "./ui/utils";
+
+const containerStyle = {
+  marginLeft: "220px",
+  height: "100vh",
+  overflowY: "scroll",
+  scrollSnapType: "y mandatory",
+};
+
+const sectionStyle = {
+  height: "100vh",
+  scrollSnapAlign: "start",
+  padding: "40px",
+  boxSizing: "border-box",
+};
+
+const sidebarStyle = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "200px",
+  height: "100vh",
+  background: "#f0f0f0",
+  padding: "20px",
+  boxSizing: "border-box",
+};
+
+const navListStyle = {
+  listStyle: "none",
+  padding: 0,
+};
+
+const navItemStyle = {
+  marginBottom: "10px",
+};
 
 const Dashboard = () => {
   const data = useData();
@@ -481,9 +518,9 @@ const Dashboard = () => {
 
   return (
     /* <div>
-      <SunburstChart data={hierarchicalData} />
-      <ParallelCoordinates data={pcData} />
-    </div>*/
+    <SunburstChart data={hierarchicalData} />
+    <ParallelCoordinates data={pcData} />
+  </div>*/
 
     <SidebarProvider>
       <div className="flex bg-background">
@@ -580,4 +617,117 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const ScrollytellingDashboard = () => {
+  //call use data
+  const data = useData();
+  // Références vers les sections
+  const temporalRef = useRef(null);
+  const multiplatformRef = useRef(null);
+  const genreRef = useRef(null);
+  const diffusionRef = useRef(null);
+  const engagementRef = useRef(null);
+
+  const scrollToSection = (ref) => {
+    ref.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <div style={{ display: "flex" }}>
+      {/* Barre latérale */}
+      <Dashboard />
+      <Overview />
+      <nav style={sidebarStyle}>
+        <ul style={navListStyle}>
+          <li style={navItemStyle}>
+            <button onClick={() => scrollToSection(temporalRef)}>
+              Aspect Temporel
+            </button>
+          </li>
+          <li style={navItemStyle}>
+            <button onClick={() => scrollToSection(multiplatformRef)}>
+              Aspect Multi-plateformes
+            </button>
+          </li>
+          <li style={navItemStyle}>
+            <button onClick={() => scrollToSection(genreRef)}>
+              Aspect Genre Musical
+            </button>
+          </li>
+          <li style={navItemStyle}>
+            <button onClick={() => scrollToSection(diffusionRef)}>
+              Aspect Diffusion & Rayonnement
+            </button>
+          </li>
+          <li style={navItemStyle}>
+            <button onClick={() => scrollToSection(engagementRef)}>
+              Aspect Engagement Utilisateur
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Conteneur principal avec scroll snapping */}
+      <div style={containerStyle}>
+        {/* Section 1 : Aspect Temporel */}
+        <section ref={temporalRef} id="temporal" style={sectionStyle}>
+          <h1 className="text-3xl font-bold mb-4">Aspect Temporel</h1>
+          {/* Nuage de points avec régression */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-2">
+              Scatter Plot : Age vs. Spotify Streams
+            </h2>
+            <ScatterPlot data={data} />
+            <p className="text-xs text-muted-foreground mt-2">
+              Ce nuage de points interactif montre la relation entre l&apos;âge
+              des chansons et divers indicateurs de succès, avec une ligne de
+              régression calculée en temps réel pour visualiser la tendance
+              globale.
+            </p>
+          </div>
+          {/* Graphique des tendances saisonnières */}
+          <div>
+            <h2 className="text-2xl font-bold mb-2">
+              Graphique des Tendances Saisonnières
+            </h2>
+            <RadialLineChart data={data} />
+            <p className="text-xs text-muted-foreground mt-2">
+              Ce graphique radial permet d&apos;identifier les tendances
+              saisonnières en fonction du mois ou de la saison, en cliquant sur
+              une section pour zoomer sur les détails.
+            </p>
+          </div>
+        </section>
+
+        {/* Section 2 : Aspect Multi-plateformes (Contenu à venir) */}
+        <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
+          <h1 className="text-3xl font-bold mb-4">Aspect Multi-plateformes</h1>
+          <MultiPlatformOverview data={data} />
+        </section>
+
+        {/* Section 3 : Aspect Genre Musical (Contenu à venir) */}
+        <section ref={genreRef} id="genre" style={sectionStyle}>
+          <h1 className="text-3xl font-bold mb-4">Aspect Genre Musical</h1>
+          <p>Contenu à venir (Boxplot, Parallel Coordinates, etc.)</p>
+        </section>
+
+        {/* Section 4 : Aspect Diffusion et Rayonnement (Contenu à venir) */}
+        <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
+          <h1 className="text-3xl font-bold mb-4">
+            Aspect Diffusion & Rayonnement
+          </h1>
+          <p>Contenu à venir (Parallel Coordinates, etc.)</p>
+        </section>
+
+        {/* Section 5 : Aspect Engagement Utilisateur (Contenu à venir) */}
+        <section ref={engagementRef} id="engagement" style={sectionStyle}>
+          <h1 className="text-3xl font-bold mb-4">
+            Aspect Engagement des Utilisateurs
+          </h1>
+          {/* <EngagementSection data={data} /> */}
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default ScrollytellingDashboard;
