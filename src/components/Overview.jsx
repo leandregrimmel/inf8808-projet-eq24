@@ -100,7 +100,7 @@ const Overview = () => {
       {/* <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">
           Méthodologie & Visualisations
-        </h2>
+      </h2>
         <p className="mb-4">
           Notre analyse se base sur une série de visualisations interactives
           développées avec D3. Chaque diagramme répond à l'une des questions de

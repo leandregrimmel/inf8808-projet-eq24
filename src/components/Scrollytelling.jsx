@@ -5,7 +5,7 @@ import BoxPlot from "./BoxPlot";
 import ScatterPlot from "./ScatterPlot";
 import RadialLineChart from "./RadialLineChart";
 import Overview from "./Overview";
-import ScrollytellingSidebar from "./ScrollytellingSidebar";
+import Sidebar from "./Sidebar";
 import CorrelationMatrix from "./CorrelationMatrix";
 import SunburstChart from "./SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
@@ -40,7 +40,6 @@ const stickyTitleStyle = {
 const ScrollytellingDashboard = () => {
   const data = useData();
   const [activeSection, setActiveSection] = React.useState("dashboard");
-  const dashboardRef = useRef(null);
   const overviewRef = useRef(null);
   const temporalRef = useRef(null);
   const multiplatformRef = useRef(null);
@@ -56,10 +55,9 @@ const ScrollytellingDashboard = () => {
   return (
     <div className="flex bg-background">
       <div style={{ display: "flex" }}>
-        <ScrollytellingSidebar
+        <Sidebar
           scrollToSection={scrollToSection}
           sectionRefs={{
-            dashboardRef,
             overviewRef,
             temporalRef,
             multiplatformRef,
