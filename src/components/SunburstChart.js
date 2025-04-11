@@ -6,7 +6,7 @@ const SunburstChart = ({ data }) => {
 
   useEffect(() => {
     if (!data) return;
-
+    console.log("Données reçues dans le composant SunburstChart :", data);
     // Vérifier que data.children existe et est un tableau non vide.
     if (!Array.isArray(data.children) || data.children.length === 0) {
       console.error("La structure des données est incomplète : 'children' est manquant ou vide.");
