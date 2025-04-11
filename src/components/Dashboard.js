@@ -44,9 +44,9 @@ import { cn } from "./ui/utils";
 
 const Dashboard = () => {
   const data = useData();
+  const hierarchicalData = useDataHierarchy(data);
   const [activeViz, setActiveViz] = useState("overview");
 
-  const hierarchicalData = useDataHierarchy(data);
 
   if (!data) return <div>Loading...</div>;
   if (!data) {
@@ -162,6 +162,72 @@ const Dashboard = () => {
               </CardContent>
               <CardFooter className="bg-muted/50 px-6 py-3">
                 <p className="text-xs text-muted-foreground">Each point represents a single track</p>
+              </CardFooter>
+            </Card>
+          </div>
+        );
+         // (B) Nouveau cas : SUNBURST
+      case "sunburst":
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight">Sunburst Chart</h2>
+                <p className="text-muted-foreground">Visualizing how streams are distributed by Artist → Platform</p>
+              </div>
+            </div>
+            <Card className="overflow-hidden">
+              <CardContent className="p-6">
+                {!hierarchicalData ? (
+                  <div>Building hierarchy…</div>
+                ) : (
+                  <SunburstChart data={hierarchicalData} />
+                )}
+              </CardContent>
+              <CardFooter className="bg-muted/50 px-6 py-3">
+                <p className="text-xs text-muted-foreground">
+                  Click segments to drill down, or center to zoom out
+                </p>
+              </CardFooter>
+            </Card>
+          </div>
+        );
+
+      // (B) Nouveau cas : PARALLEL
+      case "parallel":
+        // Construire le tableau pcData à partir des données brutes
+        const pcData = data.map(d => ({
+          // Q9: spotifyPlaylistReach & spotifyStreams
+          playlistReach: d.spotifyPlaylistReach,
+          streams: d.spotifyStreams,
+
+          // Q10: spotifyPlaylistCount & spotifyPopularity
+          playlistCount: d.spotifyPlaylistCount,
+          popularity: d.spotifyPopularity,
+
+          // Q11: airPlaySpins & siriusXMSpins
+          airPlaySpins: d.airplaySpins,
+          siriusXMSpins: d.siriusXMSpins
+        }));
+
+        console.log("pcData:", pcData);
+
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight">Parallel Coordinates</h2>
+                <p className="text-muted-foreground">Compare playlist reach, streams, popularity, etc.</p>
+              </div>
+            </div>
+            <Card className="overflow-hidden">
+              <CardContent className="p-6">
+                <ParallelCoordinates data={pcData} />
+              </CardContent>
+              <CardFooter className="bg-muted/50 px-6 py-3">
+                <p className="text-xs text-muted-foreground">
+                  Use brush on each axis to filter songs
+                </p>
               </CardFooter>
             </Card>
           </div>
@@ -326,6 +392,7 @@ const Dashboard = () => {
             </div>
           </div>
         );
+
     }
   };
 
@@ -353,28 +420,7 @@ const Dashboard = () => {
     );
   };
 
-  if (!hierarchicalData) {
-    return <div>Building hierarchy…</div>;
-  }
-  
-   // Construire le tableau pcData à partir des données brutes
-   const pcData = data.map(d => ({
-    // Q9: spotifyPlaylistReach & spotifyStreams
-    playlistReach: d.spotifyPlaylistReach,
-    streams: d.spotifyStreams,
-
-    // Q10: spotifyPlaylistCount & spotifyPopularity
-    playlistCount: d.spotifyPlaylistCount,
-    popularity: d.spotifyPopularity,
-
-    // Q11: airPlaySpins & siriusXMSpins
-    airPlaySpins: d.airplaySpins,
-    siriusXMSpins: d.siriusXMSpins
-  }));
-
-  console.log("pcData:", pcData);
-
-  
+ 
 
   return (
    /* <div>
@@ -428,6 +474,22 @@ const Dashboard = () => {
                 <SidebarMenuButton isActive={activeViz === "scatterplot"} onClick={() => setActiveViz("scatterplot")}>
                   <ScatterChart />
                   <span>Scatter Plot</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+             {/* (A) NOUVEAU : Sunburst */}
+             <SidebarMenuItem>
+                <SidebarMenuButton isActive={activeViz === "sunburst"} onClick={() => setActiveViz("sunburst")}>
+                  <Music2 />
+                  <span>Sunburst</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              {/* (A) NOUVEAU : Parallel */}
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={activeViz === "parallel"} onClick={() => setActiveViz("parallel")}>
+                  <Grid2X2 />
+                  <span>Parallel Coords</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
