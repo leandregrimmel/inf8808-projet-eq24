@@ -53,7 +53,6 @@ const ScrollytellingDashboard = () => {
   return (
       <div className="flex bg-background">
         <div style={{ display: "flex" }}>
-          {/* Sidebar Navigation */}
           <ScrollytellingSidebar
             scrollToSection={scrollToSection}
             sectionRefs={{

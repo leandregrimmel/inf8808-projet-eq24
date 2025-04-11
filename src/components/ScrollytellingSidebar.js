@@ -1,12 +1,23 @@
 import React from "react";
 import { Menu } from "lucide-react";
-import { Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "./ui/sidebar";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "./ui/sidebar";
 
-const ScrollytellingSidebar = ({ scrollToSection, sectionRefs, activeSection, setActiveSection }) => {
+const ScrollytellingSidebar = ({
+  scrollToSection,
+  sectionRefs,
+  activeSection,
+  setActiveSection,
+}) => {
   return (
     <Sidebar>
       <SidebarHeader>
-        { /* You can customize the header if needed. Here we display a title only when open. */}
         <h1 className="text-xl font-bold">Navigation</h1>
       </SidebarHeader>
       <SidebarContent>

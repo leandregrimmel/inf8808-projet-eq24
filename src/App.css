@@ -5,12 +5,28 @@
   padding: 0;
 }
 
+:root {
+  --primary-color: #1DB954; /* Spotify green */
+  --secondary-color: #191414; /* Spotify black */
+  --text-color: #333;
+  --light-bg: #f5f5f5;
+  --card-bg: #fff;
+  --border-radius: 8px;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --sidebar-width: 240px;
+}
+
+
 body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  background-color: #f5f5f5;
+  font-family: 'Gotham', 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  background-color: var(--light-bg);
 }
 
 /* Ensure SVG elements in visualizations are properly sized */
@@ -71,3 +87,4 @@ svg {
     transform: rotate(360deg);
   }
 }
+
