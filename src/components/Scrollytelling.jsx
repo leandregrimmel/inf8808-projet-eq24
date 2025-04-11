@@ -12,22 +12,32 @@ import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import { useSidebar } from "../context/SidebarContext";
 
 const sectionStyle = {
-  height: "100vh",
+  minHeight: "100vh",
   width: "100%",
   scrollSnapAlign: "start",
   display: "flex",
   flexDirection: "column",
-  padding: "40px",
   boxSizing: "border-box",
+  backgroundColor: "#f7f7f7",
 };
 
-const stickyTitleStyle = {
+// Standardized section header style.
+const sectionHeaderStyle = {
   position: "sticky",
   top: 0,
   backgroundColor: "#fff",
-  padding: "10px 0",
+  padding: "20px 40px",
+  borderBottom: "1px solid #ddd",
   marginBottom: "20px",
   zIndex: 1,
+};
+
+// Standardized container for visualizations.
+const visualizationContainerStyle = {
+  border: "1px solid #ddd",
+  marginBottom: "20px",
+  borderRadius: "4px",
+  backgroundColor: "#fff",
 };
 
 const ScrollytellingDashboard = () => {
@@ -73,15 +83,17 @@ const ScrollytellingDashboard = () => {
         />
 
         <div style={containerStyle}>
+          {/* Overview Section */}
           <section ref={overviewRef} id="overview" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
+            <div style={sectionHeaderStyle}>
               <h1 className="text-3xl font-bold">Overview</h1>
             </div>
             <Overview />
           </section>
 
+          {/* Aspect Temporel Section */}
           <section ref={temporalRef} id="temporal" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
+            <div style={sectionHeaderStyle}>
               <h1 className="text-3xl font-bold">Aspect Temporel</h1>
             </div>
             <div className="mb-8">
@@ -90,32 +102,34 @@ const ScrollytellingDashboard = () => {
               </h2>
               <ScatterPlot data={data} />
               <p className="text-xs text-muted-foreground mt-2">
-                Ce nuage de points interactif montre la relation entre
-                l&apos;âge des chansons et divers indicateurs de succès, avec
-                une ligne de régression calculée en temps réel pour visualiser
-                la tendance globale.
+                Ce nuage de points interactif montre la relation entre l’âge des
+                chansons et divers indicateurs de succès, avec une ligne de
+                régression calculée en temps réel pour visualiser la tendance
+                globale.
               </p>
             </div>
             <div>
               <h2 className="text-2xl font-bold mb-2">
                 Graphique des Tendances Saisonnières
               </h2>
-              <RadialLineChart data={data} />
+              <div style={visualizationContainerStyle}>
+                <RadialLineChart data={data} />
+              </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Ce graphique radial permet d&apos;identifier les tendances
+                Ce graphique radial permet d'identifier les tendances
                 saisonnières en fonction du mois ou de la saison, en cliquant
                 sur une section pour zoomer sur les détails.
               </p>
             </div>
           </section>
 
-          {/* Section 2: Aspect Multi-plateformes */}
+          {/* Aspect Multi-plateformes Section */}
           <section
             ref={multiplatformRef}
             id="multiplatform"
             style={sectionStyle}
           >
-            <div style={stickyTitleStyle}>
+            <div style={sectionHeaderStyle}>
               <h1 className="text-3xl font-bold">Aspect Multi-plateformes</h1>
             </div>
             <div className="p-6 space-y-8">
@@ -126,7 +140,7 @@ const ScrollytellingDashboard = () => {
                 Explorez les relations entre différents indicateurs issus de
                 plateformes variées.
               </p>
-              <div className="border p-4">
+              <div style={visualizationContainerStyle}>
                 <CorrelationMatrix data={data} />
               </div>
               <h2 className="text-2xl font-bold mb-4">
@@ -135,52 +149,52 @@ const ScrollytellingDashboard = () => {
               </h2>
               <p className="mb-4 text-muted-foreground">
                 Ce graphique vous permet de visualiser comment les différents
-                canaux (Spotify, YouTube, TikTok, etc.) se répartissent pour les
-                artistes les plus populaires. Le niveau 1 présente le top des
-                artistes (par exemple, top 10 basé sur la somme des streams sur
-                plusieurs plateformes) et les niveaux suivants détaillent la
-                contribution de chaque plateforme. Cliquez sur un segment pour
-                zoomer sur un artiste et explorer les données détaillées.{" "}
+                canaux se répartissent pour les artistes les plus populaires. Le
+                niveau 1 présente le top des artistes (ex. top 10 basé sur la
+                somme des streams) et les niveaux suivants détaillent la
+                contribution de chaque plateforme.
               </p>
-              <div className="border p-4">
+              <div style={visualizationContainerStyle}>
                 <SunburstChart data={hierarchicalData} />
               </div>
             </div>
           </section>
 
-          {/* Section 3: Aspect Genre Musical */}
+          {/* Aspect Genre Musical Section */}
           <section ref={genreRef} id="genre" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
+            <div style={sectionHeaderStyle}>
               <h1 className="text-3xl font-bold">Aspect Genre Musical</h1>
             </div>
-            <div className="border p-4">
+            <div style={visualizationContainerStyle}>
               <BoxPlot data={data} />
             </div>
-            <div className="border p-4">
+            <div style={visualizationContainerStyle}>
               <ParallelCoordinates data={data} />
             </div>
           </section>
 
-          {/* Section 4: Aspect Diffusion et Rayonnement */}
+          {/* Aspect Diffusion & Rayonnement Section */}
           <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
+            <div style={sectionHeaderStyle}>
               <h1 className="text-3xl font-bold">
                 Aspect Diffusion & Rayonnement
               </h1>
             </div>
-            <div className="border p-4">
+            <div style={visualizationContainerStyle}>
               <ParallelCoordinates data={data} />
             </div>
           </section>
 
-          {/* Section 5: Aspect Engagement Utilisateur */}
+          {/* Aspect Engagement Section */}
           <section ref={engagementRef} id="engagement" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
+            <div style={sectionHeaderStyle}>
               <h1 className="text-3xl font-bold">
                 Aspect Engagement des Utilisateurs
               </h1>
             </div>
-            <ScatterPlot data={data} />
+            <div style={visualizationContainerStyle}>
+              <ScatterPlot data={data} />
+            </div>
           </section>
         </div>
       </div>
