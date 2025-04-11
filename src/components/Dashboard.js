@@ -632,7 +632,7 @@ const ScrollytellingDashboard = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex" , flexDirection: "column" }}>
       {/* Barre latérale */}
       <Dashboard />
       <Overview />
