@@ -1,11 +1,9 @@
-// Overview.js
 import React from "react";
 import useData from "../hooks/useData";
 import * as d3 from "d3";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import formatNumber from "../utils";
 
-// Composant Overview qui fournit le contexte et le récapitulatif global
 const Overview = () => {
   const data = useData();
 
@@ -20,7 +18,6 @@ const Overview = () => {
     );
   }
 
-  // Calculer les indicateurs clés à partir des données
   const totalTracks = data.length;
   const avgStreams = Math.round(d3.mean(data, (d) => d.spotifyStreams));
   const explicitTracks = data.filter((d) => d.explicitTrack).length;
@@ -31,9 +28,7 @@ const Overview = () => {
     <div>
       {/* Section Introductive et Contexte */}
       <header className="mb-8">
-        <h2>
-          Spotify Top Streamed Songs 2024
-        </h2>
+        <h2>Spotify Top Streamed Songs 2024</h2>
         <p className="text-lg text-muted-foreground">
           Bienvenue sur notre projet de visualisation de données pour le cours
           INF8808. Dans un paysage musical en pleine transformation grâce aux
