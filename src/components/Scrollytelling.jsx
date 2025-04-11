@@ -50,42 +50,6 @@ const ScrollytellingDashboard = () => {
   const engagementRef = useRef(null);
   const hierarchicalData = useDataHierarchy(data);
 
-  const parallelConfigs = [
-    {
-      label:
-        "Comment les indicateurs de popularité varient-ils selon l’artiste ?",
-      dimensions: ["popularity", "streams"],
-    },
-    {
-      label:
-        "Comment la portée des playlists (Playlist Reach) influence-t-elle le nombre total de streams ?",
-      dimensions: ["playlistReach", "streams"],
-    },
-    {
-      label:
-        "Quelle est la relation entre le nombre de playlists contenant une chanson et sa popularité globale ?",
-      // Assuming you have a field "playlistCount" available in your data.
-      dimensions: ["playlistCount", "popularity"],
-    },
-    {
-      label:
-        "Comment les diffusions radio (AirPlay Spins, SiriusXM Spins) se comparent-elles aux mesures de popularité en ligne ?",
-      dimensions: ["airPlaySpins", "siriusXMSpins", "popularity"],
-    },
-  ];
-
-  // We'll use a single state variable (pcIndex) to determine which parallel coordinates config is active.
-  const [pcIndex, setPcIndex] = useState(0);
-  // Handle parallel coordinates configuration navigation
-  const nextPC = () => {
-    setPcIndex((prev) => (prev + 1) % parallelConfigs.length);
-  };
-  const prevPC = () => {
-    setPcIndex(
-      (prev) => (prev - 1 + parallelConfigs.length) % parallelConfigs.length
-    );
-  };
-
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -186,34 +150,25 @@ const ScrollytellingDashboard = () => {
             </div>
           </div>
         </section>
-
-        {/* Dedicated Parallel Coordinates Section (for both Genre Musical and Diffusion) */}
-        <section id="parallel" style={sectionStyle}>
+        {/* Aspect Genre Musical Section */}
+        <section ref={genreRef} id="genre" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
-            <h1 className="text-3xl font-bold">Analyse Parallèle</h1>
-            <p className="mt-2 text-lg text-muted-foreground">
-              {parallelConfigs[pcIndex].label}
-            </p>
+            <h1>Aspect Genre Musical</h1>
           </div>
-          <div
-            style={{
-              ...visualizationContainerStyle,
-              flex: 1,
-              position: "relative",
-            }}
-          >
-            <ParallelCoordinates
-              data={data}
-              config={parallelConfigs[pcIndex]}
-            />
+          <div style={visualizationContainerStyle}>
+            <BoxPlot data={data} />
           </div>
-          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-            <button className="mr-4 p-2 bg-gray-200 rounded" onClick={prevPC}>
-              Précédent
-            </button>
-            <button className="p-2 bg-gray-200 rounded" onClick={nextPC}>
-              Suivant
-            </button>
+          <div style={visualizationContainerStyle}>
+            <ParallelCoordinates data={data} />
+          </div>
+        </section>
+        {/* Aspect Diffusion & Rayonnement Section */}
+        <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
+          <div style={sectionHeaderStyle}>
+            <h1>Aspect Diffusion & Rayonnement</h1>
+          </div>
+          <div style={visualizationContainerStyle}>
+            <ParallelCoordinates data={data} />
           </div>
         </section>
 
