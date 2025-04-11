@@ -1,19 +1,15 @@
-import React, { useState, useRef } from "react";
-import useData from "../hooks/useData";
+import React, { useState } from "react";
 import BoxPlot from "./BoxPlot";
+import useData from "../hooks/useData";
+import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import CorrelationMatrix from "./CorrelationMatrix";
 import ScatterPlot from "./ScatterPlot";
-import RadialLineChart from "./RadialLineChart";
-import Overview from "./Overview";
-import MultiPlatformOverview from "./MultiPlatformOverview";
 import SunburstChart from "./SunburstChart";
-import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import ParallelCoordinates from "./ParallelCoordinates";
 
 import * as d3 from "d3";
 import {
   BarChart3,
-  LayoutDashboard,
   ScatterChart,
   Grid2X2,
   Music2,
@@ -34,52 +30,7 @@ import {
   CardFooter,
 } from "./ui/card";
 import { Badge } from "./ui/badge";
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger,
-  useSidebar,
-} from "./ui/sidebar";
 import { cn } from "./ui/utils";
-
-const containerStyle = {
-  marginLeft: "220px",
-  height: "100vh",
-  overflowY: "scroll",
-  scrollSnapType: "y mandatory",
-};
-
-const sectionStyle = {
-  height: "100vh",
-  scrollSnapAlign: "start",
-  padding: "40px",
-  boxSizing: "border-box",
-};
-
-const sidebarStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "200px",
-  height: "100vh",
-  background: "#f0f0f0",
-  padding: "20px",
-  boxSizing: "border-box",
-};
-
-const navListStyle = {
-  listStyle: "none",
-  padding: 0,
-};
-
-const navItemStyle = {
-  marginBottom: "10px",
-};
 
 const Dashboard = () => {
   const data = useData();
@@ -491,20 +442,12 @@ const Dashboard = () => {
   };
 
   const MainContent = () => {
-    const { isOpen } = useSidebar();
-
     return (
       <div
         className={cn(
-          "flex-1 flex flex-col min-h-screen transition-all duration-300 relative",
-          isOpen ? "ml-64" : "ml-20"
+          "flex-1 flex flex-col min-h-screen transition-all duration-300 relative"
         )}
       >
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b bg-background px-6 shadow-sm">
-          <SidebarTrigger />
-          <h1 className="text-xl font-semibold">Spotify Data Visualization</h1>
-        </header>
-
         <main className="flex-1 p-6 overflow-x-hidden overflow-y-auto">
           {renderVisualization()}
         </main>
@@ -516,218 +459,7 @@ const Dashboard = () => {
     );
   };
 
-  return (
-    /* <div>
-    <SunburstChart data={hierarchicalData} />
-    <ParallelCoordinates data={pcData} />
-  </div>*/
-
-    <SidebarProvider>
-      <div className="flex bg-background">
-        <Sidebar>
-          <SidebarHeader className="border-b">
-            <div className="flex items-center gap-2">
-              <div className="rounded-full bg-[#1DB954] p-1">
-                <Music2 className="h-5 w-5 text-black" />
-              </div>
-              <h1 className="text-xl font-bold text-[#1DB954]">Spotify Data</h1>
-            </div>
-          </SidebarHeader>
-
-          <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "overview"}
-                  onClick={() => setActiveViz("overview")}
-                >
-                  <LayoutDashboard />
-                  <span>Overview</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "boxplot"}
-                  onClick={() => setActiveViz("boxplot")}
-                >
-                  <BarChart3 />
-                  <span>Box Plot</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "correlation"}
-                  onClick={() => setActiveViz("correlation")}
-                >
-                  <Grid2X2 />
-                  <span>Correlation Matrix</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "barchart"}
-                  onClick={() => setActiveViz("barchart")}
-                >
-                  <TrendingUp />
-                  <span>Bar Chart</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "scatterplot"}
-                  onClick={() => setActiveViz("scatterplot")}
-                >
-                  <ScatterChart />
-                  <span>Scatter Plot</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              {/* (A) NOUVEAU : Sunburst */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "sunburst"}
-                  onClick={() => setActiveViz("sunburst")}
-                >
-                  <Music2 />
-                  <span>Sunburst</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              {/* (A) NOUVEAU : Parallel */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={activeViz === "parallel"}
-                  onClick={() => setActiveViz("parallel")}
-                >
-                  <Grid2X2 />
-                  <span>Parallel Coords</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarContent>
-        </Sidebar>
-
-        <MainContent />
-      </div>
-    </SidebarProvider>
-  );
+  return <MainContent />;
 };
 
-const ScrollytellingDashboard = () => {
-  //call use data
-  const data = useData();
-  // Références vers les sections
-  const temporalRef = useRef(null);
-  const multiplatformRef = useRef(null);
-  const genreRef = useRef(null);
-  const diffusionRef = useRef(null);
-  const engagementRef = useRef(null);
-
-  const scrollToSection = (ref) => {
-    ref.current.scrollIntoView({ behavior: "smooth" });
-  };
-
-  return (
-    <div style={{ display: "flex" , flexDirection: "column" }}>
-      {/* Barre latérale */}
-      <Dashboard />
-      <Overview />
-      <nav style={sidebarStyle}>
-        <ul style={navListStyle}>
-          <li style={navItemStyle}>
-            <button onClick={() => scrollToSection(temporalRef)}>
-              Aspect Temporel
-            </button>
-          </li>
-          <li style={navItemStyle}>
-            <button onClick={() => scrollToSection(multiplatformRef)}>
-              Aspect Multi-plateformes
-            </button>
-          </li>
-          <li style={navItemStyle}>
-            <button onClick={() => scrollToSection(genreRef)}>
-              Aspect Genre Musical
-            </button>
-          </li>
-          <li style={navItemStyle}>
-            <button onClick={() => scrollToSection(diffusionRef)}>
-              Aspect Diffusion & Rayonnement
-            </button>
-          </li>
-          <li style={navItemStyle}>
-            <button onClick={() => scrollToSection(engagementRef)}>
-              Aspect Engagement Utilisateur
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Conteneur principal avec scroll snapping */}
-      <div style={containerStyle}>
-        {/* Section 1 : Aspect Temporel */}
-        <section ref={temporalRef} id="temporal" style={sectionStyle}>
-          <h1 className="text-3xl font-bold mb-4">Aspect Temporel</h1>
-          {/* Nuage de points avec régression */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-2">
-              Scatter Plot : Age vs. Spotify Streams
-            </h2>
-            <ScatterPlot data={data} />
-            <p className="text-xs text-muted-foreground mt-2">
-              Ce nuage de points interactif montre la relation entre l&apos;âge
-              des chansons et divers indicateurs de succès, avec une ligne de
-              régression calculée en temps réel pour visualiser la tendance
-              globale.
-            </p>
-          </div>
-          {/* Graphique des tendances saisonnières */}
-          <div>
-            <h2 className="text-2xl font-bold mb-2">
-              Graphique des Tendances Saisonnières
-            </h2>
-            <RadialLineChart data={data} />
-            <p className="text-xs text-muted-foreground mt-2">
-              Ce graphique radial permet d&apos;identifier les tendances
-              saisonnières en fonction du mois ou de la saison, en cliquant sur
-              une section pour zoomer sur les détails.
-            </p>
-          </div>
-        </section>
-
-        {/* Section 2 : Aspect Multi-plateformes (Contenu à venir) */}
-        <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
-          <h1 className="text-3xl font-bold mb-4">Aspect Multi-plateformes</h1>
-          <MultiPlatformOverview data={data} />
-        </section>
-
-        {/* Section 3 : Aspect Genre Musical (Contenu à venir) */}
-        <section ref={genreRef} id="genre" style={sectionStyle}>
-          <h1 className="text-3xl font-bold mb-4">Aspect Genre Musical</h1>
-          <p>Contenu à venir (Boxplot, Parallel Coordinates, etc.)</p>
-        </section>
-
-        {/* Section 4 : Aspect Diffusion et Rayonnement (Contenu à venir) */}
-        <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
-          <h1 className="text-3xl font-bold mb-4">
-            Aspect Diffusion & Rayonnement
-          </h1>
-          <p>Contenu à venir (Parallel Coordinates, etc.)</p>
-        </section>
-
-        {/* Section 5 : Aspect Engagement Utilisateur (Contenu à venir) */}
-        <section ref={engagementRef} id="engagement" style={sectionStyle}>
-          <h1 className="text-3xl font-bold mb-4">
-            Aspect Engagement des Utilisateurs
-          </h1>
-          {/* <EngagementSection data={data} /> */}
-        </section>
-      </div>
-    </div>
-  );
-};
-
-export default ScrollytellingDashboard;
+export default Dashboard;
