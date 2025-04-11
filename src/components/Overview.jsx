@@ -28,12 +28,12 @@ const Overview = () => {
   const mostRecentDate = new Date(Math.max(...data.map((d) => d.releaseDate)));
 
   return (
-    <div className="p-6">
+    <div>
       {/* Section Introductive et Contexte */}
       <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">
+        <h2>
           Spotify Top Streamed Songs 2024
-        </h1>
+        </h2>
         <p className="text-lg text-muted-foreground">
           Bienvenue sur notre projet de visualisation de données pour le cours
           INF8808. Dans un paysage musical en pleine transformation grâce aux

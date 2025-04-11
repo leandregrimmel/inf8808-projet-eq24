@@ -17,8 +17,8 @@ const sectionStyle = {
   scrollSnapAlign: "start",
   display: "flex",
   flexDirection: "column",
+  padding: "20px",
   boxSizing: "border-box",
-  backgroundColor: "#f7f7f7",
 };
 
 // Standardized section header style.
@@ -26,9 +26,7 @@ const sectionHeaderStyle = {
   position: "sticky",
   top: 0,
   backgroundColor: "#fff",
-  padding: "20px 40px",
-  borderBottom: "1px solid #ddd",
-  marginBottom: "20px",
+  padding: "15px 0px",
   zIndex: 1,
 };
 
@@ -86,7 +84,7 @@ const ScrollytellingDashboard = () => {
           {/* Overview Section */}
           <section ref={overviewRef} id="overview" style={sectionStyle}>
             <div style={sectionHeaderStyle}>
-              <h1 className="text-3xl font-bold">Overview</h1>
+              <h1>Overview</h1>
             </div>
             <Overview />
           </section>
@@ -94,7 +92,7 @@ const ScrollytellingDashboard = () => {
           {/* Aspect Temporel Section */}
           <section ref={temporalRef} id="temporal" style={sectionStyle}>
             <div style={sectionHeaderStyle}>
-              <h1 className="text-3xl font-bold">Aspect Temporel</h1>
+              <h1>Aspect Temporel</h1>
             </div>
             <div className="mb-8">
               <h2 className="text-2xl font-bold mb-2">
@@ -130,7 +128,7 @@ const ScrollytellingDashboard = () => {
             style={sectionStyle}
           >
             <div style={sectionHeaderStyle}>
-              <h1 className="text-3xl font-bold">Aspect Multi-plateformes</h1>
+              <h1>Aspect Multi-plateformes</h1>
             </div>
             <div className="p-6 space-y-8">
               <h2 className="text-2xl font-bold mb-4">
@@ -163,7 +161,7 @@ const ScrollytellingDashboard = () => {
           {/* Aspect Genre Musical Section */}
           <section ref={genreRef} id="genre" style={sectionStyle}>
             <div style={sectionHeaderStyle}>
-              <h1 className="text-3xl font-bold">Aspect Genre Musical</h1>
+              <h1>Aspect Genre Musical</h1>
             </div>
             <div style={visualizationContainerStyle}>
               <BoxPlot data={data} />
@@ -176,9 +174,7 @@ const ScrollytellingDashboard = () => {
           {/* Aspect Diffusion & Rayonnement Section */}
           <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
             <div style={sectionHeaderStyle}>
-              <h1 className="text-3xl font-bold">
-                Aspect Diffusion & Rayonnement
-              </h1>
+              <h1>Aspect Diffusion & Rayonnement</h1>
             </div>
             <div style={visualizationContainerStyle}>
               <ParallelCoordinates data={data} />
@@ -188,9 +184,7 @@ const ScrollytellingDashboard = () => {
           {/* Aspect Engagement Section */}
           <section ref={engagementRef} id="engagement" style={sectionStyle}>
             <div style={sectionHeaderStyle}>
-              <h1 className="text-3xl font-bold">
-                Aspect Engagement des Utilisateurs
-              </h1>
+              <h1>Aspect Engagement des Utilisateurs</h1>
             </div>
             <div style={visualizationContainerStyle}>
               <ScatterPlot data={data} />

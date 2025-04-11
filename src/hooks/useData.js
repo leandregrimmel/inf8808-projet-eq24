@@ -47,7 +47,6 @@ export default function useData() {
         explicitTrack: d["Explicit Track"] === "1", // Convert "0"/"1" to a boolean
       };
     }).then((data) => {
-      console.log("Data loaded:", data.length, "tracks");
       setData(data);
     })
     .catch(error => {

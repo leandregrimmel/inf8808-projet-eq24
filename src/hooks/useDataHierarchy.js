@@ -70,7 +70,6 @@ export function useDataHierarchy(rawData) {
 
     // Transformer les données brutes en hiérarchie
     const hierarchicalData = flatToHierarchyTop10(rawData);
-    console.log("Données hiérarchiques :", hierarchicalData);
     setHierarchy(hierarchicalData);
   }, [rawData]);
 
