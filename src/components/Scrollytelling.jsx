@@ -72,9 +72,7 @@ const ScrollytellingDashboard = () => {
           setActiveSection={setActiveSection}
         />
 
-        {/* Main Scrollable Container with Scroll Snapping */}
         <div style={containerStyle}>
-          {/* Overview Section */}
           <section ref={overviewRef} id="overview" style={sectionStyle}>
             <div style={stickyTitleStyle}>
               <h1 className="text-3xl font-bold">Overview</h1>
@@ -82,7 +80,6 @@ const ScrollytellingDashboard = () => {
             <Overview />
           </section>
 
-          {/* Section 1: Aspect Temporel */}
           <section ref={temporalRef} id="temporal" style={sectionStyle}>
             <div style={stickyTitleStyle}>
               <h1 className="text-3xl font-bold">Aspect Temporel</h1>
@@ -156,8 +153,12 @@ const ScrollytellingDashboard = () => {
             <div style={stickyTitleStyle}>
               <h1 className="text-3xl font-bold">Aspect Genre Musical</h1>
             </div>
-            <BoxPlot data={data} />
-            <ParallelCoordinates data={data} />
+            <div className="border p-4">
+              <BoxPlot data={data} />
+            </div>
+            <div className="border p-4">
+              <ParallelCoordinates data={data} />
+            </div>
           </section>
 
           {/* Section 4: Aspect Diffusion et Rayonnement */}
@@ -167,9 +168,9 @@ const ScrollytellingDashboard = () => {
                 Aspect Diffusion & Rayonnement
               </h1>
             </div>
-            <ParallelCoordinates data={data} />
-            <ParallelCoordinates data={data} />
-            <ParallelCoordinates data={data} />
+            <div className="border p-4">
+              <ParallelCoordinates data={data} />
+            </div>
           </section>
 
           {/* Section 5: Aspect Engagement Utilisateur */}

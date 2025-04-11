@@ -72,26 +72,21 @@ const BoxPlot = ({ data }) => {
       };
     });
 
-    // Determine container dimensions from the parent element.
+    // Calculate responsive dimensions
     const container = d3.select(ref.current.parentNode);
-    const containerWidth = container.node().clientWidth;
-    // Use the full height available (which is 100vh from sectionStyle)
-    const containerHeight = container.node().clientHeight;
+    const containerWidth = parseInt(container.style("width")) || 800;
 
-    // Define your margins relative to available space
-    const margin = { top: 40, right: 40, bottom: 40, left: 60 };
-    const width = containerWidth - margin.left - margin.right;
-    const height = containerHeight - margin.top - margin.bottom;
+    const width = Math.min(containerWidth, 900);
+    const height = 550;
+    const margin = { top: 80, right: 160, bottom: 80, left: 100 };
 
     d3.select(ref.current).selectAll("*").remove();
 
     const svg = d3
       .select(ref.current)
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
-      .attr("preserveAspectRatio", "xMidYMid meet")
-      .style("overflow", "hidden")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", `0 0 ${width} ${height}`)
       .style("font-family", "'Gotham', 'Helvetica Neue', Arial, sans-serif");
 
     // Add background rectangle with subtle gradient
@@ -658,7 +653,7 @@ const BoxPlot = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="boxplot-wrapper" style={{ width: "100%", height: "100%" }}>
+    <div className="boxplot-wrapper">
       <svg ref={ref}></svg>
       <div
         id="tooltip"
