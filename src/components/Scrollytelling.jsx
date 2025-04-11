@@ -3,7 +3,6 @@ import useData from "../hooks/useData";
 import ScatterPlot from "./ScatterPlot";
 import RadialLineChart from "./RadialLineChart";
 import Overview from "./Overview";
-import Dashboard from "./Dashboard";
 import ScrollytellingSidebar from "./ScrollytellingSidebar";
 import CorrelationMatrix from "./CorrelationMatrix";
 import SunburstChart from "./SunburstChart";
@@ -32,7 +31,7 @@ const stickyTitleStyle = {
   zIndex: 1,
 };
 
-const ScrollytellingDashboard = () => {
+const Scrollytelling = () => {
   const data = useData();
   const [activeSection, setActiveSection] = React.useState("dashboard");
   // Create refs for each section (adding Dashboard and Overview here)
@@ -68,23 +67,15 @@ const ScrollytellingDashboard = () => {
           setActiveSection={setActiveSection}
         />
 
-        {/* Main Scrollable Container with Scroll Snapping */}
-        <div style={containerStyle}>
-          {/* Dashboard Section */}
-          <section ref={dashboardRef} id="dashboard" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
-              <h1 className="text-3xl font-bold">Dashboard</h1>
-            </div>
-            <Dashboard />
-          </section>
-
-          {/* Overview Section */}
-          <section ref={overviewRef} id="overview" style={sectionStyle}>
-            <div style={stickyTitleStyle}>
-              <h1 className="text-3xl font-bold">Overview</h1>
-            </div>
-            <Overview />
-          </section>
+          {/* Main Scrollable Container with Scroll Snapping */}
+          <div style={containerStyle}>
+            {/* Overview Section */}
+            <section ref={overviewRef} id="overview" style={sectionStyle}>
+              <div style={stickyTitleStyle}>
+                <h1 className="text-3xl font-bold">Overview</h1>
+              </div>
+              <Overview />
+            </section>
 
           {/* Section 1: Aspect Temporel */}
           <section ref={temporalRef} id="temporal" style={sectionStyle}>
@@ -195,4 +186,4 @@ const ScrollytellingDashboard = () => {
   );
 };
 
-export default ScrollytellingDashboard;
+export default Scrollytelling;
