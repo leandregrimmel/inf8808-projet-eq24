@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import ParallelCoordinates from "./ParallelCoordinates";
 import useData from "../hooks/useData";
-import BoxPlot from "./BoxPlot";
+import ExpliciteContentAnalysis from "./MusicalGenreSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
 import Sidebar from "./Sidebar";
 import CorrelationMatrix from "./CorrelationMatrix";
@@ -162,18 +162,48 @@ const ScrollytellingDashboard = () => {
         </section>
 
         {/* Aspect Genre Musical Section */}
-        <section ref={genreRef} id="genre" style={sectionStyle}>
-          <div style={sectionHeaderStyle}>
-            <h1>Aspect Genre Musical</h1>
+        <section ref={genreRef} id="genre" style={temporalSectionStyle}>
+          <div style={temporalHeaderStyle}>
+            <h1>Aspect Genre Musical et Contenu Explicite</h1>
           </div>
-          <div style={visualizationContainerStyle}>
-            <BoxPlot data={data} />
+
+          {/* Box Plot Subsection */}
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>Analyse des Contenus Explicites</h2>
+            </div>
+            <ExpliciteContentAnalysis
+              data={data}
+              initialMetric="spotifyStreams"
+              availableMetrics={[
+                { value: "spotifyStreams", label: "Streams Spotify" },
+                { value: "spotifyPopularity", label: "Popularité Spotify" },
+                { value: "playlistReach", label: "Portée des playlists" },
+                { value: "youtubeLikes", label: "Likes YouTube" },
+              ]}
+            />
           </div>
-          <div style={visualizationContainerStyle}>
-            <ParallelCoordinates data={data} />
+
+          {/* Parallel Coordinates Subsection */}
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>Analyse Multi-dimensionnelle des Genres</h2>
+            </div>
+            <ParallelCoordinates
+              data={data}
+              config={{
+                dimensions: [
+                  "spotifyPopularity",
+                  "spotifyStreams",
+                  "youtubeLikes",
+                  "playlistReach",
+                  "airPlaySpins",
+                ],
+                enableArtistFilter: true,
+              }}
+            />
           </div>
         </section>
-        {/* Aspect Diffusion & Rayonnement Section */}
         <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Diffusion & Rayonnement</h1>
