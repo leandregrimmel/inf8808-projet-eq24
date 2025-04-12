@@ -8,7 +8,6 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
   const [years, setYears] = useState([]);
   const animationRef = useRef(null);
 
-  // Store visualization elements
   const elementsRef = useRef({
     path: null,
     points: null,
@@ -29,7 +28,6 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
   useEffect(() => {
     if (!data || !years.length) return;
 
-    // Cancel any pending animation
     if (animationRef.current) {
       d3.select(ref.current).interrupt();
     }
@@ -39,18 +37,18 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
       : data;
 
     const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      { full: "Janvier", abr: "JAN" },
+      { full: "Février", abr: "FÉV" },
+      { full: "Mars", abr: "MAR" },
+      { full: "Avril", abr: "AVR" },
+      { full: "Mai", abr: "MAI" },
+      { full: "Juin", abr: "JUN" },
+      { full: "Juillet", abr: "JUL" },
+      { full: "Août", abr: "AOÛ" },
+      { full: "Septembre", abr: "SEP" },
+      { full: "Octobre", abr: "OCT" },
+      { full: "Novembre", abr: "NOV" },
+      { full: "Décembre", abr: "DÉC" },
     ];
 
     const monthlyData = monthNames.map((month, i) => {
@@ -68,7 +66,6 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
     const innerRadius = 80;
     const outerRadius = Math.min(width, height) / 2 - 50;
 
-    // Initialize SVG if not already done
     if (!elementsRef.current.path) {
       d3.select(ref.current).selectAll("*").remove();
 
@@ -81,20 +78,18 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
         .append("g")
         .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-      // Create scales
       elementsRef.current.rScale = d3
         .scaleLinear()
         .range([innerRadius, outerRadius]);
 
       elementsRef.current.angleScale = d3
         .scaleBand()
-        .domain(monthNames)
+        .domain(monthNames.map((m) => m.abr))
         .range([0, 2 * Math.PI])
         .align(0);
 
-      // Add grid
       g.selectAll("circle.grid")
-        .data([1, 2, 3, 4]) // Simple grid levels
+        .data([1, 2, 3, 4])
         .enter()
         .append("circle")
         .attr("r", (d) => innerRadius + ((outerRadius - innerRadius) * d) / 4)
@@ -102,14 +97,12 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
         .attr("stroke", "#eee")
         .attr("stroke-dasharray", "2,2");
 
-      // Create path
       elementsRef.current.path = g
         .append("path")
         .attr("fill", "none")
         .attr("stroke", "#3b82f6")
         .attr("stroke-width", 3);
 
-      // Create points
       elementsRef.current.points = g
         .selectAll("circle.point")
         .data(monthlyData)
@@ -129,78 +122,71 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
           hideTooltip();
         });
 
-      // Create labels
       elementsRef.current.labels = g
         .selectAll("text.label")
         .data(monthlyData)
         .enter()
         .append("text")
         .attr("class", "label")
-        .text((d) => d.month.substring(0, 3))
+        .text((d) => d.month.abr)
         .style("font-size", "12px")
         .style("fill", "#555");
     }
 
-    // Update scales
     elementsRef.current.rScale
       .domain([0, d3.max(monthlyData, (d) => d.value)])
       .nice();
 
-    // Create line generator
     const line = d3
       .lineRadial()
       .angle(
         (d) =>
-          elementsRef.current.angleScale(d.month) +
+          elementsRef.current.angleScale(d.month.abr) +
           elementsRef.current.angleScale.bandwidth() / 2
       )
       .radius((d) => elementsRef.current.rScale(d.value))
       .curve(d3.curveCardinalClosed);
 
-    // Animate transitions
     animationRef.current = d3.select(ref.current).transition().duration(800);
 
-    // Animate path
     elementsRef.current.path
       .datum(monthlyData)
       .transition(animationRef.current)
       .attr("d", line);
 
-    // Animate points
     elementsRef.current.points
       .data(monthlyData)
       .transition(animationRef.current)
       .attr("cx", (d) => {
         const a =
-          elementsRef.current.angleScale(d.month) +
+          elementsRef.current.angleScale(d.month.abr) +
           elementsRef.current.angleScale.bandwidth() / 2;
         return elementsRef.current.rScale(d.value) * Math.cos(a - Math.PI / 2);
       })
       .attr("cy", (d) => {
         const a =
-          elementsRef.current.angleScale(d.month) +
+          elementsRef.current.angleScale(d.month.abr) +
           elementsRef.current.angleScale.bandwidth() / 2;
         return elementsRef.current.rScale(d.value) * Math.sin(a - Math.PI / 2);
       });
 
-    // Update labels (no animation)
     elementsRef.current.labels
       .data(monthlyData)
       .attr("text-anchor", (d) => {
         const a =
-          elementsRef.current.angleScale(d.month) +
+          elementsRef.current.angleScale(d.month.abr) +
           elementsRef.current.angleScale.bandwidth() / 2;
         return a > Math.PI ? "end" : "start";
       })
       .attr("x", (d) => {
         const a =
-          elementsRef.current.angleScale(d.month) +
+          elementsRef.current.angleScale(d.month.abr) +
           elementsRef.current.angleScale.bandwidth() / 2;
         return (outerRadius + 15) * Math.cos(a - Math.PI / 2);
       })
       .attr("y", (d) => {
         const a =
-          elementsRef.current.angleScale(d.month) +
+          elementsRef.current.angleScale(d.month.abr) +
           elementsRef.current.angleScale.bandwidth() / 2;
         return (outerRadius + 15) * Math.sin(a - Math.PI / 2);
       });
@@ -213,17 +199,17 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
       .style("opacity", 1)
       .style("left", `${x + 150}px`)
       .style("top", `${y - 50}px`).html(`
-        <div class="bg-white p-3 rounded shadow-lg border border-gray-200 min-w-[200px]">
-          <strong class="text-sm block">${d.month}</strong>
-          <div class="text-xs mt-2">
-            <div>Average Popularity: ${d.value.toFixed(1)}</div>
-            ${
-              activeYear
-                ? `<div class="text-gray-500">Year: ${activeYear}</div>`
-                : ""
-            }
-          </div>
+      <div class="bg-white p-3 rounded shadow-lg border border-gray-200 min-w-[200px]">
+        <strong class="text-sm block">${d.month.full}</strong>
+        <div class="text-xs mt-2">
+        <div>Popularité Moyenne: ${d.value.toFixed(1)}</div>
+        ${
+          activeYear
+          ? `<div class="text-gray-500">Année: ${activeYear}</div>`
+          : ""
+        }
         </div>
+      </div>
       `);
   };
 
@@ -234,6 +220,12 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
   return (
     <div className="flex flex-col items-center p-4">
       {/* Radial Chart */}
+      <h4>
+        Ce graphique circulaire révèle les tendances mensuelles de popularité
+        des musiques. La courbe et les points interactifs mettent en évidence
+        les pics saisonniers, tandis que le filtre par année permet d'analyser
+        leur évolution dans le temps.
+      </h4>
       <div style={{ position: "relative" }}>
         <svg ref={ref} width={600} height={500}></svg>
         <div

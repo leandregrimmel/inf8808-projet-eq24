@@ -138,11 +138,11 @@ const AgeVsStreams = ({ data }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <p>
+      <h4>
         Ce nuage de points interactif montre la relation entre l'âge des
         chansons et divers indicateurs de succès, avec une ligne de régression
         pour visualiser la tendance globale.
-      </p>
+      </h4>
       <svg ref={ref}></svg>
       <div
         ref={tooltipRef}
