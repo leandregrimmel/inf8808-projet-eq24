@@ -69,7 +69,8 @@ const AgeVsStreams = ({ data }) => {
       .text("Spotify Streams");
 
     const scatter = svg.append("g");
-    const circles = scatter
+    
+    scatter
       .selectAll("circle")
       .data(data)
       .enter()

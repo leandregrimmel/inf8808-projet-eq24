@@ -14,7 +14,6 @@ import SeasonalTrends from "./TemporalSection/SeasonalTrends";
 const sectionStyle = {
   minHeight: "100vh",
   width: "100%",
-  scrollSnapAlign: "start",
   display: "flex",
   flexDirection: "column",
   padding: "20px",
@@ -42,7 +41,6 @@ const temporalSectionStyle = {
 const subsectionStyle = {
   minHeight: "100vh",
   width: "100%",
-  scrollSnapAlign: "start",
   padding: "0 40px",
   boxSizing: "border-box",
 };
@@ -81,7 +79,6 @@ const ScrollytellingDashboard = () => {
     height: "100vh",
     width: `calc(100vw - ${isOpen ? "16rem" : "5rem"})`,
     overflowY: "auto",
-    scrollSnapType: "y mandatory",
     transition: "margin-left 0.3s ease, width 0.3s ease",
   };
 
