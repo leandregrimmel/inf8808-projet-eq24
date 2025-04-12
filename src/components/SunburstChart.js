@@ -6,19 +6,17 @@ const SunburstChart = ({ data }) => {
 
   useEffect(() => {
     if (!data) return;
-
     // Vérifier que data.children existe et est un tableau non vide.
     if (!Array.isArray(data.children) || data.children.length === 0) {
       console.error("La structure des données est incomplète : 'children' est manquant ou vide.");
       return;
     }
 
-    console.log("Données reçues :", data);
 
     // --- Définition des dimensions et du rayon ---
-    const width = 900;
+    const width = 600;
     const height = width;
-    const radius = width / 10;
+    const radius = width / 7;
 
     // --- Création de la palette de couleurs ---
     const color = d3.scaleOrdinal(
@@ -38,7 +36,6 @@ const SunburstChart = ({ data }) => {
       })
       .sort((a, b) => b.value - a.value);
 
-    console.log("Hiérarchie générée :", hierarchyData.descendants());
 
     // --- Calcul du layout de partition ---
     const root = d3.partition()
@@ -116,7 +113,6 @@ const SunburstChart = ({ data }) => {
     // --- Fonction de zoom (clic) ---
     function clicked(event, p) {
       parent.datum(p.parent || root);
-      console.log("Clic sur :", p.data.name);
       root.each(d => {
         d.target = {
           x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -157,7 +153,7 @@ const SunburstChart = ({ data }) => {
   }, [data]);
 
   return (
-    <div style={{ margin: "0 auto", maxWidth: "928px" }}>
+    <div style={{ margin: "0 auto", maxWidth: "600px" }}>
       <svg ref={ref}></svg>
     </div>
   );
