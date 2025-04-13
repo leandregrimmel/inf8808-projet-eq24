@@ -90,9 +90,9 @@ const ScrollytellingDashboard = () => {
   // Use a ref for the scroll container and state for button visibility
   const containerRef = useRef(null);
   const containerStyle = {
-    marginLeft: isOpen ? "16rem" : "5rem",
+    marginLeft: isOpen ? "18rem" : "5rem",
     height: "100vh",
-    width: `calc(100vw - ${isOpen ? "16rem" : "5rem"})`,
+    width: `calc(100vw - ${isOpen ? "18rem" : "5rem"})`,
     overflowY: "auto",
     transition: "margin-left 0.3s ease, width 0.3s ease",
   };
@@ -166,15 +166,34 @@ const ScrollytellingDashboard = () => {
           <Overview temporalSectionRef={temporalRef} />
         </section>
 
-        {/* Questions Cards Section */}
         <section ref={questionsRef} id="questions" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Questions</h1>
           </div>
-          <QuestionCards
-            scrollRefs={scrollRefs}
-            onQuestionSelect={handleQuestionSelect}
-          />
+          <div
+            style={{
+              minHeight: "50vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
+              <h2>Explorez nos questions d'analyse</h2>
+            </div>
+            <QuestionCards
+              scrollRefs={scrollRefs}
+              onQuestionSelect={handleQuestionSelect}
+            />
+          </div>
         </section>
 
         {/* Aspect Temporel Section */}

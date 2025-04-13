@@ -2,13 +2,31 @@ import React from "react";
 import formatNumber from "../utils";
 
 const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
-  // List of question objects with their default configuration
+  const sectionColors = {
+    temporal: "rgba(245, 158, 11, 0.15)", // Amber (more transparent)
+    multiplatform: "rgba(101, 163, 13, 0.15)", // Lime green (more distinct from teal)
+    style: "rgba(168, 85, 247, 0.15)", // Purple
+    diffusion: "rgba(239, 68, 68, 0.15)", // Red
+    engagement: "rgba(6, 182, 212, 0.15)", // Cyan (more distinct from lime)
+    questions: "rgba(107, 114, 128, 0.15)", // Gray
+  };
+
+  const borderColors = {
+    temporal: "#f59e0b", // Amber
+    multiplatform: "#65a30d", // Lime green
+    style: "#a855f7", // Purple
+    diffusion: "#ef4444", // Red
+    engagement: "#06b6d4", // Cyan
+    questions: "#6b7280", // Gray
+  };
+
   const questions = [
     {
       id: 1,
       question:
         "Comment la popularité d'une chanson varie-t-elle en fonction de son âge (calculé à partir de la date de sortie) ?",
       targetSection: "temporalAge",
+      section: "temporal",
       defaultConfig: { metric: "spotifyStreams" },
     },
     {
@@ -16,6 +34,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Peut-on identifier des corrélations entre l'ancienneté d'une chanson et ses indicateurs de succès sur différentes plateformes ?",
       targetSection: "temporalAge",
+      section: "temporal",
       defaultConfig: { metric: "spotifyStreams" },
     },
     {
@@ -23,43 +42,22 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Existe-t-il un lien entre le moment de l'année de la parution d'une chanson et sa popularité ?",
       targetSection: "temporalSeason",
+      section: "temporal",
       defaultConfig: { year: 2024, metric: "spotifyPopularity" },
     },
+
     {
       id: 4,
       question:
         "Quelle est la corrélation entre la popularité sur Spotify et les indicateurs provenant d'autres plateformes (YouTube, TikTok, Shazam) ?",
       targetSection: "multiCorrelation",
+      section: "multiplatform",
       defaultConfig: {
         metrics: [
-          {
-            id: "spotifyStreams",
-            label: "Streams Spotify",
-            format: formatNumber,
-            description: "Streams totaux sur Spotify",
-            unit: "streams",
-          },
-          {
-            id: "tiktokViews",
-            label: "Vues TikTok",
-            format: formatNumber,
-            description: "Vues totales sur TikTok",
-            unit: "vues",
-          },
-          {
-            id: "youtubeViews",
-            label: "Vues YouTube",
-            format: formatNumber,
-            description: "Vues totales sur YouTube",
-            unit: "vues",
-          },
-          {
-            id: "shazamCounts",
-            label: "Shazams",
-            format: formatNumber,
-            description: "Identifications Shazam",
-            unit: "shazams",
-          },
+          { id: "spotifyStreams", label: "Streams Spotify" },
+          { id: "tiktokViews", label: "Vues TikTok" },
+          { id: "youtubeViews", label: "Vues YouTube" },
+          { id: "shazamCounts", label: "Shazams" },
         ],
       },
     },
@@ -68,36 +66,13 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Les pics de popularité sur une plateforme suivent-ils ceux sur une autre ?",
       targetSection: "multiCorrelation",
+      section: "multiplatform",
       defaultConfig: {
         metrics: [
-          {
-            id: "spotifyStreams",
-            label: "Streams Spotify",
-            format: formatNumber,
-            description: "Streams totaux sur Spotify",
-            unit: "streams",
-          },
-          {
-            id: "tiktokViews",
-            label: "Vues TikTok",
-            format: formatNumber,
-            description: "Vues totales sur TikTok",
-            unit: "vues",
-          },
-          {
-            id: "youtubeViews",
-            label: "Vues YouTube",
-            format: formatNumber,
-            description: "Vues totales sur YouTube",
-            unit: "vues",
-          },
-          {
-            id: "shazamCounts",
-            label: "Shazams",
-            format: formatNumber,
-            description: "Identifications Shazam",
-            unit: "shazams",
-          },
+          { id: "spotifyStreams", label: "Streams Spotify" },
+          { id: "tiktokViews", label: "Vues TikTok" },
+          { id: "youtubeViews", label: "Vues YouTube" },
+          { id: "shazamCounts", label: "Shazams" },
         ],
       },
     },
@@ -106,29 +81,35 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Quelles plateformes attirent le plus grand nombre de consommateurs selon l'artiste ?",
       targetSection: "multiSunburst",
+      section: "multiplatform",
       defaultConfig: {},
     },
+
     {
       id: 7,
       question:
-        "Comment les indicateurs de popularité varient-ils selon la présence de mots vulgaires ?",
-      targetSection: "styleExplicit",
-      defaultConfig: { metric: "spotifyStreams" },
-    },
-    {
-      id: 8,
-      question:
         "Comment les indicateurs de popularité varient-ils selon l'artiste ?",
       targetSection: "diffusionChart",
+      section: "style",
       defaultConfig: {
         info: "Pour sélectionner un artiste, utilisez la barre de recherche dans la barre latérale.",
       },
     },
     {
+      id: 8,
+      question:
+        "Comment les indicateurs de popularité varient-ils selon la présence de mots vulgaires ?",
+      targetSection: "styleExplicit",
+      section: "style",
+      defaultConfig: { metric: "spotifyStreams" },
+    },
+
+    {
       id: 9,
       question:
         "Comment la portée des playlists (Playlist Reach) influence-t-elle le nombre total de streams ?",
       targetSection: "diffusionChart",
+      section: "diffusion",
       defaultConfig: { metrics: ["spotifyPlaylistReach", "spotifyStreams"] },
     },
     {
@@ -136,6 +117,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Quelle est la relation entre le nombre de playlists contenant une chanson et sa popularité globale ?",
       targetSection: "diffusionChart",
+      section: "diffusion",
       defaultConfig: {
         metrics: [
           "spotifyPlaylistCount",
@@ -151,6 +133,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Comment les diffusions radio (AirPlay Spins, SiriusXM Spins) se comparent-elles aux mesures de popularité en ligne ?",
       targetSection: "diffusionChart",
+      section: "diffusion",
       defaultConfig: {
         metrics: [
           "airplaySpins",
@@ -162,11 +145,13 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
         ],
       },
     },
+
     {
       id: 12,
       question:
         "Comment le ratio vues/likes sur YouTube ou TikTok varie-t-il selon l'artiste ?",
       targetSection: "engagementRatio",
+      section: "engagement",
       defaultConfig: {},
     },
     {
@@ -174,6 +159,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Quelle est la relation entre les posts TikTok et les vues TikTok, et comment cela impacte-t-il la popularité Spotify ?",
       targetSection: "engagementTikTok",
+      section: "engagement",
       defaultConfig: {},
     },
     {
@@ -181,6 +167,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       question:
         "Comment l'engagement sur Shazam (recherche de titres) corrèle-t-il avec la découvrabilité d'une chanson sur d'autres plateformes ?",
       targetSection: "diffusionChart",
+      section: "engagement",
       defaultConfig: {
         metrics: [
           "shazamCounts",
@@ -193,14 +180,9 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
     },
   ];
 
-  // Handle card click: set the selected question and scroll to its section
   const handleClick = (questionObj) => {
     onQuestionSelect(questionObj);
-    if (
-      scrollRefs &&
-      scrollRefs[questionObj.targetSection] &&
-      scrollRefs[questionObj.targetSection].current
-    ) {
+    if (scrollRefs && scrollRefs[questionObj.targetSection]?.current) {
       scrollRefs[questionObj.targetSection].current.scrollIntoView({
         behavior: "smooth",
         block: "start",
@@ -209,13 +191,12 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2 style={{ marginBottom: "20px" }}>Questions de l'Analyse</h2>
+    <div style={{ padding: "20px", maxWidth: "1400px", margin: "0 auto" }}>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gap: "16px",
         }}
       >
         {questions.map((q) => (
@@ -223,26 +204,41 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
             key={q.id}
             onClick={() => handleClick(q)}
             style={{
-              border: "1px solid #ccc",
+              borderLeft: `4px solid ${borderColors[q.section]}`,
               borderRadius: "8px",
-              padding: "16px",
+              padding: "18px",
               cursor: "pointer",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              transition: "transform 0.2s, box-shadow 0.2s",
+              backgroundColor: sectionColors[q.section],
+              transition: "all 0.2s ease",
+              minHeight: "120px",
+              display: "flex",
+              alignItems: "center",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.02)";
-              e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.1)";
+              e.currentTarget.style.backgroundColor = sectionColors[
+                q.section
+              ].replace("0.15", "0.25");
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
+              e.currentTarget.style.backgroundColor = sectionColors[q.section];
             }}
           >
-            <h3 style={{ marginBottom: "10px", fontSize: "16px" }}>
-              Question {q.id}
-            </h3>
-            <p style={{ fontSize: "14px", color: "#333" }}>{q.question}</p>
+            <p
+              style={{
+                fontSize: "17px",
+                fontWeight: "500",
+                color: "#1a1a1a",
+                margin: 0,
+                lineHeight: "1.5",
+              }}
+            >
+              {q.question}
+            </p>
           </div>
         ))}
       </div>
