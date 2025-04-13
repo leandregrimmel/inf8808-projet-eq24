@@ -7,7 +7,7 @@ import {
   Users,
   Menu,
 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../common/button";
 import { useSidebar } from "../../context/SidebarContext";
 import ArtistFilter from "./ArtistFilter";
 

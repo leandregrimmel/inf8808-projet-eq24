@@ -2,8 +2,8 @@ import React, { useRef, useState } from "react";
 import CrossPlatformPerformanceChart from "./DifusionAspect/CrossPlatformPerformanceChart";
 import ExpliciteContentAnalysis from "./MusicalGenreSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
-import CorrelationMatrix from "./CorrelationMatrix";
-import SunburstChart from "./SunburstChart";
+import CorrelationMatrix from "./MultiPlatformSection/CorrelationMatrix";
+import SunburstChart from "./MultiPlatformSection/SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import { useSidebar } from "../context/SidebarContext";
 import AgeVsStreams from "./TemporalSection/AgeVsStreams";
@@ -26,11 +26,6 @@ const sectionHeaderStyle = {
   backgroundColor: "#fff",
   padding: "15px 0px",
   zIndex: 2,
-};
-
-const visualizationContainerStyle = {
-  marginBottom: "20px",
-  backgroundColor: "#fff",
 };
 
 const temporalSectionStyle = {
@@ -69,7 +64,7 @@ const ScrollytellingDashboard = () => {
   const genreRef = useRef(null);
   const diffusionRef = useRef(null);
   const engagementRef = useRef(null);
-  
+
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -132,32 +127,28 @@ const ScrollytellingDashboard = () => {
 
         {/* Aspect Multi-plateformes Section */}
         <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
-          <div style={sectionHeaderStyle}>
+          <div style={temporalHeaderStyle}>
             <h1>Aspect Multi-plateformes</h1>
           </div>
-          <div className="p-6 space-y-8">
-            <h2 className="text-2xl font-bold mb-4">Matrice de Corrélation</h2>
-            <p className="mb-4 text-muted-foreground">
-              Explorez les relations entre différents indicateurs issus de
-              plateformes variées.
-            </p>
-            <div style={visualizationContainerStyle}>
-              <CorrelationMatrix data={filteredData} />
+
+          {/* Correlation Matrix Subsection */}
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>Matrice de Corrélation</h2>
             </div>
-            <h2 className="text-2xl font-bold mb-4">
-              Sunburst Chart : Répartition des Consommations par Artiste et
-              Plateforme
-            </h2>
-            <p className="mb-4 text-muted-foreground">
-              Ce graphique vous permet de visualiser comment les différents
-              canaux se répartissent pour les artistes les plus populaires. Le
-              niveau 1 présente le top des artistes (ex. top 10 basé sur la
-              somme des streams) et les niveaux suivants détaillent la
-              contribution de chaque plateforme.
-            </p>
-            <div style={visualizationContainerStyle}>
-              <SunburstChart data={useDataHierarchy(filteredData)} />
+            <CorrelationMatrix data={filteredData} />
+          </div>
+
+          {/* Sunburst Chart Subsection */}
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>
+                Sunburst Chart : Répartition des Consommations par Artiste et
+                Plateforme
+              </h2>
             </div>
+
+            <SunburstChart data={useDataHierarchy(filteredData)} />
           </div>
         </section>
 
@@ -188,9 +179,7 @@ const ScrollytellingDashboard = () => {
           <div style={sectionHeaderStyle}>
             <h1>Aspect Diffusion & Rayonnement</h1>
           </div>
-          <div style={visualizationContainerStyle}>
-            <CrossPlatformPerformanceChart data={filteredData} />
-          </div>
+          <CrossPlatformPerformanceChart data={filteredData} />
         </section>
 
         {/* Aspect Engagement Section */}
@@ -198,9 +187,7 @@ const ScrollytellingDashboard = () => {
           <div style={sectionHeaderStyle}>
             <h1>Aspect Engagement des Utilisateurs</h1>
           </div>
-          <div style={visualizationContainerStyle}>
-            {/* <ScatterPlot data={filteredData} /> */}
-          </div>
+          {/* <ScatterPlot data={filteredData} /> */}
         </section>
       </div>
     </div>

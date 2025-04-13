@@ -1,7 +1,7 @@
 import React from "react";
 import useData from "../hooks/useData";
 import * as d3 from "d3";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./common/card";
 import formatNumber from "../utils";
 
 const Overview = () => {
@@ -91,11 +91,11 @@ const Overview = () => {
         </div>
       </section>
 
-      {/* Section d'Explication de la Méthodologie */}
-      {/* <section className="mb-8">
+      {/* Section d'Explication de la Méthodologie  */}
+      <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">
           Méthodologie & Visualisations
-      </h2>
+        </h2>
         <p className="mb-4">
           Notre analyse se base sur une série de visualisations interactives
           développées avec D3. Chaque diagramme répond à l'une des questions de
@@ -131,7 +131,7 @@ const Overview = () => {
             popularité.
           </li>
         </ul>
-      </section> */}
+      </section>
 
       {/* Section Navigation */}
       <section>

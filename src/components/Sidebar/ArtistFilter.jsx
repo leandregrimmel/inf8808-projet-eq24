@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { useFilter } from "./../../context/FilterContext";
+import { useFilter } from "../../context/FilterContext";
 import useData from "../../hooks/useData";
 
 const ArtistFilter = () => {

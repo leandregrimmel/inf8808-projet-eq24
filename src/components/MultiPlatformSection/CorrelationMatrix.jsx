@@ -47,7 +47,6 @@ const CorrelationMatrix = ({ data }) => {
     { label: "Shazam Counts", field: "shazamCounts" },
     { label: "AirPlay Spins", field: "airplaySpins" },
     { label: "SiriusXM Spins", field: "siriusXMSpins" },
-    { label: "TIDAL Popularity", field: "tidalPopularity" },
   ];
 
   const [selectedMetrics, setSelectedMetrics] = useState([...availableMetrics]);
