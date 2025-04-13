@@ -10,6 +10,10 @@ const AnnualTrends = ({ data, initialYear }) => {
   const [selectedMetric, setSelectedMetric] = useState("spotifyPopularity");
   const animationRef = useRef(null);
 
+  useEffect(() => {
+    initialYear && setActiveYear(initialYear);
+  }, [initialYear]);
+
   const elementsRef = useRef({
     path: null,
     points: null,
@@ -222,7 +226,7 @@ const AnnualTrends = ({ data, initialYear }) => {
       <div class="bg-white p-3 rounded shadow-lg border border-gray-200 min-w-[200px]">
         <strong class="text-sm block">${d.month.full}</strong>
         <div class="text-xs mt-2">
-          <div>Popularité Moyenne: ${formatNumber(d.value)}</div>
+          <div>Valeur Moyenne: ${formatNumber(d.value)}</div>
           ${
             activeYear
               ? `<div class="text-gray-500">Année: ${activeYear}</div>`

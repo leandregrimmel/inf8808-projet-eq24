@@ -7,28 +7,28 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
     {
       id: 1,
       question:
-        "Comment la popularité d’une chanson varie-t-elle en fonction de son âge (calculé à partir de la date de sortie) ?",
+        "Comment la popularité d'une chanson varie-t-elle en fonction de son âge (calculé à partir de la date de sortie) ?",
       targetSection: "temporalAge",
       defaultConfig: { metric: "spotifyStreams" },
     },
     {
       id: 2,
       question:
-        "Peut-on identifier des corrélations entre l’ancienneté d’une chanson et ses indicateurs de succès sur différentes plateformes ?",
+        "Peut-on identifier des corrélations entre l'ancienneté d'une chanson et ses indicateurs de succès sur différentes plateformes ?",
       targetSection: "temporalAge",
       defaultConfig: { metric: "spotifyStreams" },
     },
     {
       id: 3,
       question:
-        "Existe-t-il un lien entre le moment de l’année de la parution d’une chanson et sa popularité ?",
+        "Existe-t-il un lien entre le moment de l'année de la parution d'une chanson et sa popularité ?",
       targetSection: "temporalSeason",
       defaultConfig: { year: 2024, metric: "spotifyPopularity" },
     },
     {
       id: 4,
       question:
-        "Quelle est la corrélation entre la popularité sur Spotify et les indicateurs provenant d’autres plateformes (YouTube, TikTok, Shazam) ?",
+        "Quelle est la corrélation entre la popularité sur Spotify et les indicateurs provenant d'autres plateformes (YouTube, TikTok, Shazam) ?",
       targetSection: "multiCorrelation",
       defaultConfig: {
         metrics: [
@@ -104,7 +104,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
     {
       id: 6,
       question:
-        "Quelles plateformes attirent le plus grand nombre de consommateurs selon l’artiste ?",
+        "Quelles plateformes attirent le plus grand nombre de consommateurs selon l'artiste ?",
       targetSection: "multiSunburst",
       defaultConfig: {},
     },
@@ -118,7 +118,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
     {
       id: 8,
       question:
-        "Comment les indicateurs de popularité varient-ils selon l’artiste ?",
+        "Comment les indicateurs de popularité varient-ils selon l'artiste ?",
       targetSection: "diffusionChart",
       defaultConfig: {
         info: "Pour sélectionner un artiste, utilisez la barre de recherche dans la barre latérale.",
@@ -165,7 +165,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
     {
       id: 12,
       question:
-        "Comment le ratio vues/likes sur YouTube ou TikTok varie-t-il selon l’artiste ?",
+        "Comment le ratio vues/likes sur YouTube ou TikTok varie-t-il selon l'artiste ?",
       targetSection: "engagementRatio",
       defaultConfig: {},
     },

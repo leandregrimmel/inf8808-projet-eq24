@@ -1,5 +1,5 @@
-// ScrollytellingDashboard.jsx
-import React, { useRef, useState } from "react";
+import { ArrowUpToLine } from "lucide-react";
+import React, { useRef, useState, useEffect } from "react";
 import CrossPlatformPerformanceChart from "./DifusionSection/CrossPlatformPerformanceChart";
 import ExpliciteContentAnalysis from "./MusicalStyleSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
@@ -32,26 +32,6 @@ const sectionHeaderStyle = {
   zIndex: 2,
 };
 
-const subsectionStyle = {
-  minHeight: "100vh",
-  width: "100%",
-  padding: "0 40px",
-  boxSizing: "border-box",
-};
-
-const temporalHeaderStyle = {
-  ...sectionHeaderStyle,
-  height: "80px",
-};
-
-const subsectionHeaderStyle = {
-  position: "sticky",
-  top: "80px",
-  backgroundColor: "#fff",
-  padding: "0 0 15px 0",
-  zIndex: 1,
-};
-
 const ScrollytellingDashboard = () => {
   const filteredData = useFilteredData();
   const { isOpen } = useSidebar();
@@ -66,17 +46,16 @@ const ScrollytellingDashboard = () => {
   const diffusionRef = useRef(null);
   const engagementRef = useRef(null);
 
-  const temporalAgeRef = useRef(null); // For questions 1 and 2 (Age vs. Popularity)
-  const temporalSeasonRef = useRef(null); // For question 3 (Annual Trends)
-  const multiCorrelationRef = useRef(null); // For questions 4 and 5 (Correlation Matrix)
-  const multiSunburstRef = useRef(null); // For question 6 (Sunburst Chart)
-  const styleExplicitRef = useRef(null); // For question 7 (Explicite Content Analysis)
-  const diffusionChartRef = useRef(null); // For questions 8, 9, 10, 11, 14 (CrossPlatformPerformanceChart)
-  const engagementRatioRef = useRef(null); // For question 12 (Ratio Chart)
-  const engagementTikTokRef = useRef(null); // For question 13 (TikTok Impact)
-  // (If needed, add additional ref for ShazamCorrelation, for example)
+  const temporalAgeRef = useRef(null);
+  const temporalSeasonRef = useRef(null);
+  const multiCorrelationRef = useRef(null);
+  const multiSunburstRef = useRef(null);
+  const styleExplicitRef = useRef(null);
+  const diffusionChartRef = useRef(null);
+  const engagementRatioRef = useRef(null);
+  const engagementTikTokRef = useRef(null);
 
-  // Mapping of keys to refs for QuestionCards
+  // Mapping for QuestionCards
   const scrollRefs = {
     temporalAge: temporalAgeRef,
     temporalSeason: temporalSeasonRef,
@@ -92,8 +71,15 @@ const ScrollytellingDashboard = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const handleQuestionSelect = (question) => {
     setSelectedQuestion(question);
-    // (Additional logic to update chart metrics can be added here.)
+    // Additional logic can be added here.
   };
+
+  console.log(
+    selectedQuestion?.targetSection === "styleExplicit" &&
+      selectedQuestion?.defaultConfig.metric
+      ? selectedQuestion.defaultConfig.metric
+      : "spotifyStreams"
+  );
 
   const scrollToSection = (ref) => {
     if (ref && ref.current) {
@@ -101,12 +87,57 @@ const ScrollytellingDashboard = () => {
     }
   };
 
+  // Use a ref for the scroll container and state for button visibility
+  const containerRef = useRef(null);
   const containerStyle = {
     marginLeft: isOpen ? "16rem" : "5rem",
     height: "100vh",
     width: `calc(100vw - ${isOpen ? "16rem" : "5rem"})`,
     overflowY: "auto",
     transition: "margin-left 0.3s ease, width 0.3s ease",
+  };
+
+  const [showTopButton, setShowTopButton] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const handleScroll = () => {
+      setShowTopButton(container.scrollTop > 100);
+    };
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
+
+  // Base style for the button.
+  const goTopButtonStyle = {
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    padding: "10px",
+    backgroundColor: "#d3d3d3",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    zIndex: 1000,
+    width: "50px",
+    height: "50px",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
+    transition:
+      "background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease",
+  };
+
+  const dynamicButtonStyle = {
+    ...goTopButtonStyle,
+    backgroundColor: isHover ? "#a9a9a9" : "#d3d3d3",
+    transform: isHover ? "scale(1.1)" : "scale(1)",
+    pointerEvents: showTopButton ? "auto" : "none",
   };
 
   return (
@@ -126,7 +157,7 @@ const ScrollytellingDashboard = () => {
         setActiveSection={setActiveSection}
       />
 
-      <div style={containerStyle}>
+      <div ref={containerRef} style={containerStyle}>
         {/* Overview Section */}
         <section ref={overviewRef} id="overview" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
@@ -151,7 +182,6 @@ const ScrollytellingDashboard = () => {
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Temporel</h1>
           </div>
-          {/* Age vs. Popularity Metric */}
           <div
             ref={temporalAgeRef}
             style={{
@@ -183,7 +213,6 @@ const ScrollytellingDashboard = () => {
             />
           </div>
 
-          {/* Seasonal Trends */}
           <div
             ref={temporalSeasonRef}
             style={{
@@ -221,7 +250,6 @@ const ScrollytellingDashboard = () => {
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Multi-plateformes</h1>
           </div>
-          {/* Correlation Matrix */}
           <div
             ref={multiCorrelationRef}
             style={{
@@ -252,7 +280,6 @@ const ScrollytellingDashboard = () => {
               }
             />
           </div>
-          {/* Sunburst Chart */}
           <div
             ref={multiSunburstRef}
             style={{
@@ -313,12 +340,6 @@ const ScrollytellingDashboard = () => {
                   ? selectedQuestion.defaultConfig.metric
                   : "spotifyStreams"
               }
-              availableMetrics={[
-                { value: "spotifyStreams", label: "Streams Spotify" },
-                { value: "spotifyPopularity", label: "Popularité Spotify" },
-                { value: "playlistReach", label: "Portée des playlists" },
-                { value: "youtubeLikes", label: "Likes YouTube" },
-              ]}
             />
           </div>
         </section>
@@ -381,7 +402,6 @@ const ScrollytellingDashboard = () => {
             </div>
             <RatioChart data={filteredData} />
           </div>
-
           <div
             ref={engagementTikTokRef}
             style={{
@@ -406,6 +426,18 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
       </div>
+      {showTopButton && (
+        <button
+          style={dynamicButtonStyle}
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
+          onClick={() =>
+            containerRef.current.scrollTo({ top: 0, behavior: "smooth" })
+          }
+        >
+          <ArrowUpToLine />
+        </button>
+      )}
     </div>
   );
 };

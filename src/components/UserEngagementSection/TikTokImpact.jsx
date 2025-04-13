@@ -5,7 +5,6 @@ import formatNumber from "../../utils";
 const TikTokImpact = ({ data }) => {
   const svgRef = useRef(null);
   const tooltipRef = useRef(null);
-  const zoomRef = useRef(null);
 
   useEffect(() => {
     if (!data || !svgRef.current) return;
