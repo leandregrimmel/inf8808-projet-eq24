@@ -12,7 +12,6 @@ import Sidebar from "./Sidebar/Sidebar";
 import useFilteredData from "../hooks/useFilteredData";
 import RatioChart from "./UserEngagementSection/RatioChart";
 import TikTokImpact from "./UserEngagementSection/TikTokImpact";
-import ShazamCorrelation from "./UserEngagementSection/ShazamCorrelation";
 
 const sectionStyle = {
   minHeight: "100vh",
@@ -201,13 +200,6 @@ const ScrollytellingDashboard = () => {
               <h2>Impact des Posts TikTok sur la Popularité</h2>
             </div>
             <TikTokImpact data={filteredData} />
-          </div>
-
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
-              <h2>Corrélation Shazam ↔ Découvrabilitéc </h2>
-            </div>
-            <ShazamCorrelation data={filteredData} />
           </div>
         </section>
       </div>

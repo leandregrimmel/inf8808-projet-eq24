@@ -14,8 +14,12 @@ const ArtistFilter = () => {
   useEffect(() => {
     if (Array.isArray(data)) {
       const uniqueArtists = [...new Set(data.map((item) => item.artist))]
-        .filter(Boolean)
+        .filter(
+          (artist) =>
+            typeof artist === "string" && /^[\p{L}0-9\s\-'/&]+$/u.test(artist)
+        )
         .sort();
+
       setArtists(uniqueArtists);
     }
   }, [data]);
@@ -39,7 +43,7 @@ const ArtistFilter = () => {
       <div className="relative">
         <input
           type="text"
-          placeholder="Search artist..."
+          placeholder="Rechercher un artiste..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
@@ -50,7 +54,7 @@ const ArtistFilter = () => {
       {isOpen && (
         <div className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
           {filteredArtists.length === 0 ? (
-            <div className="px-4 py-2 text-gray-500">No artists found</div>
+            <div className="px-4 py-2 text-gray-500">Aucun artiste trouvé</div>
           ) : (
             filteredArtists.map((artist) => (
               <div
@@ -72,7 +76,7 @@ const ArtistFilter = () => {
       {selectedArtist && (
         <div className="mt-2 flex items-center justify-between rounded-md bg-blue-50 px-3 py-1.5">
           <span className="truncate text-sm font-medium text-blue-800">
-            Filtering: {selectedArtist}
+            Filtrer: {selectedArtist}
           </span>
           <button
             onClick={() => {

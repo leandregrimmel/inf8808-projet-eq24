@@ -79,8 +79,6 @@ const CrossPlatformPerformanceChart = ({ data }) => {
   ];
 
   useEffect(() => {
-    console.log("data", filteredData);
-
     if (!data || data.length === 0 || !filteredData) return;
 
     const margin = { top: 60, right: 150, bottom: 60, left: 50 };
