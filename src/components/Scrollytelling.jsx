@@ -6,7 +6,7 @@ import CorrelationMatrix from "./MultiPlatformSection/CorrelationMatrix";
 import SunburstChart from "./MultiPlatformSection/SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import { useSidebar } from "../context/SidebarContext";
-import AgeVsStreams from "./TemporalSection/AgeVsStreams";
+import AgeVsStreams from "./TemporalSection/AgeVsPopularityMetric";
 import SeasonalTrends from "./TemporalSection/SeasonalTrends";
 import Sidebar from "./Sidebar/Sidebar";
 import useFilteredData from "../hooks/useFilteredData";
@@ -99,7 +99,7 @@ const ScrollytellingDashboard = () => {
           <div style={sectionHeaderStyle}>
             <h1>Overview</h1>
           </div>
-          <Overview />
+          <Overview temporalSectionRef={temporalRef} />
         </section>
 
         {/* Aspect Temporel Section */}
@@ -111,7 +111,7 @@ const ScrollytellingDashboard = () => {
           {/* Scatter Plot Subsection */}
           <div style={subsectionStyle}>
             <div style={subsectionHeaderStyle}>
-              <h2>Age vs. Spotify Streams</h2>
+              <h2>Age vs. Popularity Metric</h2>
             </div>
             <AgeVsStreams data={filteredData} />
           </div>

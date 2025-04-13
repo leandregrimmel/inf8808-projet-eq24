@@ -73,7 +73,7 @@ const SideBar = ({
         >
           {isOpen ? (
             <>
-              <h1 className="text-xl font-bold">Spotify Analytics</h1>
+              <h1 className="text-xl font-bold">Music Popularity Analysis</h1>
               <Button
                 variant="ghost"
                 size="icon"

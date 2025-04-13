@@ -4,7 +4,7 @@ import * as d3 from "d3";
 import { Card, CardContent, CardHeader, CardTitle } from "./common/card";
 import formatNumber from "../utils";
 
-const Overview = () => {
+const Overview = ({ temporalSectionRef }) => {
   const data = useData();
 
   if (!data) {
@@ -91,48 +91,6 @@ const Overview = () => {
         </div>
       </section>
 
-      {/* Section d'Explication de la Méthodologie  */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">
-          Méthodologie & Visualisations
-        </h2>
-        <p className="mb-4">
-          Notre analyse se base sur une série de visualisations interactives
-          développées avec D3. Chaque diagramme répond à l'une des questions de
-          recherche définies dans le projet :
-        </p>
-        <ul className="list-disc ml-6">
-          <li>
-            <strong>Aspect Temporel :</strong> Un scatter plot enrichi (avec une
-            ligne de tendance) analyse l'évolution de la popularité en fonction
-            de l'âge des chansons. Un graphique des tendances saisonnières
-            permet de repérer des cycles récurrents.
-          </li>
-          <li>
-            <strong>Multi-plateformes :</strong> Une matrice de corrélation
-            interactive et un sunburst chart détaillent les relations entre les
-            indicateurs (Spotify, YouTube, TikTok, Shazam…) et la répartition de
-            la consommation par artiste.
-          </li>
-          <li>
-            <strong>Contenu Explicite :</strong> Un box plot compare la
-            distribution des streams entre pistes explicites et non-explicites,
-            et permet d'identifier des variations significatives.
-          </li>
-          <li>
-            <strong>Diffusion & Rayonnement :</strong> Des scatter plots
-            comparent la portée des playlists et le nombre de diffusions radio
-            aux mesures de popularité en ligne.
-          </li>
-          <li>
-            <strong>Engagement des Utilisateurs :</strong> Des analyses du ratio
-            vues/likes et l'impact des posts sur TikTok ainsi que l'engagement
-            sur Shazam révèlent comment les interactions influencent la
-            popularité.
-          </li>
-        </ul>
-      </section>
-
       {/* Section Navigation */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Navigation</h2>
@@ -143,6 +101,16 @@ const Overview = () => {
           une partie spécifique de notre analyse.
         </p>
       </section>
+      <div className="mt-8 flex justify-center">
+        <button
+          onClick={() =>
+            temporalSectionRef.current.scrollIntoView({ behavior: "smooth" })
+          }
+          className="mb-4 px-4 py-2 bg-primary rounded-md border border-black hover:bg-primary-dark hover:scale-105 transition-transform"
+        >
+          Start Exploring
+        </button>
+      </div>
     </div>
   );
 };

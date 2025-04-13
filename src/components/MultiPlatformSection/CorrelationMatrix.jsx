@@ -1,6 +1,76 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
+// Dummy formatter function. Replace with your desired formatting if needed.
+const formatNumber = (d) => d;
+
+// New metric configuration variable including descriptions.
+const dimensionConfigs = [
+  {
+    id: "spotifyPlaylistReach",
+    label: "Playlist Reach",
+    format: formatNumber,
+    description: "Estimated audience size of playlists",
+    unit: "listeners",
+  },
+  {
+    id: "spotifyStreams",
+    label: "Spotify Streams",
+    format: formatNumber,
+    description: "Total streams on Spotify",
+    unit: "streams",
+  },
+  {
+    id: "spotifyPopularity",
+    label: "Popularity",
+    format: (d) => `${d}/100`,
+    description: "Spotify's popularity score",
+    unit: "score",
+  },
+  {
+    id: "airplaySpins",
+    label: "Radio Plays",
+    format: formatNumber,
+    description: "Traditional radio spins",
+    unit: "spins",
+  },
+  {
+    id: "siriusXMSpins",
+    label: "SiriusXM Plays",
+    format: formatNumber,
+    description: "Satellite radio plays",
+    unit: "plays",
+  },
+  {
+    id: "spotifyPlaylistCount",
+    label: "Playlist Count",
+    format: formatNumber,
+    description: "Number of Spotify playlists",
+    unit: "playlists",
+  },
+  {
+    id: "tiktokViews",
+    label: "TikTok Views",
+    format: formatNumber,
+    description: "Total TikTok views",
+    unit: "views",
+  },
+  {
+    id: "youtubeViews",
+    label: "YouTube Views",
+    format: formatNumber,
+    description: "Total YouTube views",
+    unit: "views",
+  },
+  {
+    id: "shazamCounts",
+    label: "Shazams",
+    format: formatNumber,
+    description: "Shazam identifications",
+    unit: "shazams",
+  },
+];
+
 // Custom correlation function
 function correlation(xArray, yArray) {
   const n = xArray.length;
@@ -35,27 +105,14 @@ function computeCorrelationMatrix(data, numericKeys) {
 const CorrelationMatrix = ({ data }) => {
   const ref = useRef();
 
-  const availableMetrics = [
-    { label: "Spotify Popularity", field: "spotifyPopularity" },
-    { label: "Spotify Streams", field: "spotifyStreams" },
-    { label: "Spotify Playlist Reach", field: "spotifyPlaylistReach" },
-    { label: "YouTube Views", field: "youtubeViews" },
-    { label: "YouTube Likes", field: "youtubeLikes" },
-    { label: "TikTok Posts", field: "tiktokPosts" },
-    { label: "TikTok Likes", field: "tiktokLikes" },
-    { label: "TikTok Views", field: "tiktokViews" },
-    { label: "Shazam Counts", field: "shazamCounts" },
-    { label: "AirPlay Spins", field: "airplaySpins" },
-    { label: "SiriusXM Spins", field: "siriusXMSpins" },
-  ];
-
-  const [selectedMetrics, setSelectedMetrics] = useState([...availableMetrics]);
+  // Use all dimensions by default
+  const [selectedMetrics, setSelectedMetrics] = useState([...dimensionConfigs]);
 
   const handleToggleMetric = (metric) => {
     setSelectedMetrics((prevSelected) => {
-      const exists = prevSelected.some((m) => m.field === metric.field);
+      const exists = prevSelected.some((m) => m.id === metric.id);
       if (exists) {
-        return prevSelected.filter((m) => m.field !== metric.field);
+        return prevSelected.filter((m) => m.id !== metric.id);
       } else {
         return [...prevSelected, metric];
       }
@@ -65,15 +122,19 @@ const CorrelationMatrix = ({ data }) => {
   useEffect(() => {
     if (!data || selectedMetrics.length === 0) return;
 
-    const numericKeys = selectedMetrics.map((m) => m.field);
+    // Compute correlation matrix using metric id.
+    const numericKeys = selectedMetrics.map((m) => m.id);
     const corrMatrix = computeCorrelationMatrix(data, numericKeys);
     const n = numericKeys.length;
 
-    // Adjusted dimensions for better fit
+    // Dimensions and margins
     const width = 800;
     const height = 600;
     const margin = { top: 150, right: 200, bottom: 50, left: 150 };
+
+    // Calculate cell size and actual matrix width.
     const cellSize = (width - margin.left - margin.right) / n;
+    const matrixWidth = n * cellSize;
 
     d3.select(ref.current).selectAll("*").remove();
 
@@ -82,20 +143,27 @@ const CorrelationMatrix = ({ data }) => {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom);
 
+    // Color scale with inverted domain to map red to 1 and blue to -1.
     const color = d3
       .scaleSequential()
       .domain([1, -1])
       .interpolator(d3.interpolateRdBu);
 
+    // Center the matrix horizontally.
     const container = svg
       .append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .attr(
+        "transform",
+        `translate(${margin.left + (width - matrixWidth) / 2}, ${margin.top})`
+      );
 
-    // Draw cells with rounded corners and updated tooltip styling
+    // Draw cells with rounded corners and tooltip interaction.
     container
       .selectAll("rect")
       .data(
-        corrMatrix.flatMap((row, i) => row.map((val, j) => ({ i, j, val })))
+        corrMatrix.flatMap((row, i) =>
+          row.map((val, j) => ({ i, j, val }))
+        )
       )
       .enter()
       .append("rect")
@@ -109,15 +177,13 @@ const CorrelationMatrix = ({ data }) => {
       .attr("stroke", "#fff")
       .attr("stroke-width", 0.5)
       .on("mouseover", function (event, d) {
-        // Get pointer coordinates relative to the svg element
         const [xPos, yPos] = d3.pointer(event, svg.node());
-
-        d3
-          .select("#tooltip-corr")
+        d3.select("#tooltip-corr")
           .style("opacity", 1)
           .style("left", `${xPos}px`)
           .style("cursor", "pointer")
-          .style("top", `${yPos + 150}px`).html(`
+          .style("top", `${yPos + 150}px`)
+          .html(`
             <div class="bg-white p-3 rounded shadow-lg border border-gray-200 min-w-[200px]">
               <strong class="text-sm block">${
                 selectedMetrics[d.i].label
@@ -132,7 +198,7 @@ const CorrelationMatrix = ({ data }) => {
         d3.select("#tooltip-corr").style("opacity", 0);
       });
 
-    // Improved row labels
+    // Row labels
     container
       .selectAll(".rowLabel")
       .data(selectedMetrics.map((m) => m.label))
@@ -148,7 +214,7 @@ const CorrelationMatrix = ({ data }) => {
       .style("fill", "#555")
       .text((d) => d);
 
-    // Improved column labels
+    // Column labels with rotated text.
     container
       .selectAll(".colLabel")
       .data(selectedMetrics.map((m) => m.label))
@@ -169,6 +235,7 @@ const CorrelationMatrix = ({ data }) => {
       .style("fill", "#555")
       .text((d) => d);
 
+    // Title for the matrix
     svg
       .append("text")
       .attr("x", (width + margin.left + margin.right) / 2)
@@ -179,17 +246,28 @@ const CorrelationMatrix = ({ data }) => {
       .style("font-family", "sans-serif")
       .text("Popularity Metrics Correlation Matrix");
 
-    // Right-aligned legend
+    // --- Updated Legend Section ---
     const legendWidth = 20,
       legendHeight = 150;
-    const legend = svg
+
+    const legendGroup = svg
       .append("g")
       .attr(
         "transform",
         `translate(${width + margin.left + 30}, ${margin.top})`
       );
 
-    // Create gradient for vertical legend
+    legendGroup
+      .append("rect")
+      .attr("x", -20)
+      .attr("y", -30)
+      .attr("width", legendWidth + 80)
+      .attr("height", legendHeight + 50)
+      .attr("fill", "#fff")
+      .attr("stroke", "#ccc")
+      .attr("rx", 8)
+      .attr("ry", 8);
+
     const defs = svg.append("defs");
     const gradient = defs
       .append("linearGradient")
@@ -198,14 +276,21 @@ const CorrelationMatrix = ({ data }) => {
       .attr("y1", "100%")
       .attr("x2", "0%")
       .attr("y2", "0%");
-    gradient.append("stop").attr("offset", "0%").attr("stop-color", color(1));
-    gradient.append("stop").attr("offset", "50%").attr("stop-color", color(0));
+    gradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", color(1));
+    gradient
+      .append("stop")
+      .attr("offset", "50%")
+      .attr("stop-color", color(0));
     gradient
       .append("stop")
       .attr("offset", "100%")
       .attr("stop-color", color(-1));
 
-    // Draw the legend rectangle
+    const legend = legendGroup.append("g").attr("transform", "translate(20,0)");
+
     legend
       .append("rect")
       .attr("width", legendWidth)
@@ -213,11 +298,12 @@ const CorrelationMatrix = ({ data }) => {
       .style("fill", "url(#legend-gradient)")
       .style("stroke", "#ccc");
 
-    // Add legend axis on the right
+    // Inverted legend scale to match our color scale (red corresponds to 1).
     const legendScale = d3
       .scaleLinear()
-      .domain([-1, 1])
+      .domain([1, -1])
       .range([legendHeight, 0]);
+
     const legendAxis = d3
       .axisRight(legendScale)
       .ticks(5)
@@ -227,75 +313,68 @@ const CorrelationMatrix = ({ data }) => {
       .attr("transform", `translate(${legendWidth}, 0)`)
       .call(legendAxis);
 
-    // Add legend title
     legend
       .append("text")
       .attr("x", legendWidth / 2)
-      .attr("y", -20)
+      .attr("y", -10)
       .attr("text-anchor", "middle")
-      .style("font-size", "12px")
+      .style("font-size", "14px")
+      .style("font-weight", "bold")
       .style("font-family", "sans-serif")
       .text("Correlation");
   }, [data, selectedMetrics]);
 
   return (
     <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto" }}>
-      {/* Improved metric selection controls */}
-      <div
-        style={{
-          marginBottom: "20px",
-          padding: "15px",
-          backgroundColor: "#f8f9fa",
-          borderRadius: "8px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "16px",
-            fontWeight: "600",
-            marginBottom: "10px",
-            color: "#333",
-          }}
+      {/* Updated metric selection controls */}
+      <div style={{ marginBottom: "20px" }}>
+        <label
+          style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
         >
           Select Metrics:
-        </div>
+        </label>
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-            gap: "8px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gap: "10px",
           }}
         >
-          {availableMetrics.map((metric) => (
-            <label
-              key={metric.field}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                cursor: "pointer",
-                fontSize: "14px",
-                color: "#555",
-                padding: "4px 8px",
-                borderRadius: "4px",
-                transition: "background-color 0.2s",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={selectedMetrics.some((m) => m.field === metric.field)}
-                onChange={() => handleToggleMetric(metric)}
+          {dimensionConfigs.map((metric) => {
+            const isSelected = selectedMetrics.some(
+              (m) => m.id === metric.id
+            );
+            return (
+              <div
+                key={metric.id}
                 style={{
-                  width: "16px",
-                  height: "16px",
-                  accentColor: "#4e79a7",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  background: isSelected ? "#f0f0f0" : "transparent",
                   cursor: "pointer",
                 }}
-              />
-              {metric.label}
-            </label>
-          ))}
+                onClick={() => handleToggleMetric(metric)}
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => handleToggleMetric(metric)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <div>
+                  <div style={{ fontWeight: "500" }}>{metric.label}</div>
+                  {metric.description && (
+                    <div style={{ fontSize: "0.8em", color: "#666" }}>
+                      {metric.description}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

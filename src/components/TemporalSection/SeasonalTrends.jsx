@@ -190,7 +190,7 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
           elementsRef.current.angleScale.bandwidth() / 2;
         return (outerRadius + 15) * Math.sin(a - Math.PI / 2);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, metric, activeYear, years]);
 
   const showTooltip = (event, d) => {
@@ -206,8 +206,8 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
         <div>Popularité Moyenne: ${d.value.toFixed(1)}</div>
         ${
           activeYear
-          ? `<div class="text-gray-500">Année: ${activeYear}</div>`
-          : ""
+            ? `<div class="text-gray-500">Année: ${activeYear}</div>`
+            : ""
         }
         </div>
       </div>
@@ -257,16 +257,6 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
             </span>
           </div>
           <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setActiveYear(null)}
-              className={`px-3 py-1 rounded text-sm transition-colors ${
-                !activeYear
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              Toutes les années
-            </button>
             <input
               type="range"
               min={Math.min(...years)}
@@ -281,6 +271,16 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
             <span>{Math.min(...years)}</span>
             <span>{Math.max(...years)}</span>
           </div>
+          <button
+            onClick={() => setActiveYear(null)}
+            className={`px-3 py-1 mt-8 rounded text-sm transition-colors ${
+              !activeYear
+                ? "bg-blue-600 text-white shadow-md"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            Toutes les années
+          </button>
         </div>
       )}
     </div>

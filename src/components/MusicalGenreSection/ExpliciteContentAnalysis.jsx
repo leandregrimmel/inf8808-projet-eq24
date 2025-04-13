@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
 const ExpliciteContentAnalysis = ({ data }) => {
   const ref = useRef();
   const tooltipRef = useRef();
+  const [selectedMetric, setSelectedMetric] = useState("spotifyStreams");
 
   useEffect(() => {
     if (!data || !data.length) return;
@@ -31,6 +32,14 @@ const ExpliciteContentAnalysis = ({ data }) => {
       text: "#333333",
     };
 
+    const metricLabels = {
+      spotifyStreams: "Spotify Streams",
+      youtubeViews: "YouTube Views",
+      tiktokViews: "TikTok Views",
+      shazamCounts: "Shazam Counts",
+      pandoraStreams: "Pandora Streams"
+    };
+    
     const groups = [
       {
         key: "Non-Explicite",
@@ -159,7 +168,7 @@ const ExpliciteContentAnalysis = ({ data }) => {
       .attr("fill", "currentColor")
       .style("font-size", "16px")
       .style("font-weight", "bold")
-      .text("Spotify Streams (log scale)");
+      .text(`${metricLabels[selectedMetric]} (log scale)`);
 
     const boxWidth = x.bandwidth();
 
@@ -364,15 +373,31 @@ const ExpliciteContentAnalysis = ({ data }) => {
         .attr("font-size", "13px")
         .text(item.label);
     });
-  }, [data]);
+  }, [data, selectedMetric]);
 
   return (
     <div style={{ position: "relative" }}>
       <h4 style={{ marginBottom: "20px" }}>
-        Ce diagramme en boîte compare la distribution des streams Spotify entre
-        les chansons explicites et non-explicites, avec une échelle
-        logarithmique pour mieux visualiser l'étendue des données.
+        Ce diagramme en boîte compare la distribution des streams entre les
+        chansons explicites et non-explicites, avec une échelle logarithmique
+        pour mieux visualiser l'étendue des données.
       </h4>
+      <div style={{ marginBottom: "1rem" }}>
+        <label htmlFor="metric-selector" style={{ marginRight: "0.5rem" }}>
+          Choisissez une métrique de popularité :
+        </label>
+        <select
+          id="metric-selector"
+          value={selectedMetric}
+          onChange={(e) => setSelectedMetric(e.target.value)}
+        >
+          <option value="spotifyStreams">Spotify Streams</option>
+          <option value="youtubeViews">YouTube Views</option>
+          <option value="tiktokViews">TikTok Views</option>
+          <option value="shazamCounts">Shazam Counts</option>
+          <option value="pandoraStreams">Pandora Streams</option>
+        </select>
+      </div>
       <svg ref={ref}></svg>
       <div
         ref={tooltipRef}
