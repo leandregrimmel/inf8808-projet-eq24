@@ -37,7 +37,6 @@ const ScrollytellingDashboard = () => {
   const { isOpen } = useSidebar();
   const [activeSection, setActiveSection] = useState("overview");
 
-  // Create refs for key sections
   const overviewRef = useRef(null);
   const questionsRef = useRef(null);
   const temporalRef = useRef(null);
@@ -55,7 +54,6 @@ const ScrollytellingDashboard = () => {
   const engagementRatioRef = useRef(null);
   const engagementTikTokRef = useRef(null);
 
-  // Mapping for QuestionCards
   const scrollRefs = {
     temporalAge: temporalAgeRef,
     temporalSeason: temporalSeasonRef,
@@ -67,11 +65,9 @@ const ScrollytellingDashboard = () => {
     engagementTikTok: engagementTikTokRef,
   };
 
-  // State for the currently selected question
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const handleQuestionSelect = (question) => {
     setSelectedQuestion(question);
-    // Additional logic can be added here.
   };
 
   console.log(
@@ -87,7 +83,6 @@ const ScrollytellingDashboard = () => {
     }
   };
 
-  // Use a ref for the scroll container and state for button visibility
   const containerRef = useRef(null);
   const containerStyle = {
     marginLeft: isOpen ? "18rem" : "5rem",
@@ -111,7 +106,6 @@ const ScrollytellingDashboard = () => {
     }
   }, []);
 
-  // Base style for the button.
   const goTopButtonStyle = {
     position: "fixed",
     bottom: "20px",
@@ -158,10 +152,9 @@ const ScrollytellingDashboard = () => {
       />
 
       <div ref={containerRef} style={containerStyle}>
-        {/* Overview Section */}
         <section ref={overviewRef} id="overview" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
-            <h1>Overview</h1>
+            <h1>Vue d'ensemble</h1>
           </div>
           <Overview temporalSectionRef={temporalRef} />
         </section>
@@ -196,7 +189,6 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        {/* Aspect Temporel Section */}
         <section ref={temporalRef} id="temporal" style={{ sectionStyle }}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Temporel</h1>
@@ -219,7 +211,7 @@ const ScrollytellingDashboard = () => {
                 zIndex: 1,
               }}
             >
-              <h2>Age vs. Popularity Metric</h2>
+              <h2>Âge vs. Indicateur de Popularité</h2>
             </div>
             <AgeVsStreams
               data={filteredData}
@@ -250,7 +242,7 @@ const ScrollytellingDashboard = () => {
                 zIndex: 1,
               }}
             >
-              <h2>Graphique des Tendances Saisonnières</h2>
+              <h2>Tendances Saisonnières</h2>
             </div>
             <AnnualTrends
               data={filteredData}
@@ -264,7 +256,6 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        {/* Aspect Multi-plateformes Section */}
         <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Multi-plateformes</h1>
@@ -326,7 +317,6 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        {/* Aspect Style Musical Section */}
         <section ref={styleRef} id="style" style={{ sectionStyle }}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Style Musical et Contenu Explicite</h1>
@@ -363,7 +353,6 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        {/* Aspect Diffusion & Rayonnement Section */}
         <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Diffusion & Rayonnement</h1>
@@ -394,7 +383,6 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        {/* Aspect Engagement des Utilisateurs Section */}
         <section ref={engagementRef} id="engagement" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Engagement des Utilisateurs</h1>

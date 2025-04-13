@@ -91,9 +91,7 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
         "Comment les indicateurs de popularité varient-ils selon l'artiste ?",
       targetSection: "diffusionChart",
       section: "style",
-      defaultConfig: {
-        info: "Pour sélectionner un artiste, utilisez la barre de recherche dans la barre latérale.",
-      },
+      defaultConfig: {},
     },
     {
       id: 8,

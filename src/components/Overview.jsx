@@ -1,7 +1,7 @@
 import React from "react";
 import useData from "../hooks/useData";
 import * as d3 from "d3";
-import { Card, CardContent, CardHeader, CardTitle } from "./common/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import formatNumber from "../utils";
 
 const Overview = ({ temporalSectionRef }) => {
@@ -12,7 +12,9 @@ const Overview = ({ temporalSectionRef }) => {
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-          <p className="text-muted-foreground">Loading visualization data...</p>
+          <p className="text-muted-foreground">
+            Chargement des données de visualisation…
+          </p>
         </div>
       </div>
     );
@@ -32,7 +34,7 @@ const Overview = ({ temporalSectionRef }) => {
         <h4>
           Bienvenue sur notre projet de visualisation de données pour le cours
           INF8808. Dans un paysage musical en pleine transformation grâce aux
-          plateformes de streaming, nous analyserons comment la popularité des
+          plateformes de streaming, nous analysons comment la popularité des
           chansons évolue après leur sortie. Nous nous intéressons
           particulièrement aux impacts des réseaux sociaux, à l'évolution des
           tendances temporelles et aux interactions multi-plateformes.
@@ -45,7 +47,7 @@ const Overview = ({ temporalSectionRef }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader>
-              <CardTitle>Total Tracks</CardTitle>
+              <CardTitle>Pistes totales</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -56,7 +58,7 @@ const Overview = ({ temporalSectionRef }) => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Avg. Spotify Streams</CardTitle>
+              <CardTitle>Streams Spotify moyens</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -67,7 +69,7 @@ const Overview = ({ temporalSectionRef }) => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Explicit Tracks</CardTitle>
+              <CardTitle>Pistes explicites</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -79,7 +81,7 @@ const Overview = ({ temporalSectionRef }) => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Most Recent</CardTitle>
+              <CardTitle>Sortie la plus récente</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
