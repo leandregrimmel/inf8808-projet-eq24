@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
+import formatNumber from "./../../utils";
 
 const RatioChart = ({ data }) => {
   const svgRef = useRef(null);
@@ -8,24 +9,48 @@ const RatioChart = ({ data }) => {
   useEffect(() => {
     if (!data || !svgRef.current) return;
 
-    // Préparation des données
+    const safeRatio = (views, likes) => {
+      return likes > 0 ? views / likes : 0;
+    };
+
     const artists = d3
       .rollups(
         data,
-        (v) => ({
-          youtubeRatio: d3.mean(v, (d) => d.youtubeViews / d.youtubeLikes),
-          tiktokRatio: d3.mean(v, (d) => d.tiktokViews / d.tiktokLikes),
-          totalViews: d3.sum(v, (d) => d.youtubeViews + d.tiktokViews),
-        }),
+        (v) => {
+          const youtubeViews = d3.sum(v, (d) => d.youtubeViews || 0);
+          const youtubeLikes = d3.sum(v, (d) => d.youtubeLikes || 0);
+          const tiktokViews = d3.sum(v, (d) => d.tiktokViews || 0);
+          const tiktokLikes = d3.sum(v, (d) => d.tiktokLikes || 0);
+
+          return {
+            youtubeRatio: safeRatio(youtubeViews, youtubeLikes),
+            tiktokRatio: safeRatio(tiktokViews, tiktokLikes),
+            youtubeViews,
+            tiktokViews,
+            youtubeLikes,
+            tiktokLikes,
+          };
+        },
         (d) => d.artist
       )
-      .sort((a, b) => b[1].totalViews - a[1].totalViews)
-      .slice(0, 15);
+      .filter((d) => {
+        return !isNaN(d[1].youtubeRatio) && !isNaN(d[1].tiktokRatio);
+      })
+      .sort(
+        (a, b) =>
+          b[1].youtubeViews +
+          b[1].tiktokViews -
+          (a[1].youtubeViews + a[1].tiktokViews)
+      )
+      .slice(0, 10);
 
-    // Configuration du graphique
-    const margin = { top: 40, right: 80, bottom: 60, left: 60 };
-    const width = 800 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    if (artists.length === 0) return;
+
+    const margin = { top: 60, right: 80, bottom: 150, left: 60 };
+    const width = 1000 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+
+    d3.select(svgRef.current).selectAll("*").remove();
 
     const svg = d3
       .select(svgRef.current)
@@ -34,95 +59,83 @@ const RatioChart = ({ data }) => {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Échelles
     const x = d3
       .scaleBand()
       .domain(artists.map((d) => d[0]))
       .range([0, width])
       .padding(0.2);
 
+    const maxRatio =
+      d3.max(artists, (d) => Math.max(d[1].youtubeRatio, d[1].tiktokRatio)) ||
+      10;
+
     const yRatio = d3
       .scaleLinear()
-      .domain([
-        0,
-        d3.max(artists, (d) => Math.max(d[1].youtubeRatio, d[1].tiktokRatio)) *
-          1.1,
-      ])
-      .range([height, 0]);
+      .domain([0, maxRatio * 1.2])
+      .range([height, 0])
+      .nice();
 
-    const yViews = d3
-      .scaleLog()
-      .domain([
-        d3.min(artists, (d) => d[1].totalViews) * 0.9,
-        d3.max(artists, (d) => d[1].totalViews) * 1.1,
-      ])
-      .range([height, 0]);
+    const platformColors = {
+      youtube: "#CC2B2B",
+      tiktok: "#333333",
+    };
 
-    // Barres YouTube
-    svg
-      .selectAll(".youtube-bar")
-      .data(artists)
-      .enter()
-      .append("rect")
-      .attr("class", "youtube-bar")
-      .attr("x", (d) => x(d[0]))
-      .attr("y", (d) => yRatio(d[1].youtubeRatio))
-      .attr("width", x.bandwidth() / 2)
-      .attr("height", (d) => height - yRatio(d[1].youtubeRatio))
-      .attr("fill", "#4e79a7")
-      .on("mouseover", function (event, d) {
-        d3.select(this).attr("opacity", 0.8);
-        showTooltip(event, "YouTube", d[1].youtubeRatio);
-      })
-      .on("mouseout", function () {
-        d3.select(this).attr("opacity", 1);
-        hideTooltip();
-      });
+    const barWidth = x.bandwidth() / 2;
 
-    // Barres TikTok
-    svg
-      .selectAll(".tiktok-bar")
-      .data(artists)
-      .enter()
-      .append("rect")
-      .attr("class", "tiktok-bar")
-      .attr("x", (d) => x(d[0]) + x.bandwidth() / 2)
-      .attr("y", (d) => yRatio(d[1].tiktokRatio))
-      .attr("width", x.bandwidth() / 2)
-      .attr("height", (d) => height - yRatio(d[1].tiktokRatio))
-      .attr("fill", "#f28e2b")
-      .on("mouseover", function (event, d) {
-        d3.select(this).attr("opacity", 0.8);
-        showTooltip(event, "TikTok", d[1].tiktokRatio);
-      })
-      .on("mouseout", function () {
-        d3.select(this).attr("opacity", 1);
-        hideTooltip();
-      });
+    const platforms = [
+      {
+        id: "youtube",
+        name: "YouTube",
+        views: "youtubeViews",
+        likes: "youtubeLikes",
+      },
+      {
+        id: "tiktok",
+        name: "TikTok",
+        views: "tiktokViews",
+        likes: "tiktokLikes",
+      },
+    ];
 
-    // Ligne des vues totales
-    const line = d3
-      .line()
-      .x((d) => x(d[0]) + x.bandwidth() / 2)
-      .y((d) => yViews(d[1].totalViews));
+    platforms.forEach((platform, i) => {
+      svg
+        .selectAll(`.${platform.id}-bar`)
+        .data(artists)
+        .enter()
+        .append("rect")
+        .attr("class", `${platform.id}-bar`)
+        .attr("x", (d) => x(d[0]) + i * barWidth)
+        .attr("y", (d) => yRatio(d[1][`${platform.id}Ratio`] || 0))
+        .attr("width", barWidth - 2)
+        .attr(
+          "height",
+          (d) => height - yRatio(d[1][`${platform.id}Ratio`] || 0)
+        )
+        .attr("fill", platformColors[platform.id])
+        .on("mouseover", function (event, d) {
+          d3.select(this).attr("opacity", 0.8);
+          showTooltip(
+            event,
+            platform.name,
+            d[1][`${platform.id}Ratio`],
+            d[1][platform.views],
+            d[1][platform.likes]
+          );
+        })
+        .on("mouseout", function () {
+          d3.select(this).attr("opacity", 1);
+          hideTooltip();
+        });
+    });
 
-    svg
-      .append("path")
-      .datum(artists)
-      .attr("class", "views-line")
-      .attr("d", line)
-      .attr("stroke", "#e15759")
-      .attr("stroke-width", 2)
-      .attr("fill", "none");
-
-    // Axes
     svg
       .append("g")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x))
       .selectAll("text")
       .attr("transform", "rotate(-45)")
-      .style("text-anchor", "end");
+      .style("text-anchor", "end")
+      .style("font-size", "14px");
 
     svg
       .append("g")
@@ -133,91 +146,72 @@ const RatioChart = ({ data }) => {
       .attr("y", -40)
       .attr("x", -height / 2)
       .attr("text-anchor", "middle")
+      .style("font-size", "14px")
       .text("Ratio Vues/Likes");
 
-    svg
-      .append("g")
-      .attr("transform", `translate(${width},0)`)
-      .call(d3.axisRight(yViews))
-      .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(90)")
-      .attr("y", 50)
-      .attr("x", height / 2)
-      .attr("text-anchor", "middle")
-      .text("Vues Totales (log)");
-
-    // Légende
     const legend = svg
       .append("g")
-      .attr("transform", `translate(${width - 150},20)`);
+      .attr("transform", `translate(${width - 180}, -20)`);
 
-    legend
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 12)
-      .attr("height", 12)
-      .attr("fill", "#4e79a7");
+    platforms.forEach((platform, i) => {
+      legend
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", i * 20)
+        .attr("width", 12)
+        .attr("height", 12)
+        .attr("fill", platformColors[platform.id]);
 
-    legend
-      .append("text")
-      .attr("x", 20)
-      .attr("y", 10)
-      .text("YouTube")
-      .style("font-size", "12px");
+      legend
+        .append("text")
+        .attr("x", 20)
+        .attr("y", i * 20 + 10)
+        .text(platform.name)
+        .style("font-size", "14px");
+    });
 
-    legend
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", 20)
-      .attr("width", 12)
-      .attr("height", 12)
-      .attr("fill", "#f28e2b");
+    function showTooltip(event, platform, ratio, views, likes) {
+      const [xpos, ypos] = d3.pointer(event);
 
-    legend
-      .append("text")
-      .attr("x", 20)
-      .attr("y", 30)
-      .text("TikTok")
-      .style("font-size", "12px");
-
-    legend
-      .append("path")
-      .attr("d", "M0,40 L12,40")
-      .attr("stroke", "#e15759")
-      .attr("stroke-width", 2);
-
-    legend
-      .append("text")
-      .attr("x", 20)
-      .attr("y", 45)
-      .text("Vues Totales")
-      .style("font-size", "12px");
-
-    // Fonctions tooltip
-    function showTooltip(event, platform, value) {
-      const [xpos, ypos] = d3.pointer(event, svg.node());
-
-      d3.select(tooltipRef.current)
+      d3
+        .select(tooltipRef.current)
         .style("opacity", 1)
-        .style("left", `${xpos + 100}px`)
-        .style("top", `${ypos}px`)
-        .html(`<strong>${platform}</strong><br/>Ratio: ${value.toFixed(2)}`);
+        .style("left", `${xpos + 150}px`)
+        .style("top", `${ypos + 100}px`).html(`
+                    <div class="text-sm">
+                        <strong>${platform}</strong><br/>
+                        Ratio: ${ratio ? ratio.toFixed(2) : "N/A"}<br/>
+                        ${
+                          views !== undefined
+                            ? `Vues: ${formatNumber(views)}<br/>`
+                            : ""
+                        }
+                        ${
+                          likes !== undefined
+                            ? `Likes: ${formatNumber(likes)}`
+                            : ""
+                        }
+                    </div>
+                `);
     }
 
     function hideTooltip() {
       d3.select(tooltipRef.current).style("opacity", 0);
     }
-
-    return () => {
-      d3.select(svgRef.current).selectAll("*").remove();
-    };
   }, [data]);
 
   return (
     <div className="relative">
-      <svg ref={svgRef} className="h-[500px]"></svg>
+      <h4>
+        On observe que les ratios TikTok présentent une plus grande régularité
+        entre artistes (les 10 plus populaires dans ce cas ci), suggérant un
+        engagement plus constant sur cette plateforme. En revanche, les ratios
+        YouTube varient significativement et ne semblent montrer aucune
+        corrélation évidente ni avec les performances TikTok, ni avec la
+        popularité générale des artistes. Cette disparité souligne des
+        dynamiques d'engagement distinctes entre les deux plateformes.
+      </h4>
+      <svg ref={svgRef}></svg>
       <div
         ref={tooltipRef}
         className="absolute bg-white p-2 border rounded shadow-lg pointer-events-none opacity-0 text-sm"

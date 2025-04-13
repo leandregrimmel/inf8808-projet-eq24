@@ -8,7 +8,7 @@ const ArtistFilter = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [artists, setArtists] = useState([]);
   const dropdownRef = useRef(null);
-  const { selectedArtist, setSelectedArtist } = useFilter();
+  const { selectedArtists, setSelectedArtists } = useFilter();
   const data = useData();
 
   useEffect(() => {
@@ -38,6 +38,23 @@ const ArtistFilter = () => {
     artist.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const toggleArtist = (artist) => {
+    if (selectedArtists.includes(artist)) {
+      setSelectedArtists(selectedArtists.filter((a) => a !== artist));
+    } else {
+      setSelectedArtists([...selectedArtists, artist]);
+    }
+    setSearchQuery("");
+  };
+
+  const removeArtist = (artistToRemove) => {
+    setSelectedArtists(selectedArtists.filter((artist) => artist !== artistToRemove));
+  };
+
+  const clearAllArtists = () => {
+    setSelectedArtists([]);
+  };
+
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <div className="relative">
@@ -59,34 +76,52 @@ const ArtistFilter = () => {
             filteredArtists.map((artist) => (
               <div
                 key={artist}
-                className="relative cursor-pointer select-none px-4 py-2 text-gray-900 hover:bg-gray-100"
-                onClick={() => {
-                  setSelectedArtist(artist);
-                  setIsOpen(false);
-                  setSearchQuery("");
-                }}
+                className={`relative cursor-pointer select-none px-4 py-2 ${
+                  selectedArtists.includes(artist)
+                    ? "bg-blue-100 text-blue-800"
+                    : "text-gray-900 hover:bg-gray-100"
+                }`}
+                onClick={() => toggleArtist(artist)}
               >
                 {artist}
+                {selectedArtists.includes(artist) && (
+                  <span className="absolute right-2 top-2 text-blue-500">✓</span>
+                )}
               </div>
             ))
           )}
         </div>
       )}
 
-      {selectedArtist && (
-        <div className="mt-2 flex items-center justify-between rounded-md bg-blue-50 px-3 py-1.5">
-          <span className="truncate text-sm font-medium text-blue-800">
-            Filtrer: {selectedArtist}
-          </span>
-          <button
-            onClick={() => {
-              setSelectedArtist(null);
-              setIsOpen(false);
-            }}
-            className="text-blue-500 hover:text-blue-700"
-          >
-            <X className="h-4 w-4" />
-          </button>
+      {selectedArtists.length > 0 && (
+        <div className="mt-2 space-y-1">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-gray-700">
+              Artistes sélectionnés:
+            </span>
+            <button
+              onClick={clearAllArtists}
+              className="text-sm text-blue-500 hover:text-blue-700"
+            >
+              Tout effacer
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {selectedArtists.map((artist) => (
+              <div
+                key={artist}
+                className="flex items-center rounded-md bg-blue-50 px-2 py-1 text-sm text-blue-800"
+              >
+                {artist}
+                <button
+                  onClick={() => removeArtist(artist)}
+                  className="ml-1 text-blue-500 hover:text-blue-700"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

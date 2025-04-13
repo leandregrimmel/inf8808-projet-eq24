@@ -3,10 +3,10 @@ import React, { createContext, useContext, useState } from 'react';
 const FilterContext = createContext();
 
 export const FilterProvider = ({ children }) => {
-  const [selectedArtist, setSelectedArtist] = useState(null);
+  const [selectedArtists, setSelectedArtists] = useState([]);
   
   return (
-    <FilterContext.Provider value={{ selectedArtist, setSelectedArtist }}>
+    <FilterContext.Provider value={{ selectedArtists, setSelectedArtists }}>
       {children}
     </FilterContext.Provider>
   );

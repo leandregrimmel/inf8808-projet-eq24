@@ -365,10 +365,13 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <h4 style={{ marginBottom: "15px", fontSize: "14px" }}>
-        Comparez les performances des titres sur différentes plateformes et
-        métriques. Sélectionnez les métriques ci-dessous pour analyser les
-        relations.
+      <h4>
+        Le graphique parallèle suivant compare les performances des titres sur
+        différentes plateformes via plusieurs métriques clés. Chaque ligne
+        représente un titre, colorée selon sa popularité Spotify. Utilisez les
+        filtres pour sélectionner les métriques à analyser et cliquez sur les
+        axes pour zoomer sur des plages de valeurs spécifiques. Passez votre
+        souris sur une ligne pour voir les détails du titre.
       </h4>
 
       {/* Sélecteur de dimensions */}
@@ -426,13 +429,7 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       </div>
 
       <div style={{ position: "relative" }}>
-        <svg
-          ref={ref}
-          style={{
-            width: "100%",
-            height: "500px",
-          }}
-        ></svg>
+        <svg ref={ref}></svg>
         <div
           ref={tooltipRef}
           style={{

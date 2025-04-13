@@ -4,14 +4,14 @@ import { useFilter } from "../context/FilterContext";
 
 const useFilteredData = () => {
   const data = useData();
-  const { selectedArtist } = useFilter();
+  const { selectedArtists } = useFilter();
 
   const filteredData = useMemo(() => {
     if (!data) return null;
-    return selectedArtist
-      ? data.filter((track) => track.artist === selectedArtist)
+    return selectedArtists && selectedArtists.length > 0
+      ? data.filter((track) => selectedArtists.includes(track.artist))
       : data;
-  }, [data, selectedArtist]);
+  }, [data, selectedArtists]);
 
   return filteredData;
 };
