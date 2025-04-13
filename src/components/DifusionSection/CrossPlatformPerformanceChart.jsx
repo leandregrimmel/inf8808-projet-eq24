@@ -1,4 +1,4 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
@@ -340,6 +340,7 @@ const CrossPlatformPerformanceChart = ({ data }) => {
       .style("font-size", "12px")
       .style("font-weight", "bold")
       .text("Valeurs des Métriques");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDimensions, filteredData]);
 
   useEffect(() => {
