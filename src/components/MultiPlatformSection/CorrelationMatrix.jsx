@@ -100,7 +100,9 @@ function computeCorrelationMatrix(data, numericKeys) {
 }
 
 const CorrelationMatrix = ({ data, defaultMetrics }) => {
-  const initialMetrics = defaultMetrics || [...dimensionConfigs];
+  const initialMetrics =
+    defaultMetrics.length > 0 ? defaultMetrics : dimensionConfigs;
+  console.log("Initial metrics:", initialMetrics);
   const ref = useRef();
   const [selectedMetrics, setSelectedMetrics] = useState(initialMetrics);
   const handleToggleMetric = (metric) => {

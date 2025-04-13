@@ -246,12 +246,7 @@ const ScrollytellingDashboard = () => {
                 selectedQuestion?.targetSection === "multiCorrelation" &&
                 selectedQuestion?.defaultConfig.metrics
                   ? selectedQuestion.defaultConfig.metrics
-                  : [
-                      "spotifyStreams",
-                      "youtubeViews",
-                      "tiktokViews",
-                      "shazamCounts",
-                    ]
+                  : []
               }
             />
           </div>

@@ -1,5 +1,5 @@
-// QuestionCards.jsx
 import React from "react";
+import formatNumber from "../utils";
 
 const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
   // List of question objects with their default configuration
@@ -32,10 +32,34 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       targetSection: "multiCorrelation",
       defaultConfig: {
         metrics: [
-          "spotifyStreams",
-          "youtubeViews",
-          "tiktokViews",
-          "shazamCounts",
+          {
+            id: "spotifyStreams",
+            label: "Streams Spotify",
+            format: formatNumber,
+            description: "Streams totaux sur Spotify",
+            unit: "streams",
+          },
+          {
+            id: "tiktokViews",
+            label: "Vues TikTok",
+            format: formatNumber,
+            description: "Vues totales sur TikTok",
+            unit: "vues",
+          },
+          {
+            id: "youtubeViews",
+            label: "Vues YouTube",
+            format: formatNumber,
+            description: "Vues totales sur YouTube",
+            unit: "vues",
+          },
+          {
+            id: "shazamCounts",
+            label: "Shazams",
+            format: formatNumber,
+            description: "Identifications Shazam",
+            unit: "shazams",
+          },
         ],
       },
     },
@@ -46,10 +70,34 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
       targetSection: "multiCorrelation",
       defaultConfig: {
         metrics: [
-          "spotifyStreams",
-          "youtubeViews",
-          "tiktokViews",
-          "shazamCounts",
+          {
+            id: "spotifyStreams",
+            label: "Streams Spotify",
+            format: formatNumber,
+            description: "Streams totaux sur Spotify",
+            unit: "streams",
+          },
+          {
+            id: "tiktokViews",
+            label: "Vues TikTok",
+            format: formatNumber,
+            description: "Vues totales sur TikTok",
+            unit: "vues",
+          },
+          {
+            id: "youtubeViews",
+            label: "Vues YouTube",
+            format: formatNumber,
+            description: "Vues totales sur YouTube",
+            unit: "vues",
+          },
+          {
+            id: "shazamCounts",
+            label: "Shazams",
+            format: formatNumber,
+            description: "Identifications Shazam",
+            unit: "shazams",
+          },
         ],
       },
     },
