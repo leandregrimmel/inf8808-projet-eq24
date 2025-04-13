@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
@@ -9,83 +9,83 @@ const CrossPlatformPerformanceChart = ({ data }) => {
     "spotifyPlaylistReach",
     "spotifyStreams",
     "spotifyPopularity",
-    "airplaySpins",
-    "tiktokViews",
   ]);
   const [filteredData, setFilteredData] = useState(data);
 
   const dimensionConfigs = [
     {
       id: "spotifyPlaylistReach",
-      label: "Playlist Reach",
+      label: "Portée des Playlists",
       format: formatNumber,
-      description: "Estimated audience size of playlists",
-      unit: "listeners",
+      description: "Audience estimée des playlists",
+      unit: "auditeurs",
     },
     {
       id: "spotifyStreams",
-      label: "Spotify Streams",
+      label: "Streams Spotify",
       format: formatNumber,
-      description: "Total streams on Spotify",
+      description: "Streams totaux sur Spotify",
       unit: "streams",
     },
     {
       id: "spotifyPopularity",
-      label: "Popularity",
+      label: "Popularité",
       format: (d) => `${d}/100`,
-      description: "Spotify's popularity score",
+      description: "Score de popularité Spotify",
       unit: "score",
     },
     {
       id: "airplaySpins",
-      label: "Radio Plays",
+      label: "Passages Radio",
       format: formatNumber,
-      description: "Traditional radio spins",
-      unit: "spins",
+      description: "Passages radio traditionnels",
+      unit: "passages",
     },
     {
       id: "siriusXMSpins",
-      label: "SiriusXM Plays",
+      label: "Passages SiriusXM",
       format: formatNumber,
-      description: "Satellite radio plays",
-      unit: "plays",
+      description: "Passages radio satellite",
+      unit: "passages",
     },
     {
       id: "spotifyPlaylistCount",
-      label: "Playlist Count",
+      label: "Nombre de Playlists",
       format: formatNumber,
-      description: "Number of Spotify playlists",
+      description: "Nombre de playlists Spotify",
       unit: "playlists",
     },
     {
       id: "tiktokViews",
-      label: "TikTok Views",
+      label: "Vues TikTok",
       format: formatNumber,
-      description: "Total TikTok views",
-      unit: "views",
+      description: "Vues totales sur TikTok",
+      unit: "vues",
     },
     {
       id: "youtubeViews",
-      label: "YouTube Views",
+      label: "Vues YouTube",
       format: formatNumber,
-      description: "Total YouTube views",
-      unit: "views",
+      description: "Vues totales sur YouTube",
+      unit: "vues",
     },
     {
       id: "shazamCounts",
       label: "Shazams",
       format: formatNumber,
-      description: "Shazam identifications",
+      description: "Identifications Shazam",
       unit: "shazams",
     },
   ];
 
   useEffect(() => {
+    console.log("data", filteredData);
+
     if (!data || data.length === 0 || !filteredData) return;
 
-    const margin = { top: 80, right: 200, bottom: 80, left: 60 };
+    const margin = { top: 60, right: 150, bottom: 60, left: 50 };
     const containerWidth = ref.current.parentNode.clientWidth;
-    const containerHeight = 650;
+    const containerHeight = 500;
     const width = containerWidth - margin.left - margin.right;
     const height = containerHeight - margin.top - margin.bottom;
 
@@ -98,7 +98,7 @@ const CrossPlatformPerformanceChart = ({ data }) => {
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // Create scales for selected dimensions only
+    // Créer les échelles pour les dimensions sélectionnées
     const yScales = {};
     selectedDimensions.forEach((dimId) => {
       const values = filteredData
@@ -123,34 +123,28 @@ const CrossPlatformPerformanceChart = ({ data }) => {
       .range([0, width])
       .padding(0.5);
 
-    // Color scale with better contrast
+    // Échelle de couleurs avec 5 niveaux
     const colorScale = d3
       .scaleOrdinal()
-      .domain(["low", "medium", "high"])
-      .range(["#4e79a7", "#f28e2b", "#e15759"]);
+      .domain(["très faible", "faible", "moyenne", "élevée", "très élevée"])
+      .range(["#4e79a7", "#59a14f", "#f1ce63", "#f28e2b", "#e15759"]);
 
-    // Categorize popularity into low/medium/high
+    // Catégoriser la popularité en 5 niveaux
     const popularityExtent = d3.extent(
       filteredData,
       (d) => d.spotifyPopularity
     );
     const categorizePopularity = (score) => {
-      if (
-        score <
-        popularityExtent[0] + (popularityExtent[1] - popularityExtent[0]) / 3
-      )
-        return "low";
-      if (
-        score <
-        popularityExtent[0] +
-          (2 * (popularityExtent[1] - popularityExtent[0])) / 3
-      )
-        return "medium";
-      return "high";
+      const range = popularityExtent[1] - popularityExtent[0];
+      if (score < popularityExtent[0] + range * 0.2) return "très faible";
+      if (score < popularityExtent[0] + range * 0.4) return "faible";
+      if (score < popularityExtent[0] + range * 0.6) return "moyenne";
+      if (score < popularityExtent[0] + range * 0.8) return "élevée";
+      return "très élevée";
     };
 
-    // Draw lines
-    svg
+    // Dessiner les lignes
+    const lines = svg
       .selectAll(".line")
       .data(filteredData)
       .enter()
@@ -178,21 +172,28 @@ const CrossPlatformPerformanceChart = ({ data }) => {
       .attr("fill", "none")
       .attr("stroke-width", 1)
       .attr("opacity", 0.6)
-      .style("cursor", "pointer")
+      .style("cursor", "pointer");
+
+    // Gestion des événements de survol
+    lines
       .on("mouseover", function (event, d) {
+        // Réduire l'opacité de toutes les lignes
+        d3.selectAll(".line").attr("opacity", 0.1);
+
+        // Mettre en évidence la ligne survolée
         d3.select(this).raise().attr("stroke-width", 3).attr("opacity", 1);
 
-        const [x, y] = d3.pointer(event, svg.node());
+        const [xpos, ypos] = d3.pointer(event, svg.node());
         d3
           .select(tooltipRef.current)
           .style("opacity", 1)
-          .style("left", `${event.pageX + 20}px`)
-          .style("top", `${event.pageY - 80}px`).html(`
+          .style("left", `${xpos + 100}px`)
+          .style("top", `${ypos}px`).html(`
               <strong class="text-sm block">${
-                d.track || "Unknown track"
+                d.track || "Titre inconnu"
               }</strong>
               <span class="text-xs text-gray-500">${
-                d.artist || "Unknown artist"
+                d.artist || "Artiste inconnu"
               }</span>
               <div class="text-xs mt-2 grid grid-cols-2 gap-2">
                 ${selectedDimensions
@@ -212,18 +213,20 @@ const CrossPlatformPerformanceChart = ({ data }) => {
           `);
       })
       .on("mouseout", function () {
-        d3.select(this).attr("stroke-width", 1).attr("opacity", 0.6);
+        // Rétablir l'opacité de toutes les lignes
+        d3.selectAll(".line").attr("opacity", 0.6);
+        d3.select(this).attr("stroke-width", 1);
         d3.select(tooltipRef.current).style("opacity", 0);
       });
 
-    // Add axes
+    // Ajouter les axes
     selectedDimensions.forEach((dimId) => {
       const dimConfig = dimensionConfigs.find((d) => d.id === dimId);
       const axisGroup = svg
         .append("g")
         .attr("transform", `translate(${xScale(dimConfig?.label || dimId)},0)`);
 
-      // Y axis with formatted numbers
+      // Axe Y avec nombres formatés
       axisGroup
         .call(
           d3
@@ -232,26 +235,26 @@ const CrossPlatformPerformanceChart = ({ data }) => {
             .tickFormat((d) => formatNumber(d))
         )
         .selectAll("text")
-        .style("font-size", "11px");
+        .style("font-size", "10px");
 
-      // Axis title
+      // Titre de l'axe
       axisGroup
         .append("text")
-        .attr("y", -20)
+        .attr("y", -15)
         .attr("text-anchor", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "11px")
         .style("font-weight", "bold")
         .style("fill", "#555")
         .text(dimConfig?.label || dimId);
 
-      // Add brushing
+      // Ajouter le brushing
       const brushGroup = axisGroup.append("g").attr("class", "brush");
 
       const brush = d3
         .brushY()
         .extent([
-          [-15, 0],
-          [15, height],
+          [-12, 0],
+          [12, height],
         ])
         .on("brush end", function (event) {
           if (!event.selection) {
@@ -274,68 +277,74 @@ const CrossPlatformPerformanceChart = ({ data }) => {
       brushGroup.call(brush);
     });
 
-    // Add color legend to the right of the graph
+    // Ajouter la légende des couleurs
     const legendGroup = svg
       .append("g")
-      .attr("transform", `translate(${width + 40}, 20)`);
+      .attr("transform", `translate(${width + 30}, 20)`);
 
-    // Legend title
+    // Titre de la légende
     legendGroup
       .append("text")
       .attr("y", 0)
       .attr("text-anchor", "start")
-      .style("font-size", "14px")
+      .style("font-size", "12px")
       .style("font-weight", "bold")
-      .text("Popularity Level");
+      .text("Niveau de Popularité");
 
-    // Legend items
+    // Éléments de la légende
     const legendItems = [
-      { label: "High (66-100)", color: "#e15759" },
-      { label: "Medium (33-66)", color: "#f28e2b" },
-      { label: "Low (0-33)", color: "#4e79a7" },
+      { label: "Très élevée (80-100)", color: "#e15759" },
+      { label: "Élevée (60-80)", color: "#f28e2b" },
+      { label: "Moyenne (40-60)", color: "#f1ce63" },
+      { label: "Faible (20-40)", color: "#59a14f" },
+      { label: "Très faible (0-20)", color: "#4e79a7" },
     ];
 
     legendItems.forEach((item, i) => {
       const itemGroup = legendGroup
         .append("g")
-        .attr("transform", `translate(0, ${i * 25 + 25})`);
+        .attr("transform", `translate(0, ${i * 20 + 20})`);
 
       itemGroup
         .append("rect")
-        .attr("width", 15)
-        .attr("height", 15)
+        .attr("width", 12)
+        .attr("height", 12)
         .attr("fill", item.color);
 
       itemGroup
         .append("text")
-        .attr("x", 25)
-        .attr("y", 12)
+        .attr("x", 20)
+        .attr("y", 10)
         .attr("dy", "0.35em")
-        .style("font-size", "12px")
+        .style("font-size", "11px")
         .text(item.label);
     });
 
-    // Add X axis title
+    // Titre de l'axe X
     svg
       .append("text")
       .attr("x", width / 2)
-      .attr("y", height + 50)
+      .attr("y", height + 40)
       .attr("text-anchor", "middle")
-      .style("font-size", "14px")
+      .style("font-size", "12px")
       .style("font-weight", "bold")
-      .text("Performance Metrics");
+      .text("Métriques de Performance");
 
-    // Add Y axis title
+    // Titre de l'axe Y
     svg
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("x", -height / 2)
-      .attr("y", -40)
+      .attr("y", -30)
       .attr("text-anchor", "middle")
-      .style("font-size", "14px")
+      .style("font-size", "12px")
       .style("font-weight", "bold")
-      .text("Metric Values");
-  }, [data, selectedDimensions, filteredData]);
+      .text("Valeurs des Métriques");
+  }, [selectedDimensions, filteredData]);
+
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
   const toggleDimension = (dimId) => {
     setSelectedDimensions((prev) =>
@@ -345,23 +354,30 @@ const CrossPlatformPerformanceChart = ({ data }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <h4 style={{ marginBottom: "20px" }}>
-        Compare how tracks perform across different platforms and metrics.
-        Select metrics below to analyze relationships.
+      <h4 style={{ marginBottom: "15px", fontSize: "14px" }}>
+        Comparez les performances des titres sur différentes plateformes et
+        métriques. Sélectionnez les métriques ci-dessous pour analyser les
+        relations.
       </h4>
 
-      {/* Dimension selector */}
-      <div style={{ marginBottom: "20px" }}>
+      {/* Sélecteur de dimensions */}
+      <div style={{ marginBottom: "15px" }}>
         <label
-          style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+          style={{
+            display: "block",
+            marginBottom: "6px",
+            fontWeight: "bold",
+            fontSize: "13px",
+          }}
         >
-          Select Metrics:
+          Sélectionnez les Métriques:
         </label>
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: "10px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "8px",
+            fontSize: "12px",
           }}
         >
           {dimensionConfigs.map((dim) => (
@@ -370,8 +386,8 @@ const CrossPlatformPerformanceChart = ({ data }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
-                padding: "8px",
+                gap: "6px",
+                padding: "6px",
                 borderRadius: "4px",
                 background: selectedDimensions.includes(dim.id)
                   ? "#f0f0f0"
@@ -385,10 +401,11 @@ const CrossPlatformPerformanceChart = ({ data }) => {
                 checked={selectedDimensions.includes(dim.id)}
                 onChange={() => toggleDimension(dim.id)}
                 onClick={(e) => e.stopPropagation()}
+                style={{ width: "14px", height: "14px" }}
               />
               <div>
                 <div style={{ fontWeight: "500" }}>{dim.label}</div>
-                <div style={{ fontSize: "0.8em", color: "#666" }}>
+                <div style={{ fontSize: "0.75em", color: "#666" }}>
                   {dim.description}
                 </div>
               </div>
@@ -397,26 +414,12 @@ const CrossPlatformPerformanceChart = ({ data }) => {
         </div>
       </div>
 
-      <button
-        onClick={() => setFilteredData(data)}
-        style={{
-          padding: "8px 16px",
-          background: "#f0f0f0",
-          border: "1px solid #ddd",
-          borderRadius: "4px",
-          marginBottom: "20px",
-          cursor: "pointer",
-        }}
-      >
-        Reset All Filters
-      </button>
-
       <div style={{ position: "relative" }}>
         <svg
           ref={ref}
           style={{
             width: "100%",
-            height: "650px",
+            height: "500px",
           }}
         ></svg>
         <div
@@ -428,12 +431,12 @@ const CrossPlatformPerformanceChart = ({ data }) => {
             transition: "opacity 0.2s",
             zIndex: 10,
             backgroundColor: "white",
-            padding: "12px",
+            padding: "10px",
             borderRadius: "6px",
             boxShadow: "0 3px 10px rgba(0,0,0,0.15)",
             border: "1px solid #e5e7eb",
-            fontSize: "14px",
-            maxWidth: "300px",
+            fontSize: "12px",
+            maxWidth: "250px",
           }}
         ></div>
       </div>

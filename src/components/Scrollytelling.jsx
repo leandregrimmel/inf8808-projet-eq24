@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import CrossPlatformPerformanceChart from "./DifusionAspect/CrossPlatformPerformanceChart";
+import CrossPlatformPerformanceChart from "./DifusionSection/CrossPlatformPerformanceChart";
 import ExpliciteContentAnalysis from "./MusicalGenreSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
 import CorrelationMatrix from "./MultiPlatformSection/CorrelationMatrix";
