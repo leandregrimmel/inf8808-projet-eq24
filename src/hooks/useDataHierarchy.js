@@ -68,7 +68,6 @@ export function useDataHierarchy(rawData) {
       return;
     }
 
-    // Transformer les données brutes en hiérarchie
     const hierarchicalData = flatToHierarchyTop10(rawData);
     setHierarchy(hierarchicalData);
   }, [rawData]);
