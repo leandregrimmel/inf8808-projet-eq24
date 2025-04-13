@@ -10,6 +10,9 @@ import AgeVsStreams from "./TemporalSection/AgeVsPopularityMetric";
 import SeasonalTrends from "./TemporalSection/SeasonalTrends";
 import Sidebar from "./Sidebar/Sidebar";
 import useFilteredData from "../hooks/useFilteredData";
+import RatioChart from "./UserEngagementSection/RatioChart";
+import TikTokImpact from "./UserEngagementSection/TikTokImpact";
+import ShazamCorrelation from "./UserEngagementSection/ShazamCorrelation";
 
 const sectionStyle = {
   minHeight: "100vh",
@@ -182,12 +185,30 @@ const ScrollytellingDashboard = () => {
           <CrossPlatformPerformanceChart data={filteredData} />
         </section>
 
-        {/* Aspect Engagement Section */}
         <section ref={engagementRef} id="engagement" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Engagement des Utilisateurs</h1>
           </div>
-          {/* <ScatterPlot data={filteredData} /> */}
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>Ratio Vues/Likes par Plateforme</h2>
+            </div>
+            <RatioChart data={filteredData} />
+          </div>
+
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>Impact des Posts TikTok sur la Popularité</h2>
+            </div>
+            <TikTokImpact data={filteredData} />
+          </div>
+
+          <div style={subsectionStyle}>
+            <div style={subsectionHeaderStyle}>
+              <h2>Corrélation Shazam ↔ Découvrabilitéc </h2>
+            </div>
+            <ShazamCorrelation data={filteredData} />
+          </div>
         </section>
       </div>
     </div>
