@@ -34,7 +34,7 @@ const SideBar = ({
     {
       id: "overview",
       icon: LayoutDashboard,
-      label: "Overview",
+      label: "Apreçu",
       ref: "overviewRef",
     },
     {

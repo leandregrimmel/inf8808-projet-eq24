@@ -299,11 +299,19 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
   return (
     <div style={{ position: "relative" }}>
       {/* Updated metric selection controls */}
+      <h4>
+        Cette matrice de corrélations permet d'identifier les relations entre
+        différentes plateformes musicales. Les cases colorées (du bleu au rouge)
+        indiquent la force et le sens des liens, révélant quelles métriques
+        évoluent conjointement ou indépendamment. Nous utilisons cette
+        visualisation pour repérer les synergies entre indicateurs clés comme
+        les streams Spotify et les vues TikTok.
+      </h4>
       <div style={{ marginBottom: "20px" }}>
         <label
           style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
         >
-          Select Metrics:
+          Selectionner les métriques à afficher :
         </label>
         <div
           style={{

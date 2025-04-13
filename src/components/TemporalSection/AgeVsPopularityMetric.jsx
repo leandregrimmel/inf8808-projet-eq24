@@ -262,8 +262,8 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
         de régression pour visualiser la tendance globale.
       </h4>
       <div style={{ margin: "1rem" }}>
-        <label htmlFor="metric-selector" style={{ marginRight: "0.5rem" }}>
-          Choisissez une métrique de popularité :
+        <label htmlFor="metric-selector" style={{ marginRight: "0.5rem", fontWeight: "bold", color: "black" }}>
+          Métrique de popularité :
         </label>
         <select
           id="metric-selector"

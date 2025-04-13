@@ -242,23 +242,23 @@ const AnnualTrends = ({ data, initialYear }) => {
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <>
       <h4>
         On évalue ici le lien entre quelques métriques de popularité d'une
         chanson et son moment de sortie. La courbe et les points interactifs
         mettent en évidence les pics mensuels, tandis que le filtre par année
         permet d'analyser leur évolution dans le temps.
       </h4>
-      <div style={{ margin: "1rem", textAlign: "center" }}>
-        <label htmlFor="popularity-metric" style={{ marginRight: "0.5rem" }}>
-          Choisissez une métrique de popularité :
+      <div style={{ margin: "1rem" }}>
+        <label
+          htmlFor="popularity-metric"
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "bold",
+            color: "black",
+          }}
+        >
+          Métrique de popularité :
         </label>
         <select
           id="popularity-metric"
@@ -273,61 +273,70 @@ const AnnualTrends = ({ data, initialYear }) => {
           <option value="pandoraStreams">Pandora Streams</option>
         </select>
       </div>
-      <div style={{ position: "relative" }}>
-        <svg ref={ref} width={600} height={500}></svg>
-        <div
-          ref={tooltipRef}
-          style={{
-            position: "absolute",
-            opacity: 0,
-            pointerEvents: "none",
-            transition: "opacity 0.2s",
-            zIndex: 10,
-          }}
-        ></div>
-        {years.length > 0 && (
-          <div className="w-full max-w-2xl mt-8 px-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Filtrer par année:</span>
-              <span
-                className={`text-sm font-medium px-3 py-1 rounded ${
-                  activeYear
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-gray-100 text-gray-800"
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ position: "relative" }}>
+          <svg ref={ref} width={600} height={500}></svg>
+          <div
+            ref={tooltipRef}
+            style={{
+              position: "absolute",
+              opacity: 0,
+              pointerEvents: "none",
+              transition: "opacity 0.2s",
+              zIndex: 10,
+            }}
+          ></div>
+          {years.length > 0 && (
+            <div className="w-full max-w-2xl mt-8 px-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Filtrer par année:</span>
+                <span
+                  className={`text-sm font-medium px-3 py-1 rounded ${
+                    activeYear
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {activeYear ? activeYear : "Toutes les années"}
+                </span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <input
+                  type="range"
+                  min={Math.min(...years)}
+                  max={Math.max(...years)}
+                  value={activeYear || Math.max(...years)}
+                  onChange={(e) => setActiveYear(parseInt(e.target.value))}
+                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  step="1"
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>{Math.min(...years)}</span>
+                <span>{Math.max(...years)}</span>
+              </div>
+              <button
+                onClick={() => setActiveYear(null)}
+                className={`px-3 py-1 mt-8 rounded text-sm transition-colors ${
+                  !activeYear
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
               >
-                {activeYear ? activeYear : "Toutes les années"}
-              </span>
+                Toutes les années
+              </button>
             </div>
-            <div className="flex items-center space-x-4">
-              <input
-                type="range"
-                min={Math.min(...years)}
-                max={Math.max(...years)}
-                value={activeYear || Math.max(...years)}
-                onChange={(e) => setActiveYear(parseInt(e.target.value))}
-                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                step="1"
-              />
-            </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>{Math.min(...years)}</span>
-              <span>{Math.max(...years)}</span>
-            </div>
-            <button
-              onClick={() => setActiveYear(null)}
-              className={`px-3 py-1 mt-8 rounded text-sm transition-colors ${
-                !activeYear
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              Toutes les années
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

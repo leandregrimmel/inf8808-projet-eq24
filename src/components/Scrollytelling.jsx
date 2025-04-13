@@ -154,7 +154,11 @@ const ScrollytellingDashboard = () => {
       <div ref={containerRef} style={containerStyle}>
         <section ref={overviewRef} id="overview" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
+<<<<<<< Updated upstream
             <h1>Vue d'ensemble</h1>
+=======
+            <h1>Aperçu</h1>
+>>>>>>> Stashed changes
           </div>
           <Overview temporalSectionRef={temporalRef} />
         </section>
@@ -308,10 +312,7 @@ const ScrollytellingDashboard = () => {
                 zIndex: 1,
               }}
             >
-              <h2>
-                Sunburst Chart : Répartition des Consommations par Artiste et
-                Plateforme
-              </h2>
+              <h2>Répartition des Consommations par Artiste et Plateforme</h2>
             </div>
             <SunburstChart data={useDataHierarchy(filteredData)} />
           </div>

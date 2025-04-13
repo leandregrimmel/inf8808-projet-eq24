@@ -396,15 +396,18 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <h4>
+      <h4 style={{ fontWeight: "bold", color: "black" }}>
         L'analyse montre que le caractère explicite influence différemment les
         performances selon les plateformes - avantage net sur Spotify, impact
         neutre sur TikTok, et effet polarisant sur YouTube. Explorez chaque
         métrique pour découvrir ces dynamiques.
       </h4>
       <div style={{ marginBottom: "1rem" }}>
-        <label htmlFor="metric-selector" style={{ marginRight: "0.5rem" }}>
-          Choisissez une métrique de popularité :
+        <label
+          htmlFor="metric-selector"
+          style={{ marginRight: "0.5rem", fontWeight: "bold", color: "black" }}
+        >
+          Métrique de popularité :
         </label>
         <select
           id="metric-selector"
