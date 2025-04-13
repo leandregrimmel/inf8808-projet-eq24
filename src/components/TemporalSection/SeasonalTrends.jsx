@@ -190,6 +190,7 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
           elementsRef.current.angleScale.bandwidth() / 2;
         return (outerRadius + 15) * Math.sin(a - Math.PI / 2);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, metric, activeYear, years]);
 
   const showTooltip = (event, d) => {
