@@ -68,7 +68,6 @@ const dimensionConfigs = [
   },
 ];
 
-// Custom correlation function
 function correlation(xArray, yArray) {
   const n = xArray.length;
   const meanX = d3.mean(xArray);
@@ -125,17 +124,14 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
   useEffect(() => {
     if (!data || selectedMetrics.length === 0) return;
 
-    // Compute correlation matrix using metric id.
     const numericKeys = selectedMetrics.map((m) => m.id);
     const corrMatrix = computeCorrelationMatrix(data, numericKeys);
     const n = numericKeys.length;
 
-    // Dimensions and margins
     const width = 800;
     const height = 600;
     const margin = { top: 150, right: 200, bottom: 50, left: 150 };
 
-    // Calculate cell size and actual matrix width.
     const cellSize = (width - margin.left - margin.right) / n;
     const matrixWidth = n * cellSize;
 
@@ -146,13 +142,11 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom);
 
-    // Color scale with inverted domain to map red to 1 and blue to -1.
     const color = d3
       .scaleSequential()
       .domain([1, -1])
       .interpolator(d3.interpolateRdBu);
 
-    // Center the matrix horizontally.
     const container = svg
       .append("g")
       .attr(
@@ -160,7 +154,6 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
         `translate(${margin.left + (width - matrixWidth) / 2}, ${margin.top})`
       );
 
-    // Draw cells with rounded corners and tooltip interaction.
     container
       .selectAll("rect")
       .data(
@@ -199,7 +192,6 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
         d3.select("#tooltip-corr").style("opacity", 0);
       });
 
-    // Row labels
     container
       .selectAll(".rowLabel")
       .data(selectedMetrics.map((m) => m.label))
@@ -215,7 +207,6 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
       .style("fill", "#555")
       .text((d) => d);
 
-    // Column labels with rotated text.
     container
       .selectAll(".colLabel")
       .data(selectedMetrics.map((m) => m.label))
@@ -236,18 +227,6 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
       .style("fill", "#555")
       .text((d) => d);
 
-    // Title for the matrix
-    svg
-      .append("text")
-      .attr("x", (width + margin.left + margin.right) / 2)
-      .attr("y", 40)
-      .attr("text-anchor", "middle")
-      .style("font-size", "16px")
-      .style("font-weight", "bold")
-      .style("font-family", "sans-serif")
-      .text("Popularity Metrics Correlation Matrix");
-
-    // --- Updated Legend Section ---
     const legendWidth = 20,
       legendHeight = 150;
 
@@ -293,7 +272,6 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
       .style("fill", "url(#legend-gradient)")
       .style("stroke", "#ccc");
 
-    // Inverted legend scale to match our color scale (red corresponds to 1).
     const legendScale = d3
       .scaleLinear()
       .domain([1, -1])

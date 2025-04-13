@@ -21,7 +21,9 @@ const AnnualTrends = ({ data, initialYear }) => {
   useEffect(() => {
     if (!data) return;
 
-    const uniqueYears = [...new Set(data.map((d) => d.releaseDate.getFullYear()))].sort();
+    const uniqueYears = [
+      ...new Set(data.map((d) => d.releaseDate.getFullYear())),
+    ].sort();
     setYears(uniqueYears);
   }, [data]);
 
@@ -51,10 +53,14 @@ const AnnualTrends = ({ data, initialYear }) => {
     ];
 
     const monthlyData = monthNames.map((month, i) => {
-      const monthData = filteredData.filter((d) => d.releaseDate.getMonth() === i);
+      const monthData = filteredData.filter(
+        (d) => d.releaseDate.getMonth() === i
+      );
       return {
         month,
-        value: monthData.length ? d3.mean(monthData, (d) => d[selectedMetric]) : 0,
+        value: monthData.length
+          ? d3.mean(monthData, (d) => d[selectedMetric])
+          : 0,
       };
     });
 
@@ -240,11 +246,11 @@ const AnnualTrends = ({ data, initialYear }) => {
         alignItems: "center",
       }}
     >
-      <h4 style={{ textAlign: "center", maxWidth: "600px" }}>
-        Ce graphique circulaire révèle les tendances mensuelles de popularité
-        des musiques. La courbe et les points interactifs mettent en évidence
-        les pics saisonniers, tandis que le filtre par année permet d'analyser
-        leur évolution dans le temps.
+      <h4>
+        On évalue ici le lien entre quelques métriques de popularité d'une
+        chanson et son moment de sortie. La courbe et les points interactifs
+        mettent en évidence les pics mensuels, tandis que le filtre par année
+        permet d'analyser leur évolution dans le temps.
       </h4>
       <div style={{ margin: "1rem", textAlign: "center" }}>
         <label htmlFor="popularity-metric" style={{ marginRight: "0.5rem" }}>

@@ -351,7 +351,7 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .style("font-weight", "bold")
       .text("Valeurs des Métriques");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDimensions, filteredData]);
+  }, [selectedDimensions, filteredData, dimensionConfigs]);
 
   useEffect(() => {
     setFilteredData(data);

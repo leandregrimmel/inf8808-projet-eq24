@@ -256,10 +256,10 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <h4 style={{ textAlign: "center", maxWidth: "600px" }}>
-        Ce nuage de points interactif montre la relation entre l'âge des
-        chansons et divers indicateurs de succès, avec une ligne de régression
-        pour visualiser la tendance globale.
+      <h4>
+        Le nuage de points interactif présenté ci-dessous montre la relation
+        entre l'âge des chansons et divers indicateurs de succès, avec une ligne
+        de régression pour visualiser la tendance globale.
       </h4>
       <div style={{ margin: "1rem" }}>
         <label htmlFor="metric-selector" style={{ marginRight: "0.5rem" }}>

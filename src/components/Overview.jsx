@@ -29,14 +29,14 @@ const Overview = ({ temporalSectionRef }) => {
       {/* Section Introductive et Contexte */}
       <header className="mb-8">
         <h2>Spotify Top Streamed Songs 2024</h2>
-        <p className="text-lg text-muted-foreground">
+        <h4>
           Bienvenue sur notre projet de visualisation de données pour le cours
           INF8808. Dans un paysage musical en pleine transformation grâce aux
-          plateformes de streaming, nous analysons comment la popularité des
+          plateformes de streaming, nous analyserons comment la popularité des
           chansons évolue après leur sortie. Nous nous intéressons
           particulièrement aux impacts des réseaux sociaux, à l'évolution des
           tendances temporelles et aux interactions multi-plateformes.
-        </p>
+        </h4>
       </header>
 
       {/* Section des Indicateurs Clés */}
@@ -108,7 +108,7 @@ const Overview = ({ temporalSectionRef }) => {
           }
           className="mb-4 px-4 py-2 bg-primary rounded-md border border-black hover:bg-primary-dark hover:scale-105 transition-transform"
         >
-          Start Exploring
+          Commencer à explorer
         </button>
       </div>
     </div>

@@ -178,15 +178,18 @@ const SunburstChart = ({ data }) => {
   }, [data]);
 
   return (
-    <div style={{ margin: "0 auto", maxWidth: "600px" }}>
-      <p className="mb-4 text-muted-foreground">
-        Ce graphique vous permet de visualiser comment les différents canaux se
-        répartissent pour les artistes les plus populaires. Le niveau 1 présente
-        le top des artistes (ex. top 10 basé sur la somme des streams) et les
-        niveaux suivants détaillent la contribution de chaque plateforme.
-      </p>
-      <svg ref={ref}></svg>
-    </div>
+    <>
+      <h4>
+        On révèle ici la répartition des audiences musicales entre artistes et
+        plateformes. La hiérarchie va des artistes (centre) aux plateformes
+        (anneaux extérieurs), avec des segments proportionnels aux volumes
+        d'écoute. Cliquez pour zoomer et découvrez quelles plateformes
+        contribuent le plus à chaque artiste.
+      </h4>
+      <div style={{ margin: "0 auto", maxWidth: "600px" }}>
+        <svg ref={ref}></svg>
+      </div>
+    </>
   );
 };
 

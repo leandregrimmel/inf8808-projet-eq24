@@ -396,10 +396,11 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <h4 style={{ marginBottom: "20px" }}>
-        Ce diagramme en boîte compare la distribution des streams entre les
-        chansons explicites et non-explicites, avec une échelle logarithmique
-        pour mieux visualiser l'étendue des données.
+      <h4>
+        L'analyse montre que le caractère explicite influence différemment les
+        performances selon les plateformes - avantage net sur Spotify, impact
+        neutre sur TikTok, et effet polarisant sur YouTube. Explorez chaque
+        métrique pour découvrir ces dynamiques.
       </h4>
       <div style={{ marginBottom: "1rem" }}>
         <label htmlFor="metric-selector" style={{ marginRight: "0.5rem" }}>
