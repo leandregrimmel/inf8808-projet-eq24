@@ -62,13 +62,11 @@ const TikTokImpact = ({ data }) => {
     const size = d3
       .scaleLog()
       .base(10)
-      .domain(d3.extent(filteredData, (d) => d.spotifyStreams))
+      .domain([1e3, 1e9]) // Fixed domain for size
       .range([4, 30]);
 
     // Color scale using a perceptually uniform sequential color scheme
-    const color = d3
-      .scaleSequential(d3.interpolateViridis)
-      .domain(d3.extent(filteredData, (d) => Math.log10(d.spotifyStreams)));
+    const color = d3.scaleSequential(d3.interpolateViridis).domain([3, 9]);
 
     // Create circles for each data point
     const circles = svg
@@ -235,7 +233,7 @@ const TikTokImpact = ({ data }) => {
         .select(tooltipRef.current)
         .style("opacity", 1)
         .style("left", `${xpos + 250}px`)
-        .style("top", `${ypos}px`).html(`
+        .style("top", `${ypos + 250}px`).html(`
           <div class="text-sm bg-white p-3 rounded shadow-lg border border-gray-200">
             <strong class="block text-base mb-1">${d.track}</strong>
             <div class="mb-1"><span class="font-semibold">Artiste:</span> ${
@@ -271,9 +269,9 @@ const TikTokImpact = ({ data }) => {
         et les streams Spotify. Bien qu'aucune corrélation globale forte
         n'apparaisse entre ces métriques, on observe des tendances plus marquées
         pour certains artistes jeunes comme Taylor Swift, où l'engagement TikTok
-        semble mieux correspondre au succès sur Spotify. Les cercles plus
-        grands et plus pâles représentent les artistes avec le plus de
-        streams, permettant d'identifier visuellement ces relations potentielles
+        semble mieux correspondre au succès sur Spotify. Les cercles plus grands
+        et plus pâles représentent les artistes avec le plus de streams,
+        permettant d'identifier visuellement ces relations potentielles
         lorsqu'on zoome sur des segments spécifiques du graphique.
       </h4>
       <svg ref={svgRef}></svg>
