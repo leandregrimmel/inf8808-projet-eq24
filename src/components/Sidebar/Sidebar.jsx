@@ -1,4 +1,3 @@
-import React from "react";
 import {
   LayoutDashboard,
   Calendar,
@@ -8,8 +7,9 @@ import {
   Users,
   Menu,
 } from "lucide-react";
-import { Button } from "./ui/button";
-import { useSidebar } from "../context/SidebarContext";
+import { Button } from "../ui/button";
+import { useSidebar } from "../../context/SidebarContext";
+import ArtistFilter from "./ArtistFilter";
 
 const SideBar = ({
   scrollToSection,
@@ -95,7 +95,14 @@ const SideBar = ({
           )}
         </div>
 
-        {/* Sidebar Content */}
+        {/* Artist Filter - Only shown when sidebar is expanded */}
+        {isOpen && (
+          <div className="px-3 py-4 border-b">
+            <ArtistFilter />
+          </div>
+        )}
+
+        {/* Navigation Items */}
         <div className="flex flex-col flex-1 overflow-y-auto py-2">
           <nav
             className={`flex flex-col gap-1 py-3 ${isOpen ? "px-2" : "px-0"}`}

@@ -1,15 +1,15 @@
 import React, { useRef, useState } from "react";
-import ParallelCoordinates from "./ParallelCoordinates";
-import useData from "../hooks/useData";
+import CrossPlatformPerformanceChart from "./DifusionAspect/CrossPlatformPerformanceChart";
 import ExpliciteContentAnalysis from "./MusicalGenreSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
-import Sidebar from "./Sidebar";
 import CorrelationMatrix from "./CorrelationMatrix";
 import SunburstChart from "./SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import { useSidebar } from "../context/SidebarContext";
 import AgeVsStreams from "./TemporalSection/AgeVsStreams";
 import SeasonalTrends from "./TemporalSection/SeasonalTrends";
+import Sidebar from "./Sidebar/Sidebar";
+import useFilteredData from "../hooks/useFilteredData";
 
 const sectionStyle = {
   minHeight: "100vh",
@@ -59,17 +59,17 @@ const subsectionHeaderStyle = {
 };
 
 const ScrollytellingDashboard = () => {
-  const data = useData();
+  const filteredData = useFilteredData();
   const { isOpen } = useSidebar();
   const [activeSection, setActiveSection] = useState("overview");
+
   const overviewRef = useRef(null);
   const temporalRef = useRef(null);
   const multiplatformRef = useRef(null);
   const genreRef = useRef(null);
   const diffusionRef = useRef(null);
   const engagementRef = useRef(null);
-  const hierarchicalData = useDataHierarchy(data);
-
+  
   const scrollToSection = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -118,7 +118,7 @@ const ScrollytellingDashboard = () => {
             <div style={subsectionHeaderStyle}>
               <h2>Age vs. Spotify Streams</h2>
             </div>
-            <AgeVsStreams data={data} />
+            <AgeVsStreams data={filteredData} />
           </div>
 
           {/* Seasonal Trends Subsection */}
@@ -126,7 +126,7 @@ const ScrollytellingDashboard = () => {
             <div style={subsectionHeaderStyle}>
               <h2>Graphique des Tendances Saisonnières</h2>
             </div>
-            <SeasonalTrends data={data} />
+            <SeasonalTrends data={filteredData} />
           </div>
         </section>
 
@@ -142,7 +142,7 @@ const ScrollytellingDashboard = () => {
               plateformes variées.
             </p>
             <div style={visualizationContainerStyle}>
-              <CorrelationMatrix data={data} />
+              <CorrelationMatrix data={filteredData} />
             </div>
             <h2 className="text-2xl font-bold mb-4">
               Sunburst Chart : Répartition des Consommations par Artiste et
@@ -156,7 +156,7 @@ const ScrollytellingDashboard = () => {
               contribution de chaque plateforme.
             </p>
             <div style={visualizationContainerStyle}>
-              <SunburstChart data={hierarchicalData} />
+              <SunburstChart data={useDataHierarchy(filteredData)} />
             </div>
           </div>
         </section>
@@ -173,7 +173,7 @@ const ScrollytellingDashboard = () => {
               <h2>Analyse des Contenus Explicites</h2>
             </div>
             <ExpliciteContentAnalysis
-              data={data}
+              data={filteredData}
               initialMetric="spotifyStreams"
               availableMetrics={[
                 { value: "spotifyStreams", label: "Streams Spotify" },
@@ -183,33 +183,13 @@ const ScrollytellingDashboard = () => {
               ]}
             />
           </div>
-
-          {/* Parallel Coordinates Subsection */}
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
-              <h2>Analyse Multi-dimensionnelle des Genres</h2>
-            </div>
-            <ParallelCoordinates
-              data={data}
-              config={{
-                dimensions: [
-                  "spotifyPopularity",
-                  "spotifyStreams",
-                  "youtubeLikes",
-                  "playlistReach",
-                  "airPlaySpins",
-                ],
-                enableArtistFilter: true,
-              }}
-            />
-          </div>
         </section>
         <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Diffusion & Rayonnement</h1>
           </div>
           <div style={visualizationContainerStyle}>
-            <ParallelCoordinates data={data} />
+            <CrossPlatformPerformanceChart data={filteredData} />
           </div>
         </section>
 
@@ -219,7 +199,7 @@ const ScrollytellingDashboard = () => {
             <h1>Aspect Engagement des Utilisateurs</h1>
           </div>
           <div style={visualizationContainerStyle}>
-            {/* <ScatterPlot data={data} /> */}
+            {/* <ScatterPlot data={filteredData} /> */}
           </div>
         </section>
       </div>
