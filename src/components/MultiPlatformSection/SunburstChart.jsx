@@ -6,7 +6,7 @@ const SunburstChart = ({ data }) => {
 
   useEffect(() => {
     if (!data) return;
-    // Vérifier que data.children existe et est un tableau non vide.
+
     if (!Array.isArray(data.children) || data.children.length === 0) {
       console.error(
         "La structure des données est incomplète : 'children' est manquant ou vide."
@@ -14,21 +14,18 @@ const SunburstChart = ({ data }) => {
       return;
     }
 
-    // --- Définition des dimensions et du rayon ---
     const width = 600;
     const height = width;
     const radius = width / 7;
 
-    // --- Création de la palette de couleurs ---
     const color = d3.scaleOrdinal(
       d3.quantize(d3.interpolateRainbow, data.children.length + 1)
     );
 
-    // --- Construction de la hiérarchie D3 ---
     const hierarchyData = d3
       .hierarchy(data)
       .sum((d) => {
-        if (d.children) return 0; // Nœud parent, pas de valeur directement assignée
+        if (d.children) return 0;
         if (typeof d.value !== "number" || isNaN(d.value)) {
           console.warn(
             "Valeur non numérique détectée pour un nœud feuille :",
@@ -40,14 +37,12 @@ const SunburstChart = ({ data }) => {
       })
       .sort((a, b) => b.value - a.value);
 
-    // --- Calcul du layout de partition ---
     const root = d3.partition().size([2 * Math.PI, hierarchyData.height + 1])(
       hierarchyData
     );
 
     root.each((d) => (d.current = d));
 
-    // --- Générateur d'arc ---
     const arc = d3
       .arc()
       .startAngle((d) => d.x0)
@@ -57,17 +52,14 @@ const SunburstChart = ({ data }) => {
       .innerRadius((d) => d.y0 * radius)
       .outerRadius((d) => Math.max(d.y0 * radius, d.y1 * radius - 1));
 
-    // --- Création du conteneur SVG ---
     const svg = d3
       .select(ref.current)
       .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
       .attr("preserveAspectRatio", "xMidYMid meet")
       .style("font", "10px sans-serif");
 
-    // Suppression de tout contenu précédent
     svg.selectAll("*").remove();
 
-    // --- Ajout des arcs (chemins) ---
     const path = svg
       .append("g")
       .selectAll("path")
@@ -84,25 +76,21 @@ const SunburstChart = ({ data }) => {
       .attr("pointer-events", (d) => (arcVisible(d.current) ? "auto" : "none"))
       .attr("d", (d) => arc(d.current));
 
-    // --- Rendre cliquables les segments disposant d'enfants ---
     path
       .filter((d) => d.children)
       .style("cursor", "pointer")
       .on("click", clicked);
 
-    // >>> Modification ici : Ajout du mot "vues" après la valeur dans le tooltip
     path.append("title").text((d) => {
-      // Chaîne des noms (Artistes / Plateformes)
       const labelPath = d
         .ancestors()
         .map((p) => p.data.name)
         .reverse()
         .join("/");
-      // Format de la valeur + ajout de "vues"
+
       return `${labelPath}\n${d3.format(",d")(d.value)} vues`;
     });
 
-    // --- Ajout des labels ---
     const label = svg
       .append("g")
       .attr("pointer-events", "none")
@@ -116,7 +104,6 @@ const SunburstChart = ({ data }) => {
       .attr("transform", (d) => labelTransform(d.current))
       .text((d) => d.data.name);
 
-    // --- Ajout d'un cercle central pour le zoom arrière ---
     const parent = svg
       .append("circle")
       .datum(root)
@@ -125,7 +112,6 @@ const SunburstChart = ({ data }) => {
       .attr("pointer-events", "all")
       .on("click", clicked);
 
-    // --- Fonction de zoom (clic) ---
     function clicked(event, p) {
       parent.datum(p.parent || root);
       root.each((d) => {
@@ -163,7 +149,6 @@ const SunburstChart = ({ data }) => {
         .attrTween("transform", (d) => () => labelTransform(d.current));
     }
 
-    // --- Fonctions d'aide ---
     function arcVisible(d) {
       return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
     }

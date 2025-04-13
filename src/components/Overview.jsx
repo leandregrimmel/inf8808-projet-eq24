@@ -1,7 +1,7 @@
 import React from "react";
 import useData from "../hooks/useData";
 import * as d3 from "d3";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./common/card";
 import formatNumber from "../utils";
 
 const Overview = ({ temporalSectionRef }) => {
@@ -13,11 +13,7 @@ const Overview = ({ temporalSectionRef }) => {
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground">
-<<<<<<< Updated upstream
-            Chargement des données de visualisation…
-=======
             Chargement des données de visualisation...
->>>>>>> Stashed changes
           </p>
         </div>
       </div>
@@ -32,20 +28,6 @@ const Overview = ({ temporalSectionRef }) => {
 
   return (
     <div>
-      {/* Section Introductive et Contexte */}
-<<<<<<< Updated upstream
-      <header className="mb-8">
-        <h2>Spotify Top Streamed Songs 2024</h2>
-        <h4>
-          Bienvenue sur notre projet de visualisation de données pour le cours
-          INF8808. Dans un paysage musical en pleine transformation grâce aux
-          plateformes de streaming, nous analysons comment la popularité des
-          chansons évolue après leur sortie. Nous nous intéressons
-          particulièrement aux impacts des réseaux sociaux, à l'évolution des
-          tendances temporelles et aux interactions multi-plateformes.
-        </h4>
-      </header>
-=======
       <h4>
         Bienvenue sur notre projet de visualisation de données pour le cours
         INF8808. Dans un paysage musical en pleine transformation grâce aux
@@ -54,9 +36,7 @@ const Overview = ({ temporalSectionRef }) => {
         particulièrement aux impacts des réseaux sociaux, à l'évolution des
         tendances temporelles et aux interactions multi-plateformes.
       </h4>
->>>>>>> Stashed changes
 
-      {/* Section des Indicateurs Clés */}
       <section className="mb-12">
         <h2 className="mb-4">Statistiques Clés</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -132,7 +112,9 @@ const Overview = ({ temporalSectionRef }) => {
           <div className="mt-0 flex justify-center">
             <button
               onClick={() =>
-                temporalSectionRef.current.scrollIntoView({ behavior: "smooth" })
+                temporalSectionRef.current.scrollIntoView({
+                  behavior: "smooth",
+                })
               }
               className="mb-4 px-4 py-2 bg-primary rounded-md border border-black hover:bg-primary-dark hover:scale-105 transition-transform"
             >

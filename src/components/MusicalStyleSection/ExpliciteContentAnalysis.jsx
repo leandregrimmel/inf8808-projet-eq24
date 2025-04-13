@@ -44,12 +44,11 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
       shazamCounts: "Shazam Counts",
     };
 
-    // Define base minimum values for each metric
     const metricMinValues = {
-      spotifyStreams: 1000000, // 1 million streams
-      youtubeViews: 1000000, // 1 million views
-      tiktokViews: 10000, // 100k views (TikTok typically has lower numbers)
-      shazamCounts: 10000, // 10k counts
+      spotifyStreams: 1000000,
+      youtubeViews: 1000000,
+      tiktokViews: 10000,
+      shazamCounts: 10000,
     };
 
     const groups = [
@@ -88,7 +87,6 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
       };
     };
 
-    // Calculate stats using selected metric
     const stats = groups.map((group) => ({
       group: group.key,
       color: group.color,
@@ -102,13 +100,11 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
       .range([margin.left, width - margin.right])
       .padding(0.4);
 
-    // Use dynamic minimum value based on selected metric
     const minValue = metricMinValues[selectedMetric];
     const maxValue = d3.max(stats, (s) => s.max) * 1.1;
 
-    // Ensure we have a valid domain for the log scale
-    const yDomainMin = Math.max(minValue, 1); // Log scale can't have values <= 0
-    const yDomainMax = Math.max(maxValue, yDomainMin * 10); // Ensure max > min
+    const yDomainMin = Math.max(minValue, 1);
+    const yDomainMax = Math.max(maxValue, yDomainMin * 10);
 
     const y = d3
       .scaleLog()

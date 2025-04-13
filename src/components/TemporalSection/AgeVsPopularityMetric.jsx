@@ -1,4 +1,3 @@
-// AgeVsPopularityMetric.jsx
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
@@ -43,7 +42,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
       .nice()
       .range([height - margin.bottom, margin.top]);
 
-    // Calculate correlation coefficient (Pearson's R)
     const n = data.length;
     const sumX = d3.sum(data, (d) => d.age);
     const sumY = d3.sum(data, (d) => d[selectedMetric]);
@@ -57,7 +55,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
     );
     const rValue = covXY / (stdX * stdY);
 
-    // Calculate regression line parameters
     const numerator = d3.sum(
       data,
       (d) => (d.age - meanX) * (d[selectedMetric] - meanY)
@@ -66,7 +63,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
     const slope = numerator / denominator;
     const intercept = meanY - slope * meanX;
 
-    // X axis
     const xAxis = svg
       .append("g")
       .attr("transform", `translate(0, ${height - margin.bottom})`)
@@ -82,7 +78,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
       .style("font-size", "16px")
       .text("Âge (années)");
 
-    // Y axis
     const yAxis = svg
       .append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
@@ -109,7 +104,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
       .style("font-size", "16px")
       .text(metricLabels[selectedMetric]);
 
-    // Grid lines
     svg
       .append("g")
       .attr("class", "grid")
@@ -136,7 +130,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
       .style("stroke", "lightgray")
       .style("stroke-opacity", 0.3);
 
-    // Draw scatter plot
     const scatter = svg.append("g");
 
     scatter
@@ -175,7 +168,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
         d3.select(tooltipRef.current).style("opacity", 0);
       });
 
-    // Draw regression line
     const regLine = [
       { age: xExtent[0], [selectedMetric]: intercept + slope * xExtent[0] },
       { age: xExtent[1], [selectedMetric]: intercept + slope * xExtent[1] },
@@ -192,7 +184,6 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", "5,5");
 
-    // Info box with regression details
     const infoBox = svg
       .append("g")
       .attr(
@@ -262,7 +253,10 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
         de régression pour visualiser la tendance globale.
       </h4>
       <div style={{ margin: "1rem" }}>
-        <label htmlFor="metric-selector" style={{ marginRight: "0.5rem", fontWeight: "bold", color: "black" }}>
+        <label
+          htmlFor="metric-selector"
+          style={{ marginRight: "0.5rem", fontWeight: "bold", color: "black" }}
+        >
           Métrique de popularité :
         </label>
         <select

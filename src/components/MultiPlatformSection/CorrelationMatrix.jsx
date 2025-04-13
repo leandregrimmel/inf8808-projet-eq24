@@ -298,7 +298,6 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      {/* Updated metric selection controls */}
       <h4>
         Cette matrice de corrélations permet d'identifier les relations entre
         différentes plateformes musicales. Les cases colorées (du bleu au rouge)

@@ -154,11 +154,7 @@ const ScrollytellingDashboard = () => {
       <div ref={containerRef} style={containerStyle}>
         <section ref={overviewRef} id="overview" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
-<<<<<<< Updated upstream
             <h1>Vue d'ensemble</h1>
-=======
-            <h1>Aperçu</h1>
->>>>>>> Stashed changes
           </div>
           <Overview temporalSectionRef={temporalRef} />
         </section>

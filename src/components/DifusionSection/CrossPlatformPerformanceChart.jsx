@@ -108,7 +108,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // Créer les échelles pour les dimensions sélectionnées
     const yScales = {};
     selectedDimensions.forEach((dimId) => {
       const values = filteredData
@@ -133,13 +132,11 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .range([0, width])
       .padding(0.5);
 
-    // Échelle de couleurs avec 5 niveaux
     const colorScale = d3
       .scaleOrdinal()
       .domain(["très faible", "faible", "moyenne", "élevée", "très élevée"])
       .range(["#4e79a7", "#59a14f", "#f1ce63", "#f28e2b", "#e15759"]);
 
-    // Catégoriser la popularité en 5 niveaux
     const popularityExtent = d3.extent(
       filteredData,
       (d) => d.spotifyPopularity
@@ -153,7 +150,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       return "très élevée";
     };
 
-    // Dessiner les lignes
     const lines = svg
       .selectAll(".line")
       .data(filteredData)
@@ -184,13 +180,10 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .attr("opacity", 0.6)
       .style("cursor", "pointer");
 
-    // Gestion des événements de survol
     lines
       .on("mouseover", function (event, d) {
-        // Réduire l'opacité de toutes les lignes
         d3.selectAll(".line").attr("opacity", 0.1);
 
-        // Mettre en évidence la ligne survolée
         d3.select(this).raise().attr("stroke-width", 3).attr("opacity", 1);
 
         const [xpos, ypos] = d3.pointer(event, svg.node());
@@ -223,20 +216,17 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
           `);
       })
       .on("mouseout", function () {
-        // Rétablir l'opacité de toutes les lignes
         d3.selectAll(".line").attr("opacity", 0.6);
         d3.select(this).attr("stroke-width", 1);
         d3.select(tooltipRef.current).style("opacity", 0);
       });
 
-    // Ajouter les axes
     selectedDimensions.forEach((dimId) => {
       const dimConfig = dimensionConfigs.find((d) => d.id === dimId);
       const axisGroup = svg
         .append("g")
         .attr("transform", `translate(${xScale(dimConfig?.label || dimId)},0)`);
 
-      // Axe Y avec nombres formatés
       axisGroup
         .call(
           d3
@@ -247,7 +237,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
         .selectAll("text")
         .style("font-size", "10px");
 
-      // Titre de l'axe
       axisGroup
         .append("text")
         .attr("y", -15)
@@ -257,7 +246,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
         .style("fill", "#555")
         .text(dimConfig?.label || dimId);
 
-      // Ajouter le brushing
       const brushGroup = axisGroup.append("g").attr("class", "brush");
 
       const brush = d3
@@ -287,12 +275,10 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       brushGroup.call(brush);
     });
 
-    // Ajouter la légende des couleurs
     const legendGroup = svg
       .append("g")
       .attr("transform", `translate(${width + 30}, 20)`);
 
-    // Titre de la légende
     legendGroup
       .append("text")
       .attr("y", 0)
@@ -301,7 +287,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .style("font-weight", "bold")
       .text("Niveau de Popularité");
 
-    // Éléments de la légende
     const legendItems = [
       { label: "Très élevée (80-100)", color: "#e15759" },
       { label: "Élevée (60-80)", color: "#f28e2b" },
@@ -330,7 +315,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
         .text(item.label);
     });
 
-    // Titre de l'axe X
     svg
       .append("text")
       .attr("x", width / 2)
@@ -340,7 +324,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .style("font-weight", "bold")
       .text("Métriques de Performance");
 
-    // Titre de l'axe Y
     svg
       .append("text")
       .attr("transform", "rotate(-90)")
@@ -350,7 +333,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .style("font-size", "12px")
       .style("font-weight", "bold")
       .text("Valeurs des Métriques");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDimensions, filteredData, dimensionConfigs]);
 
   useEffect(() => {

@@ -110,13 +110,13 @@ const SideBar = ({
             </Button>
           )}
         </div>
-        {/* Filtre d'artiste - Affiché uniquement lorsque la barre latérale est étendue */}
+
         {isOpen && (
           <div className="px-3 py-4 border-b">
             <ArtistFilter />
           </div>
         )}
-        {/* Navigation Items */}
+
         <div className="flex flex-col flex-1 overflow-y-auto py-2">
           <nav
             className={`flex flex-col gap-1 py-3 ${isOpen ? "px-2" : "px-0"}`}
@@ -142,7 +142,6 @@ const SideBar = ({
                       setActiveSection(item.id);
                     }}
                   >
-                    {/* Background with reduced opacity */}
                     {isActive && (
                       <div
                         className="absolute inset-0 rounded-md"

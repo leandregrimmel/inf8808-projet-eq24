@@ -9,12 +9,10 @@ const TikTokImpact = ({ data }) => {
   useEffect(() => {
     if (!data || !svgRef.current) return;
 
-    // Filter out data points with missing or non-positive values
     const filteredData = data.filter(
       (d) => d.tiktokPosts > 0 && d.tiktokViews > 0 && d.spotifyStreams > 0
     );
 
-    // Apply log transformation to the data
     const logData = filteredData.map((d) => ({
       ...d,
       logTikTokPosts: Math.log10(d.tiktokPosts),
@@ -22,12 +20,10 @@ const TikTokImpact = ({ data }) => {
       logSpotifyStreams: Math.log10(d.spotifyStreams),
     }));
 
-    // Set up margins and dimensions
     const margin = { top: 40, right: 120, bottom: 60, left: 60 };
     const width = 900 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
 
-    // Create SVG container
     const svg = d3
       .select(svgRef.current)
       .attr("width", width + margin.left + margin.right)
@@ -35,7 +31,6 @@ const TikTokImpact = ({ data }) => {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Create a clipping path
     svg
       .append("defs")
       .append("clipPath")
@@ -44,7 +39,6 @@ const TikTokImpact = ({ data }) => {
       .attr("width", width)
       .attr("height", height);
 
-    // Set up scales
     const x = d3
       .scaleLinear()
       .domain(d3.extent(logData, (d) => d.logTikTokPosts))
@@ -57,17 +51,10 @@ const TikTokImpact = ({ data }) => {
       .range([height, 0])
       .nice();
 
-    // Logarithmic size scale for circles
-    const size = d3
-      .scaleLog()
-      .base(10)
-      .domain([1e3, 1e9]) // Fixed domain for size
-      .range([4, 30]);
+    const size = d3.scaleLog().base(10).domain([1e3, 1e9]).range([4, 30]);
 
-    // Color scale using a perceptually uniform sequential color scheme
     const color = d3.scaleSequential(d3.interpolateViridis).domain([3, 9]);
 
-    // Create circles for each data point
     const circles = svg
       .append("g")
       .attr("clip-path", "url(#clip)")
@@ -92,7 +79,6 @@ const TikTokImpact = ({ data }) => {
         hideTooltip();
       });
 
-    // Add axes
     const xAxis = svg
       .append("g")
       .attr("class", "x-axis")
@@ -123,7 +109,6 @@ const TikTokImpact = ({ data }) => {
       .attr("font-size", "12px")
       .text("Vues TikTok (Log10)");
 
-    // Unified legend showing size and color together
     const legend = svg
       .append("g")
       .attr("class", "legend")
@@ -137,14 +122,12 @@ const TikTokImpact = ({ data }) => {
       .attr("font-size", "12px")
       .text("Streams Spotify");
 
-    // Standard stream values for legend
-    const legendValues = [1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]; // 1K to 1B
+    const legendValues = [1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9];
 
     legendValues.forEach((value, i) => {
       const yPos = i * 35 + 20;
       const logValue = Math.log10(value);
 
-      // Legend circle
       legend
         .append("circle")
         .attr("cx", 15)
@@ -155,7 +138,6 @@ const TikTokImpact = ({ data }) => {
         .attr("stroke", "#fff")
         .attr("stroke-width", 1);
 
-      // Legend text with abbreviated values
       const formattedValue = formatNumber(value);
 
       legend
@@ -166,10 +148,9 @@ const TikTokImpact = ({ data }) => {
         .text(formattedValue);
     });
 
-    // Add zoom behavior
     const zoom = d3
       .zoom()
-      .scaleExtent([1, 40]) // Increased max zoom level
+      .scaleExtent([1, 40])
       .translateExtent([
         [0, 0],
         [width, height],
@@ -190,7 +171,6 @@ const TikTokImpact = ({ data }) => {
         );
       });
 
-    // Add reset zoom button
     const resetZoom = () => {
       svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
     };
@@ -221,10 +201,8 @@ const TikTokImpact = ({ data }) => {
       })
       .on("click", resetZoom);
 
-    // Apply zoom behavior to the SVG
     svg.call(zoom);
 
-    // Tooltip functions
     function showTooltip(event, d) {
       const [xpos, ypos] = d3.pointer(event, svg.node());
 
@@ -255,7 +233,6 @@ const TikTokImpact = ({ data }) => {
       d3.select(tooltipRef.current).style("opacity", 0);
     }
 
-    // Cleanup function
     return () => {
       d3.select(svgRef.current).selectAll("*").remove();
     };
