@@ -39,10 +39,10 @@ const SideBar = ({
       ref: "multiplatformRef",
     },
     {
-      id: "genre",
+      id: "style",
       icon: Music,
-      label: "Genre Musical",
-      ref: "genreRef",
+      label: "Style Musical",
+      ref: "styleRef",
     },
     {
       id: "diffusion",

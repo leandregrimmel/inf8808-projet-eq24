@@ -35,7 +35,7 @@ const TikTokImpact = ({ data }) => {
       .range([5, 30]);
 
     const color = d3.scaleOrdinal()
-      .domain([...new Set(data.map(d => d.genre))])
+      .domain([...new Set(data.map(d => d.style))])
       .range(d3.schemeTableau10);
 
     // Points
@@ -46,7 +46,7 @@ const TikTokImpact = ({ data }) => {
       .attr("cx", d => x(d.tiktokPosts || 1))
       .attr("cy", d => y(d.tiktokViews || 1))
       .attr("r", d => size(d.spotifyPopularity))
-      .attr("fill", d => color(d.genre))
+      .attr("fill", d => color(d.style))
       .attr("opacity", 0.7)
       .on("mouseover", function(event, d) {
         d3.select(this).attr("opacity", 1);
@@ -110,18 +110,18 @@ const TikTokImpact = ({ data }) => {
     const legend = svg.append("g")
       .attr("transform", `translate(${width - 150},40)`);
 
-    const genres = [...new Set(data.map(d => d.genre))];
-    genres.forEach((genre, i) => {
+    const styles = [...new Set(data.map(d => d.style))];
+    styles.forEach((style, i) => {
       legend.append("circle")
         .attr("cx", 0)
         .attr("cy", i * 20)
         .attr("r", 5)
-        .attr("fill", color(genre));
+        .attr("fill", color(style));
 
       legend.append("text")
         .attr("x", 10)
         .attr("y", i * 20 + 5)
-        .text(genre)
+        .text(style)
         .style("font-size", "10px");
     });
 

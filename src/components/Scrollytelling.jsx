@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import CrossPlatformPerformanceChart from "./DifusionSection/CrossPlatformPerformanceChart";
-import ExpliciteContentAnalysis from "./MusicalGenreSection/ExpliciteContentAnalysis";
+import ExpliciteContentAnalysis from "./MusicalStyleSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
 import CorrelationMatrix from "./MultiPlatformSection/CorrelationMatrix";
 import SunburstChart from "./MultiPlatformSection/SunburstChart";
@@ -64,7 +64,7 @@ const ScrollytellingDashboard = () => {
   const overviewRef = useRef(null);
   const temporalRef = useRef(null);
   const multiplatformRef = useRef(null);
-  const genreRef = useRef(null);
+  const styleRef = useRef(null);
   const diffusionRef = useRef(null);
   const engagementRef = useRef(null);
 
@@ -88,7 +88,7 @@ const ScrollytellingDashboard = () => {
           overviewRef,
           temporalRef,
           multiplatformRef,
-          genreRef,
+          styleRef,
           diffusionRef,
           engagementRef,
         }}
@@ -155,10 +155,10 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        {/* Aspect Genre Musical Section */}
-        <section ref={genreRef} id="genre" style={temporalSectionStyle}>
+        {/* Aspect Style Musical Section */}
+        <section ref={styleRef} id="style" style={temporalSectionStyle}>
           <div style={temporalHeaderStyle}>
-            <h1>Aspect Genre Musical et Contenu Explicite</h1>
+            <h1>Aspect Style Musical et Contenu Explicite</h1>
           </div>
 
           {/* Box Plot Subsection */}
