@@ -58,18 +58,12 @@ const TikTokImpact = ({ data }) => {
       .range([height, 0])
       .nice();
 
-<<<<<<< Updated upstream
-    const color = d3.scaleOrdinal()
-      .domain([...new Set(data.map(d => d.style))])
-      .range(d3.schemeTableau10);
-=======
     // Logarithmic size scale for circles
     const size = d3
       .scaleLog()
       .base(10)
       .domain(d3.extent(filteredData, (d) => d.spotifyStreams))
       .range([4, 30]);
->>>>>>> Stashed changes
 
     // Color scale using a perceptually uniform sequential color scheme
     const color = d3
@@ -85,15 +79,6 @@ const TikTokImpact = ({ data }) => {
       .enter()
       .append("circle")
       .attr("class", "dot")
-<<<<<<< Updated upstream
-      .attr("cx", d => x(d.tiktokPosts || 1))
-      .attr("cy", d => y(d.tiktokViews || 1))
-      .attr("r", d => size(d.spotifyPopularity))
-      .attr("fill", d => color(d.style))
-      .attr("opacity", 0.7)
-      .on("mouseover", function(event, d) {
-        d3.select(this).attr("opacity", 1);
-=======
       .attr("cx", (d) => x(d.logTikTokPosts))
       .attr("cy", (d) => y(d.logTikTokViews))
       .attr("r", (d) => size(d.spotifyStreams))
@@ -101,7 +86,6 @@ const TikTokImpact = ({ data }) => {
       .attr("opacity", 0.8)
       .on("mouseover", function (event, d) {
         d3.select(this).attr("opacity", 0.8).attr("fill", "#ff0000");
->>>>>>> Stashed changes
         showTooltip(event, d);
       })
       .on("mouseout", function (event, d) {
@@ -148,21 +132,6 @@ const TikTokImpact = ({ data }) => {
       .attr("class", "legend")
       .attr("transform", `translate(${width + 20}, 40)`);
 
-<<<<<<< Updated upstream
-    const styles = [...new Set(data.map(d => d.style))];
-    styles.forEach((style, i) => {
-      legend.append("circle")
-        .attr("cx", 0)
-        .attr("cy", i * 20)
-        .attr("r", 5)
-        .attr("fill", color(style));
-
-      legend.append("text")
-        .attr("x", 10)
-        .attr("y", i * 20 + 5)
-        .text(style)
-        .style("font-size", "10px");
-=======
     legend
       .append("text")
       .attr("x", 0)
@@ -198,7 +167,6 @@ const TikTokImpact = ({ data }) => {
         .attr("y", yPos + 5)
         .attr("font-size", "11px")
         .text(formattedValue);
->>>>>>> Stashed changes
     });
 
     // Add zoom behavior
