@@ -8,6 +8,9 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
   const [selectedMetric, setSelectedMetric] = useState(
     initialMetric || "spotifyStreams"
   );
+  useEffect(() => {
+    setSelectedMetric(initialMetric || "spotifyStreams");
+  }, [initialMetric]);
 
   useEffect(() => {
     if (!data || !data.length) return;

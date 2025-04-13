@@ -11,6 +11,10 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
   );
 
   useEffect(() => {
+    setSelectedMetric(initialMetric || "spotifyStreams");
+  }, [initialMetric]);
+
+  useEffect(() => {
     if (!data || !data.length) return;
 
     const width = 800;

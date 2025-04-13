@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import formatNumber from "../../utils";
 
 const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
-  const initialDimensions = defaultConfig.metrics || [
+  const initialDimensions = defaultConfig?.metrics || [
     "spotifyPlaylistReach",
     "spotifyStreams",
     "spotifyPopularity",
@@ -13,6 +13,16 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
   const [selectedDimensions, setSelectedDimensions] =
     useState(initialDimensions);
   const [filteredData, setFilteredData] = useState(data);
+
+  useEffect(() => {
+    setSelectedDimensions(
+      defaultConfig.metrics || [
+        "spotifyPlaylistReach",
+        "spotifyStreams",
+        "spotifyPopularity",
+      ]
+    );
+  }, [defaultConfig.metrics]);
 
   const dimensionConfigs = [
     {

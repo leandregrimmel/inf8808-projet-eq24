@@ -59,6 +59,7 @@ const ScrollytellingDashboard = () => {
 
   // Create refs for key sections
   const overviewRef = useRef(null);
+  const questionsRef = useRef(null);
   const temporalRef = useRef(null);
   const multiplatformRef = useRef(null);
   const styleRef = useRef(null);
@@ -114,6 +115,7 @@ const ScrollytellingDashboard = () => {
         scrollToSection={scrollToSection}
         sectionRefs={{
           overviewRef,
+          questionsRef,
           temporalRef,
           multiplatformRef,
           styleRef,
@@ -130,11 +132,11 @@ const ScrollytellingDashboard = () => {
           <div style={sectionHeaderStyle}>
             <h1>Overview</h1>
           </div>
-          <Overview temporalSectionRef={sectionStyle} />
+          <Overview temporalSectionRef={temporalRef} />
         </section>
 
         {/* Questions Cards Section */}
-        <section id="questions-cards" style={sectionStyle}>
+        <section ref={questionsRef} id="questions" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Questions</h1>
           </div>
@@ -145,7 +147,7 @@ const ScrollytellingDashboard = () => {
         </section>
 
         {/* Aspect Temporel Section */}
-        <section id="temporal" style={{ sectionStyle }}>
+        <section ref={temporalRef} id="temporal" style={{ sectionStyle }}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Temporel</h1>
           </div>
@@ -215,7 +217,7 @@ const ScrollytellingDashboard = () => {
         </section>
 
         {/* Aspect Multi-plateformes Section */}
-        <section id="multiplatform" style={sectionStyle}>
+        <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Multi-plateformes</h1>
           </div>
@@ -279,7 +281,7 @@ const ScrollytellingDashboard = () => {
         </section>
 
         {/* Aspect Style Musical Section */}
-        <section id="style" style={{ sectionStyle }}>
+        <section ref={styleRef} id="style" style={{ sectionStyle }}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Style Musical et Contenu Explicite</h1>
           </div>
@@ -322,7 +324,7 @@ const ScrollytellingDashboard = () => {
         </section>
 
         {/* Aspect Diffusion & Rayonnement Section */}
-        <section id="diffusion" style={sectionStyle}>
+        <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Diffusion & Rayonnement</h1>
           </div>
@@ -353,7 +355,7 @@ const ScrollytellingDashboard = () => {
         </section>
 
         {/* Aspect Engagement des Utilisateurs Section */}
-        <section id="engagement" style={sectionStyle}>
+        <section ref={engagementRef} id="engagement" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Engagement des Utilisateurs</h1>
           </div>

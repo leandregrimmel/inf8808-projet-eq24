@@ -3,6 +3,7 @@ import {
   Calendar,
   Smartphone,
   Music,
+  MessageCircleQuestion,
   Radio,
   Users,
   Menu,
@@ -25,6 +26,12 @@ const SideBar = ({
       icon: LayoutDashboard,
       label: "Overview",
       ref: "overviewRef",
+    },
+    {
+      id: "questions",
+      icon: MessageCircleQuestion,
+      label: "Questions",
+      ref: "questionsRef",
     },
     {
       id: "temporal",

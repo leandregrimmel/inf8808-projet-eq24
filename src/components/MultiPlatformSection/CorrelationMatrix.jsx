@@ -115,6 +115,14 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
   };
 
   useEffect(() => {
+    setSelectedMetrics(
+      defaultMetrics && defaultMetrics.length > 0
+        ? defaultMetrics
+        : dimensionConfigs
+    );
+  }, [defaultMetrics]);
+
+  useEffect(() => {
     if (!data || selectedMetrics.length === 0) return;
 
     // Compute correlation matrix using metric id.
