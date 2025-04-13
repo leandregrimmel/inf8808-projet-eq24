@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import formatNumber from "../../utils"; // The number formatting function
 
 const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
   const ref = useRef();
   const tooltipRef = useRef();
   const [activeYear, setActiveYear] = useState(null);
   const [years, setYears] = useState([]);
+  const [selectedMetric, setSelectedMetric] = useState(metric);
   const animationRef = useRef(null);
 
   const elementsRef = useRef({
@@ -57,7 +59,9 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
       );
       return {
         month,
-        value: monthData.length ? d3.mean(monthData, (d) => d[metric]) : 0,
+        value: monthData.length
+          ? d3.mean(monthData, (d) => d[selectedMetric])
+          : 0,
       };
     });
 
@@ -81,7 +85,6 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
       elementsRef.current.rScale = d3
         .scaleLinear()
         .range([innerRadius, outerRadius]);
-
       elementsRef.current.angleScale = d3
         .scaleBand()
         .domain(monthNames.map((m) => m.abr))
@@ -92,10 +95,21 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
         .data([1, 2, 3, 4])
         .enter()
         .append("circle")
+        .attr("class", "grid")
         .attr("r", (d) => innerRadius + ((outerRadius - innerRadius) * d) / 4)
         .attr("fill", "none")
         .attr("stroke", "#eee")
         .attr("stroke-dasharray", "2,2");
+
+      elementsRef.current.labels = g
+        .selectAll("text.label")
+        .data(monthlyData)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .text((d) => d.month.abr)
+        .style("font-size", "12px")
+        .style("fill", "#555");
 
       elementsRef.current.path = g
         .append("path")
@@ -121,21 +135,30 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
           d3.select(this).attr("fill", "#3b82f6");
           hideTooltip();
         });
-
-      elementsRef.current.labels = g
-        .selectAll("text.label")
-        .data(monthlyData)
-        .enter()
-        .append("text")
-        .attr("class", "label")
-        .text((d) => d.month.abr)
-        .style("font-size", "12px")
-        .style("fill", "#555");
     }
 
+    // Update the radial scale domain based on the new data.
     elementsRef.current.rScale
       .domain([0, d3.max(monthlyData, (d) => d.value)])
       .nice();
+
+    d3.select(ref.current).selectAll(".radial-ticks").remove();
+    const ticks = elementsRef.current.rScale.ticks(4);
+    const svg = d3.select(ref.current);
+    const g = svg.select("g");
+    const tickGroup = g.append("g").attr("class", "radial-ticks");
+
+    tickGroup
+      .selectAll("text")
+      .data(ticks)
+      .enter()
+      .append("text")
+      .attr("x", (d) => elementsRef.current.rScale(d) + 4)
+      .attr("y", 0)
+      .attr("dy", "0.35em")
+      .style("font-size", "10px")
+      .style("fill", "#aaa")
+      .text((d) => formatNumber(d));
 
     const line = d3
       .lineRadial()
@@ -191,8 +214,9 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
         return (outerRadius + 15) * Math.sin(a - Math.PI / 2);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, metric, activeYear, years]);
+  }, [data, selectedMetric, activeYear, years]);
 
+  // Tooltip functions.
   const showTooltip = (event, d) => {
     const [x, y] = d3.pointer(event, d3.select(ref.current).node());
     d3
@@ -203,12 +227,12 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
       <div class="bg-white p-3 rounded shadow-lg border border-gray-200 min-w-[200px]">
         <strong class="text-sm block">${d.month.full}</strong>
         <div class="text-xs mt-2">
-        <div>Popularité Moyenne: ${d.value.toFixed(1)}</div>
-        ${
-          activeYear
-            ? `<div class="text-gray-500">Année: ${activeYear}</div>`
-            : ""
-        }
+          <div>Popularité Moyenne: ${formatNumber(d.value)}</div>
+          ${
+            activeYear
+              ? `<div class="text-gray-500">Année: ${activeYear}</div>`
+              : ""
+          }
         </div>
       </div>
       `);
@@ -219,14 +243,41 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4">
-      {/* Radial Chart */}
-      <h4>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {/* Title and descriptive text */}
+      <h4 style={{ textAlign: "center", maxWidth: "600px" }}>
         Ce graphique circulaire révèle les tendances mensuelles de popularité
         des musiques. La courbe et les points interactifs mettent en évidence
         les pics saisonniers, tandis que le filtre par année permet d'analyser
         leur évolution dans le temps.
       </h4>
+
+      {/* Dropdown to select a popularity metric */}
+      <div style={{ margin: "1rem", textAlign: "center" }}>
+        <label htmlFor="popularity-metric" style={{ marginRight: "0.5rem" }}>
+          Choisissez une métrique de popularité :
+        </label>
+        <select
+          id="popularity-metric"
+          value={selectedMetric}
+          onChange={(e) => setSelectedMetric(e.target.value)}
+        >
+          <option value="spotifyStreams">Spotify Streams</option>
+          <option value="youtubeViews">YouTube Views</option>
+          <option value="tiktokViews">TikTok Views</option>
+          <option value="shazamCounts">Shazam Counts</option>
+          <option value="pandoraStreams">Pandora Streams</option>
+        </select>
+      </div>
+
+      {/* SVG Radial Chart */}
       <div style={{ position: "relative" }}>
         <svg ref={ref} width={600} height={500}></svg>
         <div
@@ -239,50 +290,50 @@ const SeasonalTrends = ({ data, metric = "spotifyPopularity" }) => {
             zIndex: 10,
           }}
         ></div>
-      </div>
 
-      {/* Year Slider */}
-      {years.length > 0 && (
-        <div className="w-full max-w-2xl mt-8 px-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">Filtrer par année:</span>
-            <span
-              className={`text-sm font-medium px-3 py-1 rounded ${
-                activeYear
-                  ? "bg-blue-100 text-blue-800"
-                  : "bg-gray-100 text-gray-800"
+        {/* Year slider for filtering */}
+        {years.length > 0 && (
+          <div className="w-full max-w-2xl mt-8 px-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Filtrer par année:</span>
+              <span
+                className={`text-sm font-medium px-3 py-1 rounded ${
+                  activeYear
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-gray-100 text-gray-800"
+                }`}
+              >
+                {activeYear ? activeYear : "Toutes les années"}
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <input
+                type="range"
+                min={Math.min(...years)}
+                max={Math.max(...years)}
+                value={activeYear || Math.max(...years)}
+                onChange={(e) => setActiveYear(parseInt(e.target.value))}
+                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                step="1"
+              />
+            </div>
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>{Math.min(...years)}</span>
+              <span>{Math.max(...years)}</span>
+            </div>
+            <button
+              onClick={() => setActiveYear(null)}
+              className={`px-3 py-1 mt-8 rounded text-sm transition-colors ${
+                !activeYear
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              {activeYear ? activeYear : "Toutes les années"}
-            </span>
+              Toutes les années
+            </button>
           </div>
-          <div className="flex items-center space-x-4">
-            <input
-              type="range"
-              min={Math.min(...years)}
-              max={Math.max(...years)}
-              value={activeYear || Math.max(...years)}
-              onChange={(e) => setActiveYear(parseInt(e.target.value))}
-              className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-              step="1"
-            />
-          </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>{Math.min(...years)}</span>
-            <span>{Math.max(...years)}</span>
-          </div>
-          <button
-            onClick={() => setActiveYear(null)}
-            className={`px-3 py-1 mt-8 rounded text-sm transition-colors ${
-              !activeYear
-                ? "bg-blue-600 text-white shadow-md"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Toutes les années
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

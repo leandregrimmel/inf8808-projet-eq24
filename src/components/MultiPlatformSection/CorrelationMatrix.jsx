@@ -1,72 +1,70 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-
-// Dummy formatter function. Replace with your desired formatting if needed.
-const formatNumber = (d) => d;
+import formatNumber from "../../utils";
 
 // New metric configuration variable including descriptions.
 const dimensionConfigs = [
   {
     id: "spotifyPlaylistReach",
-    label: "Playlist Reach",
+    label: "Portée des Playlists",
     format: formatNumber,
-    description: "Estimated audience size of playlists",
-    unit: "listeners",
+    description: "Audience estimée des playlists",
+    unit: "auditeurs",
   },
   {
     id: "spotifyStreams",
-    label: "Spotify Streams",
+    label: "Streams Spotify",
     format: formatNumber,
-    description: "Total streams on Spotify",
+    description: "Streams totaux sur Spotify",
     unit: "streams",
   },
   {
     id: "spotifyPopularity",
-    label: "Popularity",
+    label: "Popularité",
     format: (d) => `${d}/100`,
-    description: "Spotify's popularity score",
+    description: "Score de popularité Spotify",
     unit: "score",
   },
   {
     id: "airplaySpins",
-    label: "Radio Plays",
+    label: "Passages Radio",
     format: formatNumber,
-    description: "Traditional radio spins",
-    unit: "spins",
+    description: "Passages radio traditionnels",
+    unit: "passages",
   },
   {
     id: "siriusXMSpins",
-    label: "SiriusXM Plays",
+    label: "Passages SiriusXM",
     format: formatNumber,
-    description: "Satellite radio plays",
-    unit: "plays",
+    description: "Passages radio satellite",
+    unit: "passages",
   },
   {
     id: "spotifyPlaylistCount",
-    label: "Playlist Count",
+    label: "Nombre de Playlists",
     format: formatNumber,
-    description: "Number of Spotify playlists",
+    description: "Nombre de playlists Spotify",
     unit: "playlists",
   },
   {
     id: "tiktokViews",
-    label: "TikTok Views",
+    label: "Vues TikTok",
     format: formatNumber,
-    description: "Total TikTok views",
-    unit: "views",
+    description: "Vues totales sur TikTok",
+    unit: "vues",
   },
   {
     id: "youtubeViews",
-    label: "YouTube Views",
+    label: "Vues YouTube",
     format: formatNumber,
-    description: "Total YouTube views",
-    unit: "views",
+    description: "Vues totales sur YouTube",
+    unit: "vues",
   },
   {
     id: "shazamCounts",
     label: "Shazams",
     format: formatNumber,
-    description: "Shazam identifications",
+    description: "Identifications Shazam",
     unit: "shazams",
   },
 ];
@@ -161,9 +159,7 @@ const CorrelationMatrix = ({ data }) => {
     container
       .selectAll("rect")
       .data(
-        corrMatrix.flatMap((row, i) =>
-          row.map((val, j) => ({ i, j, val }))
-        )
+        corrMatrix.flatMap((row, i) => row.map((val, j) => ({ i, j, val })))
       )
       .enter()
       .append("rect")
@@ -178,12 +174,12 @@ const CorrelationMatrix = ({ data }) => {
       .attr("stroke-width", 0.5)
       .on("mouseover", function (event, d) {
         const [xPos, yPos] = d3.pointer(event, svg.node());
-        d3.select("#tooltip-corr")
+        d3
+          .select("#tooltip-corr")
           .style("opacity", 1)
           .style("left", `${xPos}px`)
           .style("cursor", "pointer")
-          .style("top", `${yPos + 150}px`)
-          .html(`
+          .style("top", `${yPos + 150}px`).html(`
             <div class="bg-white p-3 rounded shadow-lg border border-gray-200 min-w-[200px]">
               <strong class="text-sm block">${
                 selectedMetrics[d.i].label
@@ -276,14 +272,8 @@ const CorrelationMatrix = ({ data }) => {
       .attr("y1", "100%")
       .attr("x2", "0%")
       .attr("y2", "0%");
-    gradient
-      .append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", color(1));
-    gradient
-      .append("stop")
-      .attr("offset", "50%")
-      .attr("stop-color", color(0));
+    gradient.append("stop").attr("offset", "0%").attr("stop-color", color(1));
+    gradient.append("stop").attr("offset", "50%").attr("stop-color", color(0));
     gradient
       .append("stop")
       .attr("offset", "100%")
@@ -325,7 +315,7 @@ const CorrelationMatrix = ({ data }) => {
   }, [data, selectedMetrics]);
 
   return (
-    <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto" }}>
+    <div style={{ position: "relative" }}>
       {/* Updated metric selection controls */}
       <div style={{ marginBottom: "20px" }}>
         <label
@@ -336,14 +326,13 @@ const CorrelationMatrix = ({ data }) => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: "10px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "8px",
+            fontSize: "12px",
           }}
         >
           {dimensionConfigs.map((metric) => {
-            const isSelected = selectedMetrics.some(
-              (m) => m.id === metric.id
-            );
+            const isSelected = selectedMetrics.some((m) => m.id === metric.id);
             return (
               <div
                 key={metric.id}
@@ -377,21 +366,20 @@ const CorrelationMatrix = ({ data }) => {
           })}
         </div>
       </div>
-
-      <svg ref={ref} style={{ display: "block", margin: "0 auto" }}></svg>
-
-      {/* Enhanced tooltip */}
-      <div
-        id="tooltip-corr"
-        style={{
-          position: "absolute",
-          opacity: 0,
-          pointerEvents: "none",
-          fontSize: "13px",
-          zIndex: 100,
-          transform: "translate(-50%, -100%)",
-        }}
-      ></div>
+      <div style={{ position: "relative" }}>
+        <svg ref={ref} width={600} height={500}></svg>
+        <div
+          id="tooltip-corr"
+          style={{
+            position: "absolute",
+            opacity: 0,
+            pointerEvents: "none",
+            fontSize: "13px",
+            zIndex: 100,
+            transform: "translate(-50%, -100%)",
+          }}
+        ></div>
+      </div>
     </div>
   );
 };
