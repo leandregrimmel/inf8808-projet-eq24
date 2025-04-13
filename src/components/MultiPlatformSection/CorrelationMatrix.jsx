@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
-// New metric configuration variable including descriptions.
 const dimensionConfigs = [
   {
     id: "spotifyPlaylistReach",
@@ -100,20 +99,16 @@ function computeCorrelationMatrix(data, numericKeys) {
   return matrix;
 }
 
-const CorrelationMatrix = ({ data }) => {
+const CorrelationMatrix = ({ data, defaultMetrics }) => {
+  const initialMetrics = defaultMetrics || [...dimensionConfigs];
   const ref = useRef();
-
-  // Use all dimensions by default
-  const [selectedMetrics, setSelectedMetrics] = useState([...dimensionConfigs]);
-
+  const [selectedMetrics, setSelectedMetrics] = useState(initialMetrics);
   const handleToggleMetric = (metric) => {
     setSelectedMetrics((prevSelected) => {
       const exists = prevSelected.some((m) => m.id === metric.id);
-      if (exists) {
-        return prevSelected.filter((m) => m.id !== metric.id);
-      } else {
-        return [...prevSelected, metric];
-      }
+      return exists
+        ? prevSelected.filter((m) => m.id !== metric.id)
+        : [...prevSelected, metric];
     });
   };
 

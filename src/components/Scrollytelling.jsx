@@ -1,3 +1,4 @@
+// ScrollytellingDashboard.jsx
 import React, { useRef, useState } from "react";
 import CrossPlatformPerformanceChart from "./DifusionSection/CrossPlatformPerformanceChart";
 import ExpliciteContentAnalysis from "./MusicalStyleSection/ExpliciteContentAnalysis";
@@ -7,11 +8,12 @@ import SunburstChart from "./MultiPlatformSection/SunburstChart";
 import { useDataHierarchy } from "../hooks/useDataHierarchy";
 import { useSidebar } from "../context/SidebarContext";
 import AgeVsStreams from "./TemporalSection/AgeVsPopularityMetric";
-import SeasonalTrends from "./TemporalSection/SeasonalTrends";
+import AnnualTrends from "./TemporalSection/AnnualTrends";
 import Sidebar from "./Sidebar/Sidebar";
 import useFilteredData from "../hooks/useFilteredData";
 import RatioChart from "./UserEngagementSection/RatioChart";
 import TikTokImpact from "./UserEngagementSection/TikTokImpact";
+import QuestionCards from "./QuestionCards";
 
 const sectionStyle = {
   minHeight: "100vh",
@@ -28,11 +30,6 @@ const sectionHeaderStyle = {
   backgroundColor: "#fff",
   padding: "15px 0px",
   zIndex: 2,
-};
-
-const temporalSectionStyle = {
-  ...sectionStyle,
-  padding: "0",
 };
 
 const subsectionStyle = {
@@ -60,6 +57,7 @@ const ScrollytellingDashboard = () => {
   const { isOpen } = useSidebar();
   const [activeSection, setActiveSection] = useState("overview");
 
+  // Create refs for key sections
   const overviewRef = useRef(null);
   const temporalRef = useRef(null);
   const multiplatformRef = useRef(null);
@@ -67,8 +65,39 @@ const ScrollytellingDashboard = () => {
   const diffusionRef = useRef(null);
   const engagementRef = useRef(null);
 
+  const temporalAgeRef = useRef(null); // For questions 1 and 2 (Age vs. Popularity)
+  const temporalSeasonRef = useRef(null); // For question 3 (Annual Trends)
+  const multiCorrelationRef = useRef(null); // For questions 4 and 5 (Correlation Matrix)
+  const multiSunburstRef = useRef(null); // For question 6 (Sunburst Chart)
+  const styleExplicitRef = useRef(null); // For question 7 (Explicite Content Analysis)
+  const diffusionChartRef = useRef(null); // For questions 8, 9, 10, 11, 14 (CrossPlatformPerformanceChart)
+  const engagementRatioRef = useRef(null); // For question 12 (Ratio Chart)
+  const engagementTikTokRef = useRef(null); // For question 13 (TikTok Impact)
+  // (If needed, add additional ref for ShazamCorrelation, for example)
+
+  // Mapping of keys to refs for QuestionCards
+  const scrollRefs = {
+    temporalAge: temporalAgeRef,
+    temporalSeason: temporalSeasonRef,
+    multiCorrelation: multiCorrelationRef,
+    multiSunburst: multiSunburstRef,
+    styleExplicit: styleExplicitRef,
+    diffusionChart: diffusionChartRef,
+    engagementRatio: engagementRatioRef,
+    engagementTikTok: engagementTikTokRef,
+  };
+
+  // State for the currently selected question
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const handleQuestionSelect = (question) => {
+    setSelectedQuestion(question);
+    // (Additional logic to update chart metrics can be added here.)
+  };
+
   const scrollToSection = (ref) => {
-    ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const containerStyle = {
@@ -101,73 +130,192 @@ const ScrollytellingDashboard = () => {
           <div style={sectionHeaderStyle}>
             <h1>Overview</h1>
           </div>
-          <Overview temporalSectionRef={temporalRef} />
+          <Overview temporalSectionRef={sectionStyle} />
+        </section>
+
+        {/* Questions Cards Section */}
+        <section id="questions-cards" style={sectionStyle}>
+          <div style={sectionHeaderStyle}>
+            <h1>Questions</h1>
+          </div>
+          <QuestionCards
+            scrollRefs={scrollRefs}
+            onQuestionSelect={handleQuestionSelect}
+          />
         </section>
 
         {/* Aspect Temporel Section */}
-        <section ref={temporalRef} id="temporal" style={temporalSectionStyle}>
-          <div style={temporalHeaderStyle}>
+        <section id="temporal" style={{ sectionStyle }}>
+          <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Temporel</h1>
           </div>
-
-          {/* Scatter Plot Subsection */}
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          {/* Age vs. Popularity Metric */}
+          <div
+            ref={temporalAgeRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>Age vs. Popularity Metric</h2>
             </div>
-            <AgeVsStreams data={filteredData} />
+            <AgeVsStreams
+              data={filteredData}
+              initialMetric={
+                selectedQuestion?.targetSection === "temporalAge" &&
+                selectedQuestion?.defaultConfig.metric
+                  ? selectedQuestion.defaultConfig.metric
+                  : "spotifyStreams"
+              }
+            />
           </div>
 
-          {/* Seasonal Trends Subsection */}
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          {/* Seasonal Trends */}
+          <div
+            ref={temporalSeasonRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>Graphique des Tendances Saisonnières</h2>
             </div>
-            <SeasonalTrends data={filteredData} />
+            <AnnualTrends
+              data={filteredData}
+              initialYear={
+                selectedQuestion?.targetSection === "temporalSeason" &&
+                selectedQuestion?.defaultConfig.year
+                  ? selectedQuestion.defaultConfig.year
+                  : 2024
+              }
+            />
           </div>
         </section>
 
         {/* Aspect Multi-plateformes Section */}
-        <section ref={multiplatformRef} id="multiplatform" style={sectionStyle}>
-          <div style={temporalHeaderStyle}>
+        <section id="multiplatform" style={sectionStyle}>
+          <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Multi-plateformes</h1>
           </div>
-
-          {/* Correlation Matrix Subsection */}
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          {/* Correlation Matrix */}
+          <div
+            ref={multiCorrelationRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>Matrice de Corrélation</h2>
             </div>
-            <CorrelationMatrix data={filteredData} />
+            <CorrelationMatrix
+              data={filteredData}
+              defaultMetrics={
+                selectedQuestion?.targetSection === "multiCorrelation" &&
+                selectedQuestion?.defaultConfig.metrics
+                  ? selectedQuestion.defaultConfig.metrics
+                  : [
+                      "spotifyStreams",
+                      "youtubeViews",
+                      "tiktokViews",
+                      "shazamCounts",
+                    ]
+              }
+            />
           </div>
-
-          {/* Sunburst Chart Subsection */}
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          {/* Sunburst Chart */}
+          <div
+            ref={multiSunburstRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>
                 Sunburst Chart : Répartition des Consommations par Artiste et
                 Plateforme
               </h2>
             </div>
-
             <SunburstChart data={useDataHierarchy(filteredData)} />
           </div>
         </section>
 
         {/* Aspect Style Musical Section */}
-        <section ref={styleRef} id="style" style={temporalSectionStyle}>
-          <div style={temporalHeaderStyle}>
+        <section id="style" style={{ sectionStyle }}>
+          <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Style Musical et Contenu Explicite</h1>
           </div>
-
-          {/* Box Plot Subsection */}
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          <div
+            ref={styleExplicitRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>Analyse des Contenus Explicites</h2>
             </div>
             <ExpliciteContentAnalysis
               data={filteredData}
-              initialMetric="spotifyStreams"
+              initialMetric={
+                selectedQuestion?.targetSection === "styleExplicit" &&
+                selectedQuestion?.defaultConfig.metric
+                  ? selectedQuestion.defaultConfig.metric
+                  : "spotifyStreams"
+              }
               availableMetrics={[
                 { value: "spotifyStreams", label: "Streams Spotify" },
                 { value: "spotifyPopularity", label: "Popularité Spotify" },
@@ -177,26 +325,84 @@ const ScrollytellingDashboard = () => {
             />
           </div>
         </section>
-        <section ref={diffusionRef} id="diffusion" style={sectionStyle}>
+
+        {/* Aspect Diffusion & Rayonnement Section */}
+        <section id="diffusion" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Diffusion & Rayonnement</h1>
           </div>
-          <CrossPlatformPerformanceChart data={filteredData} />
+          <div
+            ref={diffusionChartRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <CrossPlatformPerformanceChart
+              data={filteredData}
+              defaultConfig={
+                selectedQuestion?.targetSection === "diffusionChart"
+                  ? selectedQuestion.defaultConfig
+                  : {}
+              }
+            />
+            {selectedQuestion?.targetSection === "diffusionChart" &&
+              selectedQuestion.defaultConfig.info && (
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                  {selectedQuestion.defaultConfig.info}
+                </p>
+              )}
+          </div>
         </section>
 
-        <section ref={engagementRef} id="engagement" style={sectionStyle}>
+        {/* Aspect Engagement des Utilisateurs Section */}
+        <section id="engagement" style={sectionStyle}>
           <div style={sectionHeaderStyle}>
             <h1>Aspect Engagement des Utilisateurs</h1>
           </div>
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          <div
+            ref={engagementRatioRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>Ratio Vues/Likes par Plateforme</h2>
             </div>
             <RatioChart data={filteredData} />
           </div>
 
-          <div style={subsectionStyle}>
-            <div style={subsectionHeaderStyle}>
+          <div
+            ref={engagementTikTokRef}
+            style={{
+              minHeight: "100vh",
+              width: "100%",
+              padding: "0 40px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
               <h2>Impact des Posts TikTok sur la Popularité</h2>
             </div>
             <TikTokImpact data={filteredData} />

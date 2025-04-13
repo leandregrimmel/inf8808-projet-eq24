@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
-const ExpliciteContentAnalysis = ({ data }) => {
+const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
   const ref = useRef();
   const tooltipRef = useRef();
-  const [selectedMetric, setSelectedMetric] = useState("spotifyStreams");
+  const [selectedMetric, setSelectedMetric] = useState(
+    initialMetric || "spotifyStreams"
+  );
 
   useEffect(() => {
     if (!data || !data.length) return;
@@ -41,10 +43,10 @@ const ExpliciteContentAnalysis = ({ data }) => {
 
     // Define base minimum values for each metric
     const metricMinValues = {
-      spotifyStreams: 1000000,       // 1 million streams
-      youtubeViews: 1000000,         // 1 million views
-      tiktokViews: 10000,           // 100k views (TikTok typically has lower numbers)
-      shazamCounts: 10000,           // 10k counts
+      spotifyStreams: 1000000, // 1 million streams
+      youtubeViews: 1000000, // 1 million views
+      tiktokViews: 10000, // 100k views (TikTok typically has lower numbers)
+      shazamCounts: 10000, // 10k counts
     };
 
     const groups = [
@@ -76,7 +78,9 @@ const ExpliciteContentAnalysis = ({ data }) => {
         median,
         q3,
         min: d3.min(sorted.filter((v) => v >= lowerLimit)) ?? sorted[0],
-        max: d3.max(sorted.filter((v) => v <= upperLimit)) ?? sorted[sorted.length - 1],
+        max:
+          d3.max(sorted.filter((v) => v <= upperLimit)) ??
+          sorted[sorted.length - 1],
         outliers,
       };
     };
@@ -98,11 +102,11 @@ const ExpliciteContentAnalysis = ({ data }) => {
     // Use dynamic minimum value based on selected metric
     const minValue = metricMinValues[selectedMetric];
     const maxValue = d3.max(stats, (s) => s.max) * 1.1;
-    
+
     // Ensure we have a valid domain for the log scale
     const yDomainMin = Math.max(minValue, 1); // Log scale can't have values <= 0
     const yDomainMax = Math.max(maxValue, yDomainMin * 10); // Ensure max > min
-    
+
     const y = d3
       .scaleLog()
       .domain([yDomainMin, yDomainMax])

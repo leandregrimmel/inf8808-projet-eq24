@@ -1,11 +1,14 @@
+// AgeVsPopularityMetric.jsx
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
-const AgeVsStreams = ({ data }) => {
+const AgeVsPopularityMetric = ({ data, initialMetric }) => {
   const ref = useRef();
   const tooltipRef = useRef();
-  const [selectedMetric, setSelectedMetric] = React.useState("spotifyStreams");
+  const [selectedMetric, setSelectedMetric] = React.useState(
+    initialMetric || "spotifyStreams"
+  );
 
   useEffect(() => {
     if (!data || !data.length) return;
@@ -36,25 +39,21 @@ const AgeVsStreams = ({ data }) => {
       .nice()
       .range([height - margin.bottom, margin.top]);
 
-    // Add correlation coefficient (R) calculation
+    // Calculate correlation coefficient (Pearson's R)
     const n = data.length;
     const sumX = d3.sum(data, (d) => d.age);
     const sumY = d3.sum(data, (d) => d[selectedMetric]);
     const meanX = sumX / n;
     const meanY = sumY / n;
-
-    // Calculate covariance and standard deviations
     const covXY =
       d3.sum(data, (d) => (d.age - meanX) * (d[selectedMetric] - meanY)) / n;
     const stdX = Math.sqrt(d3.sum(data, (d) => Math.pow(d.age - meanX, 2)) / n);
     const stdY = Math.sqrt(
       d3.sum(data, (d) => Math.pow(d[selectedMetric] - meanY, 2)) / n
     );
-
-    // Calculate Pearson's R
     const rValue = covXY / (stdX * stdY);
 
-    // Calculate regression line
+    // Calculate regression line parameters
     const numerator = d3.sum(
       data,
       (d) => (d.age - meanX) * (d[selectedMetric] - meanY)
@@ -63,6 +62,7 @@ const AgeVsStreams = ({ data }) => {
     const slope = numerator / denominator;
     const intercept = meanY - slope * meanX;
 
+    // X axis
     const xAxis = svg
       .append("g")
       .attr("transform", `translate(0, ${height - margin.bottom})`)
@@ -78,6 +78,7 @@ const AgeVsStreams = ({ data }) => {
       .style("font-size", "16px")
       .text("Âge (années)");
 
+    // Y axis
     const yAxis = svg
       .append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
@@ -104,7 +105,7 @@ const AgeVsStreams = ({ data }) => {
       .style("font-size", "16px")
       .text(metricLabels[selectedMetric]);
 
-    // Add grid lines
+    // Grid lines
     svg
       .append("g")
       .attr("class", "grid")
@@ -131,7 +132,7 @@ const AgeVsStreams = ({ data }) => {
       .style("stroke", "lightgray")
       .style("stroke-opacity", 0.3);
 
-    // Draw the scatter plot
+    // Draw scatter plot
     const scatter = svg.append("g");
 
     scatter
@@ -146,9 +147,7 @@ const AgeVsStreams = ({ data }) => {
       .attr("stroke", "none")
       .on("mouseover", function (event, d) {
         d3.select(this).attr("fill", "red").attr("r", 7);
-
         const [xPos, yPos] = d3.pointer(event, svg.node());
-
         d3
           .select(tooltipRef.current)
           .style("opacity", 1)
@@ -189,12 +188,13 @@ const AgeVsStreams = ({ data }) => {
       .attr("stroke-width", 2)
       .attr("stroke-dasharray", "5,5");
 
+    // Info box with regression details
     const infoBox = svg
       .append("g")
       .attr(
         "transform",
         `translate(${width - margin.right - 200},${margin.top})`
-      ); // Changed from -10 to -200
+      );
 
     infoBox
       .append("rect")
@@ -204,9 +204,8 @@ const AgeVsStreams = ({ data }) => {
       .attr("stroke", "#ccc")
       .attr("rx", 5)
       .attr("ry", 5)
-      .attr("filter", "url(#drop-shadow)"); // Added shadow for better visibility
+      .attr("filter", "url(#drop-shadow)");
 
-    // Format the equation nicely
     const formatEquation = () => {
       const roundedSlope = slope.toExponential(2);
       const roundedIntercept = intercept.toExponential(2);
@@ -219,7 +218,6 @@ const AgeVsStreams = ({ data }) => {
       .attr("y", 20)
       .attr("font-size", "12px")
       .text("Régression linéaire:");
-
     infoBox
       .append("text")
       .attr("x", 10)
@@ -227,14 +225,12 @@ const AgeVsStreams = ({ data }) => {
       .attr("font-size", "14px")
       .attr("font-weight", "bold")
       .text(formatEquation());
-
     infoBox
       .append("text")
       .attr("x", 10)
       .attr("y", 55)
       .attr("font-size", "12px")
       .text(`Coefficient de corrélation (R):`);
-
     infoBox
       .append("text")
       .attr("x", 10)
@@ -243,22 +239,20 @@ const AgeVsStreams = ({ data }) => {
       .attr("font-weight", "bold")
       .text(`${rValue.toFixed(3)}`);
 
-    // Add color to R value based on correlation strength
     const rText = infoBox
       .selectAll("text")
       .filter((d, i, nodes) => nodes[i].textContent === `${rValue.toFixed(3)}`);
-
     rText.attr("fill", () => {
       const absR = Math.abs(rValue);
-      if (absR > 0.7) return "#2ecc71"; // Strong - green
-      if (absR > 0.3) return "#f39c12"; // Moderate - orange
-      return "#e74c3c"; // Weak - red
+      if (absR > 0.7) return "#2ecc71";
+      if (absR > 0.3) return "#f39c12";
+      return "#e74c3c";
     });
   }, [data, selectedMetric]);
 
   return (
     <div style={{ position: "relative" }}>
-      <h4>
+      <h4 style={{ textAlign: "center", maxWidth: "600px" }}>
         Ce nuage de points interactif montre la relation entre l'âge des
         chansons et divers indicateurs de succès, avec une ligne de régression
         pour visualiser la tendance globale.
@@ -294,4 +288,4 @@ const AgeVsStreams = ({ data }) => {
   );
 };
 
-export default AgeVsStreams;
+export default AgeVsPopularityMetric;

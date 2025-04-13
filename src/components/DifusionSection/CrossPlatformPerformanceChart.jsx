@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import formatNumber from "../../utils";
 
-const CrossPlatformPerformanceChart = ({ data }) => {
-  const ref = useRef(null);
-  const tooltipRef = useRef(null);
-  const [selectedDimensions, setSelectedDimensions] = useState([
+const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
+  const initialDimensions = defaultConfig.metrics || [
     "spotifyPlaylistReach",
     "spotifyStreams",
     "spotifyPopularity",
-  ]);
+  ];
+  const ref = useRef(null);
+  const tooltipRef = useRef(null);
+  const [selectedDimensions, setSelectedDimensions] =
+    useState(initialDimensions);
   const [filteredData, setFilteredData] = useState(data);
 
   const dimensionConfigs = [
@@ -338,7 +340,7 @@ const CrossPlatformPerformanceChart = ({ data }) => {
       .style("font-size", "12px")
       .style("font-weight", "bold")
       .text("Valeurs des Métriques");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDimensions, filteredData]);
 
   useEffect(() => {
