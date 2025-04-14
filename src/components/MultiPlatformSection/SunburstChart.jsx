@@ -165,11 +165,13 @@ const SunburstChart = ({ data }) => {
   return (
     <>
       <h4>
-        On révèle ici la répartition des audiences musicales entre artistes et
+        Le diagramme en soleil (sunburst) ci-dessous révèle la répartition des
+        audiences musicales selon les artistes les plus écoutés sur divers
         plateformes. La hiérarchie va des artistes (centre) aux plateformes
         (anneaux extérieurs), avec des segments proportionnels aux volumes
-        d'écoute. Cliquez pour zoomer et découvrez quelles plateformes
-        contribuent le plus à chaque artiste.
+        d'écoute. Cliquez sur un artiste pour et découvrez quelles plateformes
+        contribuent le plus à chaque artiste. En mode zoom, cliquez l'intérieur
+        du cercle pour revenir à la vue d'ensemble.
       </h4>
       <div style={{ margin: "0 auto", maxWidth: "600px" }}>
         <svg ref={ref}></svg>

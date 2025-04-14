@@ -34,7 +34,7 @@ const SideBar = ({
     {
       id: "overview",
       icon: LayoutDashboard,
-      label: "Apreçu",
+      label: "Vue d'ensemble",
       ref: "overviewRef",
     },
     {
@@ -46,7 +46,7 @@ const SideBar = ({
     {
       id: "temporal",
       icon: Calendar,
-      label: "Aspect Temporel",
+      label: "Temporel",
       ref: "temporalRef",
     },
     {
@@ -58,7 +58,7 @@ const SideBar = ({
     {
       id: "style",
       icon: Music,
-      label: "Style Musical",
+      label: "Contenu Explicite",
       ref: "styleRef",
     },
     {

@@ -1,23 +1,22 @@
 import React from "react";
-import formatNumber from "../utils";
 
 const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
   const sectionColors = {
-    temporal: "rgba(245, 158, 11, 0.15)", // Amber (more transparent)
-    multiplatform: "rgba(101, 163, 13, 0.15)", // Lime green (more distinct from teal)
-    style: "rgba(168, 85, 247, 0.15)", // Purple
-    diffusion: "rgba(239, 68, 68, 0.15)", // Red
-    engagement: "rgba(6, 182, 212, 0.15)", // Cyan (more distinct from lime)
-    questions: "rgba(107, 114, 128, 0.15)", // Gray
+    temporal: "rgba(245, 158, 11, 0.15)",
+    multiplatform: "rgba(101, 163, 13, 0.15)",
+    style: "rgba(168, 85, 247, 0.15)",
+    diffusion: "rgba(239, 68, 68, 0.15)",
+    engagement: "rgba(6, 182, 212, 0.15)",
+    questions: "rgba(107, 114, 128, 0.15)",
   };
 
   const borderColors = {
-    temporal: "#f59e0b", // Amber
-    multiplatform: "#65a30d", // Lime green
-    style: "#a855f7", // Purple
-    diffusion: "#ef4444", // Red
-    engagement: "#06b6d4", // Cyan
-    questions: "#6b7280", // Gray
+    temporal: "#f59e0b",
+    multiplatform: "#65a30d",
+    style: "#a855f7",
+    diffusion: "#ef4444",
+    engagement: "#06b6d4",
+    questions: "#6b7280",
   };
 
   const questions = [

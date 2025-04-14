@@ -203,13 +203,14 @@ const RatioChart = ({ data }) => {
   return (
     <div className="relative">
       <h4>
-        On observe que les ratios TikTok présentent une plus grande régularité
-        entre artistes (les 10 plus populaires dans ce cas ci), suggérant un
-        engagement plus constant sur cette plateforme. En revanche, les ratios
-        YouTube varient significativement et ne semblent montrer aucune
-        corrélation évidente ni avec les performances TikTok, ni avec la
-        popularité générale des artistes. Cette disparité souligne des
-        dynamiques d'engagement distinctes entre les deux plateformes.
+        On constate que les ratios TikTok présentent une régularité plus marquée
+        entre les artistes (notamment parmi les 10 plus populaires), ce qui
+        suggère un engagement relativement constant sur cette plateforme. En
+        revanche, les ratios YouTube varient de manière significative et ne
+        semblent montrer aucune corrélation évidente, ni avec les performances
+        TikTok, ni avec la popularité générale des artistes. Cette disparité
+        souligne l'existence de dynamiques d'engagement distinctes entre ces
+        deux plateformes.
       </h4>
       <svg ref={svgRef}></svg>
       <div

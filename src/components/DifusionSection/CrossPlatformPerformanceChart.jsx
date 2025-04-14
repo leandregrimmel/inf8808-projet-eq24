@@ -333,6 +333,7 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
       .style("font-size", "12px")
       .style("font-weight", "bold")
       .text("Valeurs des Métriques");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDimensions, filteredData, dimensionConfigs]);
 
   useEffect(() => {
@@ -356,7 +357,6 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
         souris sur une ligne pour voir les détails du titre.
       </h4>
 
-      {/* Sélecteur de dimensions */}
       <div style={{ marginBottom: "15px" }}>
         <label
           style={{
