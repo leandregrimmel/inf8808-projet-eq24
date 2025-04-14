@@ -182,6 +182,14 @@ const ScrollytellingDashboard = () => {
             >
               <h2>Explorez nos questions d'analyse</h2>
             </div>
+            <h4 style={{ marginBottom: 8 }}>
+              Cliquez sur une question pour naviguer directement vers la
+              visualisation correspondante. Chaque question est conçue pour vous
+              aider à explorer les données d'un angle différent. Des métriques
+              par défaut sont sélectionnées en lien avec les visualisations pour
+              chaque question. Vous pouvez les modifier pour explorer d'autres
+              aspects des données.
+            </h4>
             <QuestionCards
               scrollRefs={scrollRefs}
               onQuestionSelect={handleQuestionSelect}
@@ -316,7 +324,7 @@ const ScrollytellingDashboard = () => {
 
         <section ref={styleRef} id="style" style={{ sectionStyle }}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
-            <h1>Aspect Style Musical et Contenu Explicite</h1>
+            <h1>Aspect Contenu Explicite</h1>
           </div>
           <div
             ref={styleExplicitRef}
@@ -363,6 +371,17 @@ const ScrollytellingDashboard = () => {
               boxSizing: "border-box",
             }}
           >
+            <div
+              style={{
+                position: "sticky",
+                top: "80px",
+                backgroundColor: "#fff",
+                padding: "0 0 15px 0",
+                zIndex: 1,
+              }}
+            >
+              <h2>Comparatif d'indicateurs de performance</h2>
+            </div>
             <CrossPlatformPerformanceChart
               data={filteredData}
               defaultConfig={

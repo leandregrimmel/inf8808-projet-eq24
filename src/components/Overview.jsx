@@ -40,7 +40,7 @@ const Overview = ({ temporalSectionRef }) => {
       <section className="mb-12">
         <h2 className="mb-4">Statistiques Clés</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <Card>
+          <Card className="hover:scale-105 transition-transform ease-in-out duration-300">
             <CardHeader>
               <CardTitle>Pistes totales</CardTitle>
             </CardHeader>
@@ -51,7 +51,7 @@ const Overview = ({ temporalSectionRef }) => {
               <p className="text-xs">Nombre total de pistes</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:scale-105 transition-transform ease-in-out duration-300">
             <CardHeader>
               <CardTitle>Streams Spotify moyens</CardTitle>
             </CardHeader>
@@ -62,7 +62,7 @@ const Overview = ({ temporalSectionRef }) => {
               <p className="text-xs">Streams moyens par piste</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:scale-105 transition-transform ease-in-out duration-300">
             <CardHeader>
               <CardTitle>Pistes explicites</CardTitle>
             </CardHeader>
@@ -74,7 +74,7 @@ const Overview = ({ temporalSectionRef }) => {
               <p className="text-xs">Pistes marquées comme explicites</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="hover:scale-105 transition-transform ease-in-out duration-300">
             <CardHeader>
               <CardTitle>Sortie la plus récente</CardTitle>
             </CardHeader>
@@ -100,7 +100,6 @@ const Overview = ({ temporalSectionRef }) => {
             données.
           </h4>
         </section>
-
         <section>
           <h2 className="mb-4">Navigation</h2>
           <h4 className="mt-0 mb-4 text-start">

@@ -246,8 +246,9 @@ const AnnualTrends = ({ data, initialYear }) => {
       <h4>
         On évalue ici le lien entre quelques métriques de popularité d'une
         chanson et son moment de sortie. La courbe et les points interactifs
-        mettent en évidence les pics mensuels, tandis que le filtre par année
-        permet d'analyser leur évolution dans le temps.
+        mettent en évidence les pics mensuels, tandis que la ligne du temps
+        permet de filtrer par année et d'analyser l'évolution des métriques dans
+        le temps.
       </h4>
       <div style={{ margin: "1rem" }}>
         <label

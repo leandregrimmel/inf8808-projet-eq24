@@ -234,6 +234,7 @@ const TikTokImpact = ({ data }) => {
     }
 
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       d3.select(svgRef.current).selectAll("*").remove();
     };
   }, [data]);
@@ -241,12 +242,13 @@ const TikTokImpact = ({ data }) => {
   return (
     <div className="relative">
       <h4>
-        Bien qu'aucune corrélation globale forte n'apparaisse entre l'activité
-        TikTok (posts et vues) et les streams Spotify, on observe des tendances
-        plus marquées pour certains artistes jeunes comme Taylor Swift, où
-        l'engagement TikTok semble mieux correspondre au succès sur Spotify. Les
-        cercles plus grands et plus pâles représentent les artistes avec le plus
-        de streams, permettant d'identifier visuellement ces relations
+        Bien qu'aucune forte corrélation globale n'apparaisse entre l'activité
+        TikTok (posts et vues) et les streams sur Spotify, on observe néanmoins
+        des tendances plus marquées pour certains artistes - par exemple, Taylor
+        Swift (sélectionnez l'artiste dans la barre latérale) - où l'engagement
+        sur TikTok semble mieux refléter le succès sur Spotify. Par ailleurs,
+        les cercles plus grands et plus pâles représentent les artistes avec le
+        plus de streams, ce qui permet d'identifier visuellement ces relations
         potentielles lorsqu'on zoome sur des segments spécifiques du graphique.
       </h4>
       <svg ref={svgRef}></svg>
