@@ -38,10 +38,10 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
     };
 
     const metricLabels = {
-      spotifyStreams: "Spotify Streams",
-      youtubeViews: "YouTube Views",
-      tiktokViews: "TikTok Views",
-      shazamCounts: "Shazam Counts",
+      spotifyStreams: "Streams Spotify",
+      youtubeViews: "Vues YouTube",
+      tiktokViews: "Vues TikTok",
+      shazamCounts: "Comptes Shazam",
     };
 
     const metricMinValues = {
@@ -158,7 +158,7 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
       .attr("text-anchor", "middle")
       .attr("font-size", "12px")
       .attr("fill", "#666")
-      .text((d) => `${d.count} tracks`);
+      .text((d) => `${d.count} pistes`);
 
     const yAxis = svg
       .append("g")
@@ -183,7 +183,7 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
       .attr("fill", "currentColor")
       .style("font-size", "16px")
       .style("font-weight", "bold")
-      .text(`${metricLabels[selectedMetric]} (log scale)`);
+      .text(`${metricLabels[selectedMetric]} (échelle log)`);
 
     const boxWidth = x.bandwidth();
 
@@ -198,7 +198,6 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
         .attr("class", `box-group-${stat.group.replace(/\s+/g, "-")}`)
         .on("mouseover", function (event) {
           const [xPos, yPos] = d3.pointer(event, svg.node());
-
           d3
             .select(tooltipRef.current)
             .style("opacity", 1)
@@ -207,9 +206,9 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
             .style("top", `${yPos - 50}px`).html(`
               <strong class="text-sm block">${stat.group}</strong>
               <div class="text-xs mt-2">
-                <div>Median: ${formatNumber(Math.round(stat.median))}</div>
-                <div>Q1: ${formatNumber(Math.round(stat.q1))}</div>
-                <div>Q3: ${formatNumber(Math.round(stat.q3))}</div>
+                <div>Médiane: ${formatNumber(Math.round(stat.median))}</div>
+                <div>1er quartile: ${formatNumber(Math.round(stat.q1))}</div>
+                <div>3e quartile: ${formatNumber(Math.round(stat.q3))}</div>
               </div>
             `);
         })
@@ -282,19 +281,17 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
           .attr("opacity", 0.7)
           .on("mouseover", function (event) {
             d3.select(this).attr("r", 6).attr("opacity", 1);
-
             const [xPos, yPos] = d3.pointer(event, svg.node());
-
             d3
               .select(tooltipRef.current)
               .style("opacity", 1)
               .style("left", `${xPos + 150}px`)
               .style("cursor", "pointer")
               .style("top", `${yPos - 50}px`).html(`
-                <strong class="text-sm block">Outlier</strong>
+                <strong class="text-sm block">Valeur aberrante</strong>
                 <span class="text-xs text-gray-500">${stat.group}</span>
                 <div class="text-xs mt-2">
-                  <div>Streams: ${formatNumber(outlier)}</div>
+                  <div>Valeur: ${formatNumber(outlier)}</div>
                 </div>
               `);
           })
@@ -324,7 +321,7 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
         .attr("text-anchor", "middle")
         .attr("font-size", "12px")
         .attr("fill", "#666")
-        .text(`${stat.outliers.length} outliers`);
+        .text(`${stat.outliers.length} valeurs aberrantes`);
     });
 
     const legend = svg
@@ -356,13 +353,13 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
     const legendItems = [
       { label: "Non-Explicite", color: colors.nonExplicit, y: 45 },
       { label: "Explicite", color: colors.explicit, y: 70 },
-      { label: "Outliers", color: colors.outliers, y: 95 },
+      { label: "Valeurs aberrantes", color: colors.outliers, y: 95 },
     ];
 
     legendItems.forEach((item) => {
       const itemGroup = legend.append("g");
 
-      if (item.label === "Outliers") {
+      if (item.label === "Valeurs aberrantes") {
         itemGroup
           .append("circle")
           .attr("cx", 15)
@@ -393,13 +390,7 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
   return (
     <div style={{ position: "relative" }}>
       <h4>
-        Ce graphique en boîte compare les pistes explicites et non explicites
-        sur plusieurs plateformes. Il met en évidence les différences de
-        popularité entre les deux catégories, en se concentrant sur les streams
-        Spotify, les vues YouTube, les vues TikTok et les comptes Shazam.
-        L'analyse montre que le caractère explicite influence différemment les
-        performances selon les plateformes - léger avantage sur Spotify, faible
-        désavantage selon les vues Youtube et impact variable sur TikTok.
+        Ce graphique en boîte compare les pistes explicites et non explicites sur plusieurs plateformes. Il met en évidence les différences de popularité entre les deux catégories, en se concentrant sur les écoutes Spotify, les vues YouTube, les vues TikTok et les comptes Shazam. L'analyse montre que le caractère explicite influence différemment les performances selon les plateformes – avantage léger sur Spotify, léger désavantage sur YouTube et impact variable sur TikTok.
       </h4>
       <div style={{ marginBottom: "1rem" }}>
         <label
@@ -413,10 +404,10 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
           value={selectedMetric}
           onChange={(e) => setSelectedMetric(e.target.value)}
         >
-          <option value="spotifyStreams">Spotify Streams</option>
-          <option value="youtubeViews">YouTube Views</option>
-          <option value="tiktokViews">TikTok Views</option>
-          <option value="shazamCounts">Shazam Counts</option>
+          <option value="spotifyStreams">Streams Spotify</option>
+          <option value="youtubeViews">Vues YouTube</option>
+          <option value="tiktokViews">Vues TikTok</option>
+          <option value="shazamCounts">Comptes Shazam</option>
         </select>
       </div>
       <svg ref={ref}></svg>

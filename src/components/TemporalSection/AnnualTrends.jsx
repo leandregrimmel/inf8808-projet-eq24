@@ -266,12 +266,12 @@ const AnnualTrends = ({ data, initialYear }) => {
           value={selectedMetric}
           onChange={(e) => setSelectedMetric(e.target.value)}
         >
-          <option value="spotifyPopularity">Spotify Popularity</option>
-          <option value="spotifyStreams">Spotify Streams</option>
-          <option value="youtubeViews">YouTube Views</option>
-          <option value="tiktokViews">TikTok Views</option>
-          <option value="shazamCounts">Shazam Counts</option>
-          <option value="pandoraStreams">Pandora Streams</option>
+          <option value="spotifyPopularity">Score de Popularité Spotify (0-100)</option>
+          <option value="spotifyStreams">Streams Spotify</option>
+          <option value="youtubeViews">Vues YouTube</option>
+          <option value="tiktokViews">Vues TikTok</option>
+          <option value="shazamCounts">Comptes Shazam</option>
+          <option value="pandoraStreams">Streams Pandora</option>
         </select>
       </div>
       <div

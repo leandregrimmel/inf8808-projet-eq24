@@ -87,11 +87,11 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
     yAxis.selectAll(".tick text").text((d) => formatNumber(d));
 
     const metricLabels = {
-      spotifyStreams: "Spotify Streams",
-      youtubeViews: "YouTube Views",
-      tiktokViews: "TikTok Views",
-      shazamCounts: "Shazam Counts",
-      pandoraStreams: "Pandora Streams",
+      spotifyStreams: "Streams Spotify",
+      youtubeViews: "Vues YouTube",
+      tiktokViews: "Vues TikTok",
+      shazamCounts: "Comptes Shazam",
+      pandoraStreams: "Streams Pandora",
     };
 
     yAxis
@@ -267,11 +267,11 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
           value={selectedMetric}
           onChange={(e) => setSelectedMetric(e.target.value)}
         >
-          <option value="spotifyStreams">Spotify Streams</option>
-          <option value="youtubeViews">YouTube Views</option>
-          <option value="tiktokViews">TikTok Views</option>
-          <option value="shazamCounts">Shazam Counts</option>
-          <option value="pandoraStreams">Pandora Streams</option>
+          <option value="spotifyStreams">Streams Spotify</option>
+          <option value="youtubeViews">Vues YouTube</option>
+          <option value="tiktokViews">Vues TikTok</option>
+          <option value="shazamCounts">Comptes Shazam</option>
+          <option value="pandoraStreams">Streams Pandora</option>
         </select>
       </div>
       <svg ref={ref}></svg>
