@@ -309,7 +309,7 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
         <br />
         En moyenne, tout artistes confondus, la matrice présente des
         coéfficients de corrélations positifs entre les indicateurs. Toutefois,
-        en sélectionnant un ou plusieurs artistes (ex: Artic Monkeys), on peut
+        en sélectionnant un ou plusieurs artistes (ex: Arctic Monkeys), on peut
         observer des coéfficients de corrélations négatifs entre certains
         indicateurs. Par exemple, les streams Spotify et les vues TikTok (-0.52)
         sont négativement corrélés, ce qui signifie que lorsque l'un augmente,
