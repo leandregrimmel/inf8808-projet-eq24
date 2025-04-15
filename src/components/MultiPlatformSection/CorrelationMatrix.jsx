@@ -129,7 +129,7 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
 
     const width = 800;
     const height = 600;
-    const margin = { top: 150, right: 200, bottom: 50, left: 150 };
+    const margin = { top: 150, right: 200, bottom: 50, left: 40 };
 
     const cellSize = (width - margin.left - margin.right) / n;
     const matrixWidth = n * cellSize;
@@ -231,10 +231,7 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
 
     const legendGroup = svg
       .append("g")
-      .attr(
-        "transform",
-        `translate(${width + margin.left + 30}, ${margin.top})`
-      );
+      .attr("transform", `translate(${width + margin.left}, ${margin.top})`);
 
     legendGroup
       .append("rect")
