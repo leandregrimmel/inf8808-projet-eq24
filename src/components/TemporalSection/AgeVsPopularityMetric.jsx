@@ -251,11 +251,11 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
         Le nuage de points interactif présenté ci-dessous montre la relation
         entre l'âge des chansons (années écoulées depuis leur sortie) et divers
         indicateurs de succès, avec une ligne de régression pour visualiser la
-        tendance globale. Un coéfficient de corrélation (R) proche de 1
-        indique une forte corrélation entre l'âge et la métrique choisie, tandis
-        qu'un R proche de 0 suggère une absence de corrélation. 
+        tendance globale. Un coéfficient de corrélation (R) proche de 1 indique
+        une forte corrélation entre l'âge et la métrique choisie, tandis qu'un R
+        proche de 0 suggère une absence de corrélation.
       </h4>
-      <div style={{ margin: "1rem" }}>
+            <div style={{ margin: "1rem" }}>
         <label
           htmlFor="metric-selector"
           style={{ marginRight: "0.5rem", fontWeight: "bold", color: "black" }}

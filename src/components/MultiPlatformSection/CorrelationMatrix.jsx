@@ -305,8 +305,8 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
         évoluent conjointement ou indépendamment. Nous utilisons cette
         visualisation pour repérer les synergies entre indicateurs clés comme
         les streams Spotify et les vues TikTok.
-        <br />
-        <br />
+      </h4>
+      <h6 style={{ textAlign: "center", marginBottom: "20px" }}>
         En moyenne, tout artistes confondus, la matrice présente des
         coéfficients de corrélations positifs entre les indicateurs. Toutefois,
         en sélectionnant un ou plusieurs artistes (ex: Arctic Monkeys), on peut
@@ -316,7 +316,7 @@ const CorrelationMatrix = ({ data, defaultMetrics }) => {
         l'autre a tendance à diminuer. Cela peut indiquer des différences dans
         la manière dont les artistes interagissent avec leurs fans sur
         différentes plateformes.
-      </h4>
+      </h6>
       <div style={{ marginBottom: "20px" }}>
         <label
           style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}

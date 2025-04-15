@@ -390,7 +390,13 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
   return (
     <div style={{ position: "relative" }}>
       <h4>
-        Ce graphique en boîte compare les pistes explicites et non explicites sur plusieurs plateformes. Il met en évidence les différences de popularité entre les deux catégories, en se concentrant sur les écoutes Spotify, les vues YouTube, les vues TikTok et les comptes Shazam. L'analyse montre que le caractère explicite influence différemment les performances selon les plateformes – avantage léger sur Spotify, léger désavantage sur YouTube et impact variable sur TikTok.
+        Ce graphique en boîte compare les pistes explicites et non explicites
+        sur plusieurs plateformes. Il met en évidence les différences de
+        popularité entre les deux catégories, en se concentrant sur les écoutes
+        Spotify, les vues YouTube, les vues TikTok et les comptes Shazam.
+        L'analyse montre que le caractère explicite influence différemment les
+        performances selon les plateformes - avantage léger sur Spotify, léger
+        désavantage sur YouTube et impact variable sur TikTok.
       </h4>
       <div style={{ marginBottom: "1rem" }}>
         <label
