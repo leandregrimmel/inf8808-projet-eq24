@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  Calendar,
+  Smartphone,
+  Music,
+  Radio,
+  Users,
+  MessageCircleQuestion,
+} from "lucide-react";
 
 const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
   const sectionColors = {
@@ -17,6 +25,15 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
     diffusion: "#ef4444",
     engagement: "#06b6d4",
     questions: "#6b7280",
+  };
+
+  const sectionIcons = {
+    temporal: Calendar,
+    multiplatform: Smartphone,
+    style: Music,
+    diffusion: Radio,
+    engagement: Users,
+    questions: MessageCircleQuestion,
   };
 
   const questions = [
@@ -196,48 +213,68 @@ const QuestionCards = ({ scrollRefs, onQuestionSelect }) => {
           gap: "16px",
         }}
       >
-        {questions.map((q) => (
-          <div
-            key={q.id}
-            onClick={() => handleClick(q)}
-            style={{
-              borderLeft: `4px solid ${borderColors[q.section]}`,
-              borderRadius: "8px",
-              padding: "18px",
-              cursor: "pointer",
-              backgroundColor: sectionColors[q.section],
-              transition: "all 0.2s ease",
-              minHeight: "120px",
-              display: "flex",
-              alignItems: "center",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-3px)";
-              e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.1)";
-              e.currentTarget.style.backgroundColor = sectionColors[
-                q.section
-              ].replace("0.15", "0.25");
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
-              e.currentTarget.style.backgroundColor = sectionColors[q.section];
-            }}
-          >
-            <p
+        {questions.map((q) => {
+          const SectionIcon = sectionIcons[q.section];
+          return (
+            <div
+              key={q.id}
+              onClick={() => handleClick(q)}
               style={{
-                fontSize: "17px",
-                fontWeight: "500",
-                color: "#1a1a1a",
-                margin: 0,
-                lineHeight: "1.5",
+                borderLeft: `4px solid ${borderColors[q.section]}`,
+                borderRadius: "8px",
+                padding: "18px",
+                cursor: "pointer",
+                backgroundColor: sectionColors[q.section],
+                transition: "all 0.2s ease",
+                minHeight: "120px",
+                display: "flex",
+                alignItems: "center",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.1)";
+                e.currentTarget.style.backgroundColor = sectionColors[
+                  q.section
+                ].replace("0.15", "0.25");
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
+                e.currentTarget.style.backgroundColor = sectionColors[q.section];
               }}
             >
-              {q.question}
-            </p>
-          </div>
-        ))}
+              {/* Background icon */}
+              <SectionIcon
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  bottom: "10px",
+                  opacity: 0.1,
+                  width: "80px",
+                  height: "80px",
+                  color: borderColors[q.section],
+                }}
+              />
+              
+              <p
+                style={{
+                  fontSize: "17px",
+                  fontWeight: "500",
+                  color: "#1a1a1a",
+                  margin: 0,
+                  lineHeight: "1.5",
+                  position: "relative", // Ensure text stays above the icon
+                  zIndex: 1, // Ensure text stays above the icon
+                }}
+              >
+                {q.question}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -138,7 +138,7 @@ const SideBar = ({
                         : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
                     }`}
                     onClick={() => {
-                      scrollToSection(sectionRefs[item.ref]);
+                      scrollToSection(sectionRefs[item.ref], item.id);
                       setActiveSection(item.id);
                     }}
                   >

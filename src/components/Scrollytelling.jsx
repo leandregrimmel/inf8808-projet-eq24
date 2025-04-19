@@ -1,5 +1,5 @@
 import { ArrowUpToLine } from "lucide-react";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import CrossPlatformPerformanceChart from "./DifusionSection/CrossPlatformPerformanceChart";
 import ExpliciteContentAnalysis from "./MusicalStyleSection/ExpliciteContentAnalysis";
 import Overview from "./Overview";
@@ -65,21 +65,25 @@ const ScrollytellingDashboard = () => {
     engagementTikTok: engagementTikTokRef,
   };
 
+  const sectionRefs = useMemo(() => ({
+    overview: overviewRef,
+    questions: questionsRef,
+    temporal: temporalRef,
+    multiplatform: multiplatformRef,
+    style: styleRef,
+    diffusion: diffusionRef,
+    engagement: engagementRef,
+  }), []);
+
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const handleQuestionSelect = (question) => {
     setSelectedQuestion(question);
   };
 
-  console.log(
-    selectedQuestion?.targetSection === "styleExplicit" &&
-      selectedQuestion?.defaultConfig.metric
-      ? selectedQuestion.defaultConfig.metric
-      : "spotifyStreams"
-  );
-
-  const scrollToSection = (ref) => {
+  const scrollToSection = (ref, sectionId) => {
     if (ref && ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      setActiveSection(sectionId);
     }
   };
 
@@ -134,10 +138,45 @@ const ScrollytellingDashboard = () => {
     pointerEvents: showTopButton ? "auto" : "none",
   };
 
+  const handleIntersection = useCallback((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const visibleSection = Object.keys(sectionRefs).find(
+          (key) => sectionRefs[key].current === entry.target
+        );
+        if (visibleSection) {
+          setActiveSection(visibleSection);
+        }
+      }
+    });
+  }, [sectionRefs]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: containerRef.current,
+      threshold: 0.1, // Adjust this value as needed (0.5 means 50% of the section is visible)
+    });
+
+    // Observe all main sections
+    Object.values(sectionRefs).forEach((ref) => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      Object.values(sectionRefs).forEach((ref) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, [handleIntersection, filteredData, sectionRefs]);
+
   return (
     <div className="flex bg-background">
       <Sidebar
-        scrollToSection={scrollToSection}
+        scrollToSection={(ref, sectionId) => scrollToSection(ref, sectionId)}
         sectionRefs={{
           overviewRef,
           questionsRef,
@@ -185,7 +224,8 @@ const ScrollytellingDashboard = () => {
             <h4 style={{ marginBottom: 8 }}>
               Cliquez sur une question pour naviguer directement vers la
               visualisation correspondante. Chaque question est conçue pour vous
-              aider à explorer les données d'un angle différent. Des métriques
+              aider à explorer les données d'un angle différent et les couleurs
+              des questions référencent la section correspondante. Des métriques
               par défaut sont sélectionnées en lien avec les visualisations pour
               chaque question. Vous pouvez les modifier pour explorer d'autres
               aspects des données.
@@ -197,7 +237,7 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        <section ref={temporalRef} id="temporal" style={{ sectionStyle }}>
+        <section ref={temporalRef} id="temporal" style={sectionStyle}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Temporel</h1>
           </div>
@@ -322,7 +362,7 @@ const ScrollytellingDashboard = () => {
           </div>
         </section>
 
-        <section ref={styleRef} id="style" style={{ sectionStyle }}>
+        <section ref={styleRef} id="style" style={sectionStyle}>
           <div style={{ ...sectionHeaderStyle, height: "80px" }}>
             <h1>Aspect Contenu Explicite</h1>
           </div>

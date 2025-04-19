@@ -266,7 +266,9 @@ const AnnualTrends = ({ data, initialYear }) => {
           value={selectedMetric}
           onChange={(e) => setSelectedMetric(e.target.value)}
         >
-          <option value="spotifyPopularity">Score de Popularité Spotify (0-100)</option>
+          <option value="spotifyPopularity">
+            Score de Popularité Spotify (0-100)
+          </option>
           <option value="spotifyStreams">Streams Spotify</option>
           <option value="youtubeViews">Vues YouTube</option>
           <option value="tiktokViews">Vues TikTok</option>
@@ -337,6 +339,13 @@ const AnnualTrends = ({ data, initialYear }) => {
           )}
         </div>
       </div>
+      <h4>
+        Le pic récurrent en janvier pourrait s'expliquer par les résolutions du
+        Nouvel An, les playlists de début d'année ou l'augmentation des écoutes
+        post-fêtes.
+        <br />
+        <small>(Observations basées sur des tendances générales)</small>
+      </h4>
     </>
   );
 };
