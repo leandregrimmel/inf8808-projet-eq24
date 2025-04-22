@@ -45,7 +45,7 @@ npm start
 
 ## Déploiement
 
-L'application est accessible en ligne à l'adresse suivante : [https://votre-username.github.io/inf8808-projet-eq24](https://votre-username.github.io/inf8808-projet-eq24)
+L'application est accessible en ligne à l'adresse suivante : [https://leandregrimmel.github.io/inf8808-projet-eq24](https://leandregrimmel.github.io/inf8808-projet-eq24)
 
 Pour déployer une nouvelle version :
 
