@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# INF8808 - Visualisation des Tendances Musicales
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ce projet offre une plateforme interactive d'analyse et de visualisation des tendances musicales populaires sur Spotify et d'autres plateformes de streaming.
 
-## Available Scripts
+## Aperçu du Projet
 
-In the project directory, you can run:
+Notre application web permet d'explorer les données des chansons les plus écoutées en 2024 à travers diverses visualisations interactives. L'interface utilise une approche "scrollytelling" pour guider l'utilisateur à travers différentes analyses thématiques.
 
-### `npm start`
+## Fonctionnalités
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Vue d'ensemble** : Statistiques générales sur le dataset (nombre de pistes, streams moyens, etc.)
+- **Aspect Temporel** : Analyse de la relation entre l'âge des titres et leur popularité
+- **Multi-plateformes** : Comparaisons de performances entre différentes plateformes de streaming
+- **Contenu Explicite** : Analyse de l'impact du contenu explicite sur la popularité
+- **Diffusion & Rayonnement** : Visualisation de la portée géographique des artistes
+- **Engagement Utilisateur** : Analyse du comportement des utilisateurs sur différentes plateformes
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+```bash
+# Cloner le dépôt
+git clone https://github.com/votre-username/inf8808-projet-eq24.git
+cd inf8808-projet-eq24
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Installer les dépendances
+npm install
 
-### `npm run build`
+# Lancer l'application en mode développement
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technologies Utilisées
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **React** : Framework JavaScript pour l'interface utilisateur
+- **D3.js** : Bibliothèque de visualisation de données
+- **Tailwind CSS** : Framework CSS pour le design
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Structure du Projet
 
-### `npm run eject`
+- `src/components` : Composants React pour les différentes visualisations
+- `src/hooks` : Hooks personnalisés pour la gestion des données
+- `src/context` : Contextes React pour le partage d'état
+- `src/styles` : Fichiers CSS et configuration Tailwind
+- `public` : Ressources statiques, incluant le dataset CSV
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Déploiement
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+L'application est accessible en ligne à l'adresse suivante : [https://votre-username.github.io/inf8808-projet-eq24](https://votre-username.github.io/inf8808-projet-eq24)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Pour déployer une nouvelle version :
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm run build
+npm run deploy
+```
 
-## Learn More
+## Équipe
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Développé dans le cadre du cours INF8808 - Visualisation de données à Polytechnique Montréal.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Source des Données
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Les données proviennent du jeu de données "Most Streamed Spotify Songs 2024" et incluent des métriques de diverses plateformes comme Spotify, YouTube, et autres services de streaming musical.
