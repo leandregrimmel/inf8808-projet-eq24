@@ -4,7 +4,7 @@ Ce projet offre une plateforme interactive d'analyse et de visualisation des ten
 
 ## Aperçu du Projet
 
-Notre application web permet d'explorer les données des chansons les plus écoutées en 2024 à travers diverses visualisations interactives. L'interface utilise une approche "scrollytelling" pour guider l'utilisateur à travers différentes analyses thématiques.
+Notre application web permet d'explorer les données des chansons les plus écoutées en 2024 à travers diverses visualisations interactives. L'interface utilise une approche dashboard pour guider l'utilisateur à travers différentes analyses thématiques.
 
 ## Fonctionnalités
 
