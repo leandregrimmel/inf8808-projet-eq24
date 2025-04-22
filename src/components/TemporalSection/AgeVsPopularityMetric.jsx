@@ -246,7 +246,7 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
   }, [data, selectedMetric]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", paddingBottom: "2rem" }}>
       <h4>
         Le nuage de points interactif présenté ci-dessous montre la relation
         entre l'âge des chansons (années écoulées depuis leur sortie) et divers
@@ -255,7 +255,7 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
         une forte corrélation entre l'âge et la métrique choisie, tandis qu'un R
         proche de 0 suggère une absence de corrélation.
       </h4>
-            <div style={{ margin: "1rem" }}>
+      <div style={{ margin: "1rem" }}>
         <label
           htmlFor="metric-selector"
           style={{ marginRight: "0.5rem", fontWeight: "bold", color: "black" }}
@@ -285,6 +285,37 @@ const AgeVsPopularityMetric = ({ data, initialMetric }) => {
           zIndex: 10,
         }}
       ></div>
+      <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+        En observant la répartition des points, on peut repérer plusieurs faits
+        intéressants. Premièrement, il y a une forte densité pour les chansons
+        récentes. Les chansons parues le plus récemment (0 à 5 ans d'âge) sont
+        généralement plus nombreuses dans les données, ce qui se traduit par un
+        nuage plus dense sur la partie gauche du graphique. Cela pourrait être
+        dû à l'effet des playlists, des algorithmes de recommandation et d'une
+        plus grande consommation de musique récente par les utilisateurs.
+        Deuxièmement, il y a présence d'outliers. Effectivement, certains
+        titres, même très anciens, peuvent totaliser un nombre de streams
+        exceptionnel. Cela indique l'existence de « classiques » intemporels qui
+        conservent un haut niveau d'écoute, malgré leur ancienneté.
+        <br /> <br />
+        En analysant la dispersion des points, on remarque que les chansons les
+        plus anciennes tendent à avoir moins de streams que les morceaux
+        récents, bien qu'il y ait des exceptions notables. De plus, il y a
+        beaucoup moins d'anciennes chansons (parus il y a plus de 10 ans) ayant
+        plus de 1 milliards de streams comparativement au nombre de chansons
+        plus récentes (parues il y a moins de 10 ans) pour ce même barème.
+        Également, dans le cas de la métrique de popularité “Streams Spotify”,
+        on peut observer une corrélation moyenne (R = 0.558) entre les
+        paramètres indiquant que le nombre de Streams Spotify et l'âge d'une
+        chanson ne sont pas intimement corrélés.
+        <br /> <br />
+        En bref, cette visualisation met en évidence l'avantage temporel des
+        chansons récentes sur Spotify, dans cet exemple, mais aussi l'existence
+        de quelques titres plus anciens qui parviennent à se maintenir au sommet
+        des écoutes. Elle illustre la forte rotation du marché de la musique et
+        la difficulté pour un titre de conserver une audience massive au fil des
+        décennies, sauf pour certains morceaux emblématiques.
+      </div>
     </div>
   );
 };

@@ -434,6 +434,31 @@ const ExpliciteContentAnalysis = ({ data, initialMetric }) => {
           maxWidth: "220px",
         }}
       ></div>
+      <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+        En observant ce boxplot, on constate plusieurs éléments. Dans un premier
+        temps, pour la métrique de popularité “Streams Spotify”, la médiane des
+        streams est relativement proche pour les deux catégories (explicite et
+        non explicite). Cela suggère que, globalement, le fait qu'une chanson
+        soit explicite ou non ne la rend pas, en moyenne, drastiquement plus ou
+        moins écoutée.
+        <br /> <br />
+        Également, les boîtes et les moustaches montrent une large dispersion
+        dans les deux groupes, indiquant que certaines chansons, qu'elles soient
+        explicites ou non, peuvent atteindre des nombres de streams très élevés
+        (points atypiques). De plus, les outliers (points isolés au-dessus des
+        moustaches) témoignent de titres ayant un succès exceptionnel. On peut
+        ainsi repérer rapidement si les chansons non explicites ont plus de «
+        gros succès » ou si la répartition est équivalente. Cela est
+        possiblement dû au fait que les chansons non explicites peuvent plus
+        facilement être jouées à la radio et rejoindre un plus gros groupe
+        d'auditeurs.
+        <br /> <br />
+        Ainsi, cette première visualisation met en évidence que la présence ou
+        l'absence de contenu explicite n'entraîne pas toujours un écart majeur
+        de popularité, bien que certaines chansons explicites ou non explicites
+        puissent ponctuellement se détacher avec des nombres de streams très
+        élevés.
+      </div>
     </div>
   );
 };

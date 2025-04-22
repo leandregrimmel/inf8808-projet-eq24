@@ -192,7 +192,7 @@ const TikTokImpact = ({ data }) => {
       .style("text-align", "center")
       .style("border", "1px solid black")
       .style("transition", "background 0.2s")
-      .html("Reset Zoom")
+      .html("Réinitialiser")
       .on("mouseover", function () {
         d3.select(this).style("background", "#f0f0f0");
       })
@@ -242,20 +242,40 @@ const TikTokImpact = ({ data }) => {
   return (
     <div className="relative">
       <h4>
-        Bien qu'aucune forte corrélation globale n'apparaisse entre l'activité
-        TikTok (posts et vues) et les streams sur Spotify, on observe néanmoins
-        des tendances plus marquées pour certains artistes - par exemple, Taylor
-        Swift (sélectionnez l'artiste dans la barre latérale) - où l'engagement
-        sur TikTok semble mieux refléter le succès sur Spotify. Par ailleurs,
-        les cercles plus grands et plus pâles représentent les artistes avec le
-        plus de streams, ce qui permet d'identifier visuellement ces relations
-        potentielles lorsqu'on zoome sur des segments spécifiques du graphique.
+        Cette visualisation se présente sous forme d'un scatter plot qui met en
+        relation le nombre de posts et de vues sur TikTok avec les streams
+        totaux sur Spotify. Les cercles plus grands et plus pâles représentent
+        les artistes avec le plus de streams, ce qui permet d'identifier
+        visuellement ces relations potentielles lorsqu'on zoome sur des segments
+        spécifiques du graphique.
       </h4>
       <svg ref={svgRef}></svg>
       <div
         ref={tooltipRef}
         className="absolute pointer-events-none opacity-0 transition-opacity duration-200"
       ></div>
+      <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+        La visualisation montre une absence de corrélation forte à l'échelle
+        globale, mais pour certains artistes (par exemple, Taylor Swift -
+        sélectionner l'artiste dans la barre de navigation à gauche), une
+        tendance positive est observable. Cela suggère que, même si TikTok ne
+        détermine pas systématiquement le succès sur Spotify, pour certains cas,
+        l'engagement sur la plateforme de courte vidéo peut effectivement
+        impulser une augmentation des streams. Cela peut s'expliquer par
+        plusieurs facteurs, comme un public cible plus jeune, une stratégie de
+        marketing fortement axée sur les réseaux sociaux, ou encore la viralité
+        propre à certaines chansons.
+        <br /> <br />
+        Visuellement, les cercles de plus grande taille, indiquant un nombre
+        élevé de streams Spotify, sont parfois associés à des valeurs élevées en
+        posts et vues sur TikTok, prouvant qu'il existe des scénarios où la
+        viralité TikTok a contribué à propulser un titre sur la plateforme de
+        streaming. On constate également quelques outliers : certains artistes
+        génèrent un volume conséquent de streams malgré une faible présence
+        TikTok, ce qui met en évidence la complexité des mécanismes d'adoption
+        musicale, et rappelle que d'autres canaux (playlists, radio, YouTube,
+        etc.) peuvent tout autant jouer un rôle déterminant dans la popularité.
+      </div>
     </div>
   );
 };

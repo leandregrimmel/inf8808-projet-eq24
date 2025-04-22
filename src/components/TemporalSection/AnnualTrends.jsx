@@ -339,13 +339,12 @@ const AnnualTrends = ({ data, initialYear }) => {
           )}
         </div>
       </div>
-      <h4>
-        Le pic récurrent en janvier pourrait s'expliquer par les résolutions du
-        Nouvel An, les playlists de début d'année ou l'augmentation des écoutes
-        post-fêtes.
-        <br />
-        <small>(Observations basées sur des tendances générales)</small>
-      </h4>
+      <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+        Si l'on se base sur les tendences générales, un pic récurrent semble
+        survenir en janvier. Ceci pourrait être expliqué par des résolutions du
+        Nouvel An, les playlists de début/fin d'année ou l'augmentation des
+        écoutes post-fêtes.
+      </div>
     </>
   );
 };

@@ -176,6 +176,21 @@ const SunburstChart = ({ data }) => {
       <div style={{ margin: "0 auto", maxWidth: "600px" }}>
         <svg ref={ref}></svg>
       </div>
+      <br /> <br />
+      <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+        Les deux artistes les plus populaires (selon les métriques ci-haut)
+        occupent quasiment la moitié de la superficie de cette visualisation.
+        D'ailleurs, leurs indicateurs de popularité se concentrent uniquement
+        sur la plateforme Tik Tok. Outre ces artistes, les autres artistes
+        constituant cette figure sont présents sur plusieurs plateformes
+        différentes, souvent dans des rapports de popularité différents.
+        <br /> <br />
+        En bref, l'analyse du sunburst met en lumière des artistes dominants sur
+        une ou plusieurs plateformes. En effet, un artiste dont le segment est
+        majoritairement concentré sur Spotify ou TikTok indique une audience
+        fortement segmentée, offrant ainsi des réponses sur la répartition du
+        succès et l'influence des différentes plateformes sur la popularité.
+      </div>
     </>
   );
 };

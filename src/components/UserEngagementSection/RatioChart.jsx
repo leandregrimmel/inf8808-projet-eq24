@@ -203,20 +203,31 @@ const RatioChart = ({ data }) => {
   return (
     <div className="relative">
       <h4>
-        On constate que les ratios TikTok présentent une régularité plus marquée
-        entre les artistes (notamment parmi les 10 plus populaires), ce qui
-        suggère un engagement relativement constant sur cette plateforme. En
-        revanche, les ratios YouTube varient de manière significative et ne
-        semblent montrer aucune corrélation évidente, ni avec les performances
-        TikTok, ni avec la popularité générale des artistes. Cette disparité
-        souligne l'existence de dynamiques d'engagement distinctes entre ces
-        deux plateformes.
+        Cette visualisation compare le ratio entre le nombre de vues et le
+        nombre de likes sur YouTube et TikTok pour divers artistes.
       </h4>
       <svg ref={svgRef}></svg>
       <div
         ref={tooltipRef}
         className="absolute bg-white p-2 border rounded shadow-lg pointer-events-none opacity-0 text-sm"
       ></div>
+      <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+        La visualisation révèle souvent que les ratios sur TikTok sont plus
+        homogènes, tandis que ceux sur YouTube présentent une grande dispersion.
+        Cela suggère que l'engagement sur TikTok suit un modèle plus régulier.
+        En revanche, les ratios YouTube varient de manière significative et ne
+        semblent montrer aucune corrélation évidente, ni avec les performances
+        TikTok, ni avec la popularité générale des artistes.
+        <br /> <br />
+        Cette disparité confirme l'importance de comprendre la nature de chaque
+        plateforme : TikTok, dont l'algorithme favorise fortement l'interaction
+        rapide et récurrente, aboutit à des taux plus réguliers, tandis que
+        YouTube, offrant des formats plus longs et plus diversifiés, montre des
+        profils d'engagement nettement plus hétérogènes. Pour certains artistes,
+        un ratio YouTube élevé suggère un public particulièrement dévoué, alors
+        que d'autres y connaissent un succès plus superficiel, avec beaucoup de
+        vues mais peu d'engagement profond en termes de likes.
+      </div>
     </div>
   );
 };

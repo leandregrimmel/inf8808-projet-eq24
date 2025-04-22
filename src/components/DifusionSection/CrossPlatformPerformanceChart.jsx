@@ -429,6 +429,34 @@ const CrossPlatformPerformanceChart = ({ data, defaultConfig = {} }) => {
             maxWidth: "250px",
           }}
         ></div>
+        <div style={{ fontSize: "1rem", marginTop: "1rem" }}>
+          Dans ce graphique parallèle, on constate globalement que les titres
+          présentant une portée de playlist élevée se distinguent souvent par un
+          nombre de streams Spotify également plus élevé, suggérant un lien
+          étroit entre l'audience potentielle offerte par les playlists et la
+          réussite en termes de streams.
+          <br /> <br />
+          Par ailleurs, plusieurs chansons très populaires conservent des
+          valeurs relativement élevées sur des indicateurs en apparence
+          indépendants, comme les Passages Radio (AirPlay et SiriusXM),
+          confirmant qu'une diffusion soutenue sur des canaux traditionnels peut
+          encore contribuer au succès numérique. Certains artistes se démarquent
+          aussi par un nombre de playlists nettement plus important, témoignant
+          de la portée de leur rayonnement et de la tendance qu'ont les
+          utilisateurs à inclure ces titres dans leurs sélections musicales.
+          Enfin, on observe pour quelques pistes une forte présence sur Shazam,
+          en corrélation avec une découvrabilité accrue via les réseaux sociaux
+          et les playlists, ce qui souligne le rôle de Shazam dans
+          l'identification de nouveaux morceaux et l'augmentation de leur
+          popularité sur d'autres plateformes.
+          <br /> <br />
+          Les différences de lignes sur les axes indiquent aussi que l'impact du
+          rayonnement radio ou de la portée des playlists n'a pas la même
+          importance pour tous les artistes : certaines étoiles montantes, par
+          exemple, peuvent générer un grand nombre de streams malgré peu de
+          diffusions radio, tandis que d'autres artistes établis s'appuient
+          davantage sur ces canaux traditionnels.
+        </div>
       </div>
     </div>
   );
